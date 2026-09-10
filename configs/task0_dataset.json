@@ -1,0 +1,453 @@
+{
+  "repo_id": "HuggingFaceVLA/libero",
+  "revision": "86958911c0f959db2bbbdb107eb3e17c5f9c798e",
+  "simulator_suite": "libero_spatial",
+  "simulator_task_id": 0,
+  "dataset_task_index": 34,
+  "original_instruction": "pick up the black bowl between the plate and the ramekin and place it on the plate",
+  "metadata": [
+    {
+      "path": "meta/info.json",
+      "bytes": 2409,
+      "sha256": "c4e032902aa4c2a694d35e8a0cc7b592a8816123f46c33ee629dfca29f1e954e"
+    },
+    {
+      "path": "meta/tasks.parquet",
+      "bytes": 3263,
+      "sha256": "c01ec32de3ba5f5cd7eb251ce1e6279a60fbe1c80d12df1eeca746927f78df6c"
+    },
+    {
+      "path": "meta/episodes/chunk-000/file-000.parquet",
+      "bytes": 982569,
+      "sha256": "708573e3caf9f03aed5f572d73ac6a29c0209ce4579bfc794bc6c4b1c1ff68b5"
+    },
+    {
+      "path": "meta/stats.json",
+      "bytes": 13928,
+      "sha256": "d4e03a22ef5d89a910e32c233a509465ad0d265381a06745917d69fd8924a635"
+    }
+  ],
+  "data_files": [
+    {
+      "path": "data/chunk-000/file-309.parquet",
+      "bytes": 103976602,
+      "sha256": "ac7a824d26e07681a521d868e539561b1081222e9be777034f653a0bcdf18f22"
+    },
+    {
+      "path": "data/chunk-000/file-310.parquet",
+      "bytes": 95564742,
+      "sha256": "3193da742ebafab74f518ae39fd8888518234859b779360b858494f447b4dd75"
+    },
+    {
+      "path": "data/chunk-000/file-311.parquet",
+      "bytes": 89416566,
+      "sha256": "31524b714b17ffbd953acd9688040c923e18ef70b8a1d378f58c891be8a0c061"
+    },
+    {
+      "path": "data/chunk-000/file-314.parquet",
+      "bytes": 96898179,
+      "sha256": "a0db9954708317dc9a9e81c934c922c0d1e6bd73e9ec181ed967b6e5915beb08"
+    },
+    {
+      "path": "data/chunk-000/file-318.parquet",
+      "bytes": 89963256,
+      "sha256": "ded61e735d3714027a412258bdb843664adbad21b077026b832f3b550240dd75"
+    },
+    {
+      "path": "data/chunk-000/file-319.parquet",
+      "bytes": 104650836,
+      "sha256": "bfc1b4725f99080c02b58a4319cdbeae670a81019533a7932d2ea020e351348d"
+    },
+    {
+      "path": "data/chunk-000/file-321.parquet",
+      "bytes": 99379013,
+      "sha256": "cb08e9faba2e3453a28f7fb23b72e47b59aeff9a8c5370fd25d5265d2c5ec043"
+    },
+    {
+      "path": "data/chunk-000/file-322.parquet",
+      "bytes": 93699169,
+      "sha256": "665cdc82c5e85017e5bdfc33b938ae731ba677a4d21e77d878d9a72087db03f5"
+    },
+    {
+      "path": "data/chunk-000/file-325.parquet",
+      "bytes": 97964439,
+      "sha256": "f25cf4a0d7184ef4beba7a092ed965155966c369f43871ce2b25602b713d04fa"
+    },
+    {
+      "path": "data/chunk-000/file-327.parquet",
+      "bytes": 98520140,
+      "sha256": "65a70bbdacb977745bdb09ffbb336f32cd52393f1fb03e5cddfa022682f2c4cc"
+    },
+    {
+      "path": "data/chunk-000/file-329.parquet",
+      "bytes": 88400151,
+      "sha256": "05806f616ab1de470e186f91ab2f4519a53f99eaa6a8769f6c5d30ed7b897212"
+    },
+    {
+      "path": "data/chunk-000/file-330.parquet",
+      "bytes": 97207657,
+      "sha256": "46a39771135647049a3c1575635928aa2b89181b149369e64117268788219d0e"
+    },
+    {
+      "path": "data/chunk-000/file-331.parquet",
+      "bytes": 100260552,
+      "sha256": "e7420c695ce0972642a3f3fba152bbe54643a8ffd35b0c335ff77acc50e8498a"
+    },
+    {
+      "path": "data/chunk-000/file-334.parquet",
+      "bytes": 88774360,
+      "sha256": "c062d24113914dccf2f8766a1e5af56f6504e3348248e71d9669fc8592677c71"
+    },
+    {
+      "path": "data/chunk-000/file-338.parquet",
+      "bytes": 98891770,
+      "sha256": "3d53d4a41318c6a64e2fe14fde0a211a335ae1b518063fd615f201735086aa40"
+    },
+    {
+      "path": "data/chunk-000/file-344.parquet",
+      "bytes": 101283955,
+      "sha256": "ff9f0c1ad661a195decec5121c3327f2fb96fff3759245868bd899e28d3b9ee8"
+    },
+    {
+      "path": "data/chunk-000/file-345.parquet",
+      "bytes": 92075166,
+      "sha256": "12a63743ab96a8cf56e2d386eb30c6dd8b95ec446a2c0f795851dc0cf1b36a11"
+    },
+    {
+      "path": "data/chunk-000/file-346.parquet",
+      "bytes": 87942997,
+      "sha256": "5fac3161ae703abb63b64472921ef1cbe827d20b2a37dfb967fdf7f365f04313"
+    },
+    {
+      "path": "data/chunk-000/file-347.parquet",
+      "bytes": 101437341,
+      "sha256": "1360807513ff84030d415491f2fe33f191970bb95831b9b6d836dfdcad23379d"
+    },
+    {
+      "path": "data/chunk-000/file-348.parquet",
+      "bytes": 94083919,
+      "sha256": "4397415b1f760497739a95e8fb849632a6f7934f3179175361bede896da8d5ca"
+    },
+    {
+      "path": "data/chunk-000/file-350.parquet",
+      "bytes": 91794446,
+      "sha256": "5f91ae58acbe44625054d881c10503da37a46c1af3c975bf567661d6492ebc6e"
+    },
+    {
+      "path": "data/chunk-000/file-351.parquet",
+      "bytes": 92430874,
+      "sha256": "0ff9e7be78a3642a00d9a97b261c6a3a602a2031655ff4edd2d7da1d0eddeba9"
+    },
+    {
+      "path": "data/chunk-000/file-355.parquet",
+      "bytes": 98831189,
+      "sha256": "5cbdf88fc9172499d17efe84051371d6277300ade5f2f919db38d1994e9b4392"
+    },
+    {
+      "path": "data/chunk-000/file-356.parquet",
+      "bytes": 103471812,
+      "sha256": "5e26f733c627642363457bd2cbbca453271d13c3d52a98e905a6b29434d8803c"
+    },
+    {
+      "path": "data/chunk-000/file-357.parquet",
+      "bytes": 101920966,
+      "sha256": "8e44f0bbbfefe1dca1bead2e9a1be5ede67b6eba9b0d2aa47f67d560b2b47e7b"
+    },
+    {
+      "path": "data/chunk-000/file-358.parquet",
+      "bytes": 89119395,
+      "sha256": "03290001211484cd86801d38f1be28da1b03112f64c96a482e0c8bcbdf8eecc9"
+    },
+    {
+      "path": "data/chunk-000/file-359.parquet",
+      "bytes": 93661911,
+      "sha256": "8e310f6c1db7e96782246e3f6135a2244c1b7fbabf2f28b0fe243ec719539b51"
+    },
+    {
+      "path": "data/chunk-000/file-360.parquet",
+      "bytes": 104237077,
+      "sha256": "2f6e64c29202279fb4cf067819ad3ffa26fdcaec5dfca8f4f8898b1576da2805"
+    },
+    {
+      "path": "data/chunk-000/file-361.parquet",
+      "bytes": 103478120,
+      "sha256": "260865f93b90cb9ea64c36b30e5e86364c8d1a13860c696d6037eada5467dee8"
+    },
+    {
+      "path": "data/chunk-000/file-362.parquet",
+      "bytes": 103072146,
+      "sha256": "aa1bb02313f6a03adc932d1bc75801f5b4144bb82b3e8ddb250cd8bb84c9b4fe"
+    },
+    {
+      "path": "data/chunk-000/file-364.parquet",
+      "bytes": 90501699,
+      "sha256": "aaf9364e2000dec2ed088cf6b27ba8b4f9c82885ef232c3af8caa618780fd502"
+    },
+    {
+      "path": "data/chunk-000/file-368.parquet",
+      "bytes": 92446025,
+      "sha256": "b3428d3684804c3db94a62d8b67f8332ca31d934a92c2556c3d80d255ce04e97"
+    },
+    {
+      "path": "data/chunk-000/file-371.parquet",
+      "bytes": 98113905,
+      "sha256": "e7b7766df117f751aee1953ef13ac502426403008804b8bd28b2e21a3e86d2bd"
+    },
+    {
+      "path": "data/chunk-000/file-372.parquet",
+      "bytes": 102361542,
+      "sha256": "d0f94877ce7cc1c17f06edb19f177a5c7d34faa9d1d88eff21cc9aa03a786028"
+    },
+    {
+      "path": "data/chunk-000/file-373.parquet",
+      "bytes": 93960896,
+      "sha256": "3536c2b5f124e3c40ea2a24ca80639925f85c3411d90889f8156ca6815e8b08c"
+    },
+    {
+      "path": "data/chunk-000/file-374.parquet",
+      "bytes": 103237913,
+      "sha256": "62afbdbb9036349e90638cc55453d8ee6d4a35918030b9f383a9b77aa9799f5b"
+    }
+  ],
+  "expected_task_episodes": 45,
+  "expected_task_frames": 4487,
+  "split_seed": 20260909,
+  "default_train_episodes": 36,
+  "local_root": "data/libero_86958911c0f9",
+  "output_dir": "outputs/task0_data",
+  "supersedes_config_fingerprint": "00ab288c887fd6e2167e4a361800738f3d9ec04f3ae69880f58abdda67e1e955",
+  "mapping_source": {
+    "repo_id": "lerobot/libero",
+    "revision": "a1aaacb7f6cd6ee5fb43120f673cebb0cfea7dd4",
+    "path": "meta/episodes/chunk-000/file-000.parquet",
+    "bytes": 87332,
+    "sha256": "324db6d3f8efbfb340177507c11bfa2e78b1753c46802b3700fa8c8b4be461db"
+  },
+  "episode_file_overrides": [
+    {
+      "episode_index": 1272,
+      "data/chunk_index": 0,
+      "data/file_index": 309
+    },
+    {
+      "episode_index": 1273,
+      "data/chunk_index": 0,
+      "data/file_index": 310
+    },
+    {
+      "episode_index": 1275,
+      "data/chunk_index": 0,
+      "data/file_index": 310
+    },
+    {
+      "episode_index": 1282,
+      "data/chunk_index": 0,
+      "data/file_index": 311
+    },
+    {
+      "episode_index": 1300,
+      "data/chunk_index": 0,
+      "data/file_index": 314
+    },
+    {
+      "episode_index": 1327,
+      "data/chunk_index": 0,
+      "data/file_index": 318
+    },
+    {
+      "episode_index": 1330,
+      "data/chunk_index": 0,
+      "data/file_index": 319
+    },
+    {
+      "episode_index": 1344,
+      "data/chunk_index": 0,
+      "data/file_index": 321
+    },
+    {
+      "episode_index": 1347,
+      "data/chunk_index": 0,
+      "data/file_index": 321
+    },
+    {
+      "episode_index": 1352,
+      "data/chunk_index": 0,
+      "data/file_index": 322
+    },
+    {
+      "episode_index": 1368,
+      "data/chunk_index": 0,
+      "data/file_index": 325
+    },
+    {
+      "episode_index": 1379,
+      "data/chunk_index": 0,
+      "data/file_index": 327
+    },
+    {
+      "episode_index": 1382,
+      "data/chunk_index": 0,
+      "data/file_index": 327
+    },
+    {
+      "episode_index": 1395,
+      "data/chunk_index": 0,
+      "data/file_index": 329
+    },
+    {
+      "episode_index": 1397,
+      "data/chunk_index": 0,
+      "data/file_index": 329
+    },
+    {
+      "episode_index": 1401,
+      "data/chunk_index": 0,
+      "data/file_index": 330
+    },
+    {
+      "episode_index": 1410,
+      "data/chunk_index": 0,
+      "data/file_index": 331
+    },
+    {
+      "episode_index": 1425,
+      "data/chunk_index": 0,
+      "data/file_index": 334
+    },
+    {
+      "episode_index": 1449,
+      "data/chunk_index": 0,
+      "data/file_index": 338
+    },
+    {
+      "episode_index": 1450,
+      "data/chunk_index": 0,
+      "data/file_index": 338
+    },
+    {
+      "episode_index": 1491,
+      "data/chunk_index": 0,
+      "data/file_index": 344
+    },
+    {
+      "episode_index": 1493,
+      "data/chunk_index": 0,
+      "data/file_index": 345
+    },
+    {
+      "episode_index": 1500,
+      "data/chunk_index": 0,
+      "data/file_index": 346
+    },
+    {
+      "episode_index": 1504,
+      "data/chunk_index": 0,
+      "data/file_index": 346
+    },
+    {
+      "episode_index": 1506,
+      "data/chunk_index": 0,
+      "data/file_index": 347
+    },
+    {
+      "episode_index": 1517,
+      "data/chunk_index": 0,
+      "data/file_index": 348
+    },
+    {
+      "episode_index": 1527,
+      "data/chunk_index": 0,
+      "data/file_index": 350
+    },
+    {
+      "episode_index": 1532,
+      "data/chunk_index": 0,
+      "data/file_index": 351
+    },
+    {
+      "episode_index": 1560,
+      "data/chunk_index": 0,
+      "data/file_index": 355
+    },
+    {
+      "episode_index": 1563,
+      "data/chunk_index": 0,
+      "data/file_index": 356
+    },
+    {
+      "episode_index": 1567,
+      "data/chunk_index": 0,
+      "data/file_index": 356
+    },
+    {
+      "episode_index": 1568,
+      "data/chunk_index": 0,
+      "data/file_index": 356
+    },
+    {
+      "episode_index": 1574,
+      "data/chunk_index": 0,
+      "data/file_index": 357
+    },
+    {
+      "episode_index": 1579,
+      "data/chunk_index": 0,
+      "data/file_index": 358
+    },
+    {
+      "episode_index": 1583,
+      "data/chunk_index": 0,
+      "data/file_index": 359
+    },
+    {
+      "episode_index": 1589,
+      "data/chunk_index": 0,
+      "data/file_index": 360
+    },
+    {
+      "episode_index": 1597,
+      "data/chunk_index": 0,
+      "data/file_index": 361
+    },
+    {
+      "episode_index": 1602,
+      "data/chunk_index": 0,
+      "data/file_index": 362
+    },
+    {
+      "episode_index": 1615,
+      "data/chunk_index": 0,
+      "data/file_index": 364
+    },
+    {
+      "episode_index": 1617,
+      "data/chunk_index": 0,
+      "data/file_index": 364
+    },
+    {
+      "episode_index": 1642,
+      "data/chunk_index": 0,
+      "data/file_index": 368
+    },
+    {
+      "episode_index": 1660,
+      "data/chunk_index": 0,
+      "data/file_index": 371
+    },
+    {
+      "episode_index": 1669,
+      "data/chunk_index": 0,
+      "data/file_index": 372
+    },
+    {
+      "episode_index": 1672,
+      "data/chunk_index": 0,
+      "data/file_index": 373
+    },
+    {
+      "episode_index": 1679,
+      "data/chunk_index": 0,
+      "data/file_index": 374
+    }
+  ]
+}

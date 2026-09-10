@@ -1,0 +1,263 @@
+{
+  "run_fingerprint": "80e2125d9a4be64860c1425a6d5de90d8d25f23aa64c53403a8d4c69738b6831",
+  "artifact_integrity_passed": true,
+  "all_initial_arrays_equal": true,
+  "all_initial_rng_arrays_equal": true,
+  "episode_audits": [
+    {
+      "instruction_id": "original",
+      "goals": {
+        "original_bowl": {
+          "ever": true,
+          "final": true,
+          "first_step": 78
+        },
+        "other_bowl": {
+          "ever": false,
+          "final": false,
+          "first_step": null
+        },
+        "ramekin": {
+          "ever": false,
+          "final": false,
+          "first_step": null
+        }
+      },
+      "video_info": {
+        "main": {
+          "frames": 281,
+          "fps": 20.0
+        },
+        "wrist": {
+          "frames": 281,
+          "fps": 20.0
+        }
+      },
+      "frame_sheets": [
+        "original/attempt_001/main_frames.png",
+        "original/attempt_001/wrist_frames.png"
+      ]
+    },
+    {
+      "instruction_id": "original_repeat",
+      "goals": {
+        "original_bowl": {
+          "ever": true,
+          "final": true,
+          "first_step": 78
+        },
+        "other_bowl": {
+          "ever": false,
+          "final": false,
+          "first_step": null
+        },
+        "ramekin": {
+          "ever": false,
+          "final": false,
+          "first_step": null
+        }
+      },
+      "video_info": {
+        "main": {
+          "frames": 281,
+          "fps": 20.0
+        },
+        "wrist": {
+          "frames": 281,
+          "fps": 20.0
+        }
+      },
+      "frame_sheets": [
+        "original_repeat/attempt_001/main_frames.png",
+        "original_repeat/attempt_001/wrist_frames.png"
+      ]
+    },
+    {
+      "instruction_id": "paraphrase_01",
+      "goals": {
+        "original_bowl": {
+          "ever": false,
+          "final": false,
+          "first_step": null
+        },
+        "other_bowl": {
+          "ever": false,
+          "final": false,
+          "first_step": null
+        },
+        "ramekin": {
+          "ever": false,
+          "final": false,
+          "first_step": null
+        }
+      },
+      "video_info": {
+        "main": {
+          "frames": 281,
+          "fps": 20.0
+        },
+        "wrist": {
+          "frames": 281,
+          "fps": 20.0
+        }
+      },
+      "frame_sheets": [
+        "paraphrase_01/attempt_001/main_frames.png",
+        "paraphrase_01/attempt_001/wrist_frames.png"
+      ]
+    },
+    {
+      "instruction_id": "paraphrase_02",
+      "goals": {
+        "original_bowl": {
+          "ever": false,
+          "final": false,
+          "first_step": null
+        },
+        "other_bowl": {
+          "ever": false,
+          "final": false,
+          "first_step": null
+        },
+        "ramekin": {
+          "ever": false,
+          "final": false,
+          "first_step": null
+        }
+      },
+      "video_info": {
+        "main": {
+          "frames": 281,
+          "fps": 20.0
+        },
+        "wrist": {
+          "frames": 281,
+          "fps": 20.0
+        }
+      },
+      "frame_sheets": [
+        "paraphrase_02/attempt_001/main_frames.png",
+        "paraphrase_02/attempt_001/wrist_frames.png"
+      ]
+    },
+    {
+      "instruction_id": "changed_relation",
+      "goals": {
+        "original_bowl": {
+          "ever": false,
+          "final": false,
+          "first_step": null
+        },
+        "other_bowl": {
+          "ever": false,
+          "final": false,
+          "first_step": null
+        },
+        "ramekin": {
+          "ever": false,
+          "final": false,
+          "first_step": null
+        }
+      },
+      "video_info": {
+        "main": {
+          "frames": 281,
+          "fps": 20.0
+        },
+        "wrist": {
+          "frames": 281,
+          "fps": 20.0
+        }
+      },
+      "frame_sheets": [
+        "changed_relation/attempt_001/main_frames.png",
+        "changed_relation/attempt_001/wrist_frames.png"
+      ]
+    },
+    {
+      "instruction_id": "changed_object",
+      "goals": {
+        "original_bowl": {
+          "ever": false,
+          "final": false,
+          "first_step": null
+        },
+        "other_bowl": {
+          "ever": false,
+          "final": false,
+          "first_step": null
+        },
+        "ramekin": {
+          "ever": false,
+          "final": false,
+          "first_step": null
+        }
+      },
+      "video_info": {
+        "main": {
+          "frames": 281,
+          "fps": 20.0
+        },
+        "wrist": {
+          "frames": 281,
+          "fps": 20.0
+        }
+      },
+      "frame_sheets": [
+        "changed_object/attempt_001/main_frames.png",
+        "changed_object/attempt_001/wrist_frames.png"
+      ]
+    }
+  ],
+  "repeat_control": {
+    "first_action_difference_step": 46,
+    "max_absolute_action_difference": 2.0592200756073,
+    "difference_at_first_diverging_action": 0.0021682679653167725,
+    "sim_state": {
+      "first_array_index": 46,
+      "max_absolute_difference": 3.8899521535793453
+    },
+    "goal_disagreement_steps": {
+      "original_bowl": [
+        79,
+        83,
+        118,
+        144,
+        149,
+        152,
+        156,
+        159,
+        219,
+        220,
+        222,
+        223,
+        224
+      ],
+      "other_bowl": [],
+      "ramekin": []
+    }
+  },
+  "first_action_differences_from_original": {
+    "original": 0.0,
+    "original_repeat": 0.0,
+    "paraphrase_01": 0.16381153464317322,
+    "paraphrase_02": 0.1303420513868332,
+    "changed_relation": 0.2672390043735504,
+    "changed_object": 0.11513762176036835
+  },
+  "total_rollout_seconds": 1272.6599780869983,
+  "backend": {
+    "deterministic_algorithms": false,
+    "cudnn_benchmark": false,
+    "cudnn_deterministic": false,
+    "matmul_allow_tf32": false,
+    "cudnn_allow_tf32": true
+  },
+  "diagnostic_limitations": [
+    "Per-step policy input tensors, RNG and sampled flow noise were not recorded.",
+    "Equal physics arrays before a differing action do not prove equal rendered policy inputs.",
+    "Decoded lossy videos cannot establish exact raw observation equality.",
+    "Numerical/kernel nondeterminism, observations and unrecorded internal state remain candidate causes.",
+    "Two successful original trials do not estimate outcome variability across seeds/states."
+  ]
+}

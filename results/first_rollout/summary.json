@@ -1,0 +1,89 @@
+{
+  "result": {
+    "run_id": "first_rollout",
+    "suite": "libero_spatial",
+    "task_id": 0,
+    "seed": 0,
+    "language_condition": "original",
+    "episodes": 1,
+    "success": true,
+    "sum_reward": 1.0,
+    "checkpoint_repo": "HuggingFaceVLA/smolvla_libero",
+    "checkpoint_revision": "6721902bc4d61e50a3bfdb11dfb4cb626f05d102",
+    "evaluation_seconds": 114.38923668861389,
+    "command_wall_seconds": 362.84,
+    "process_peak_rss_mib": 3824.69140625,
+    "sampled_device_peak_vram_mib": 2534.0,
+    "gpu_samples": 361,
+    "video_frames": 77,
+    "video_width": 256,
+    "video_height": 256,
+    "original_video_fps": 80.0,
+    "control_hz": 20,
+    "playback_video_fps": 20.0,
+    "original_video": "outputs/first_rollout/videos/libero_spatial_0/eval_episode_0.mp4",
+    "playback_video": "outputs/first_rollout/videos/libero_spatial_0/eval_episode_0_playback_20fps.mp4"
+  },
+  "original_video_sha256": "b4f895b098ae2a221d8fba4e1f76345a458cfa29aec2983d4e97ffc4acd3108e",
+  "video_decoded_without_error": true,
+  "keyframe_indices": [
+    0,
+    15,
+    30,
+    46,
+    61,
+    76
+  ],
+  "memory_scope": "Device-wide one-second samples including other GPU users; not an exact per-process peak",
+  "result_scope": "One acceptance episode, not a benchmark success-rate estimate",
+  "video_timing_note": "Upstream video metadata was 80 FPS while control was 20 Hz; a derived playback copy is retimed without changing the original or episode outcome",
+  "initial_state_note": "init_states=true and a single environment were configured; simulator state and policy RNG were not serialized during this acceptance run",
+  "action_log_note": "Per-step actions were not exported by the upstream CLI in this run; whole-trajectory finiteness was not independently checked",
+  "raw_eval_info": {
+    "per_task": [
+      {
+        "task_group": "libero_spatial",
+        "task_id": 0,
+        "metrics": {
+          "sum_rewards": [
+            1.0
+          ],
+          "max_rewards": [
+            1.0
+          ],
+          "successes": [
+            true
+          ],
+          "video_paths": [
+            "outputs/first_rollout/videos/libero_spatial_0/eval_episode_0.mp4"
+          ],
+          "predicted_video_paths": []
+        }
+      }
+    ],
+    "per_group": {
+      "libero_spatial": {
+        "avg_sum_reward": 1.0,
+        "avg_max_reward": 1.0,
+        "pc_success": 100.0,
+        "n_episodes": 1,
+        "video_paths": [
+          "outputs/first_rollout/videos/libero_spatial_0/eval_episode_0.mp4"
+        ],
+        "predicted_video_paths": []
+      }
+    },
+    "overall": {
+      "avg_sum_reward": 1.0,
+      "avg_max_reward": 1.0,
+      "pc_success": 100.0,
+      "n_episodes": 1,
+      "eval_s": 114.38923668861389,
+      "eval_ep_s": 114.38923740386963,
+      "video_paths": [
+        "outputs/first_rollout/videos/libero_spatial_0/eval_episode_0.mp4"
+      ],
+      "predicted_video_paths": []
+    }
+  }
+}

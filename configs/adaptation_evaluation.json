@@ -1,0 +1,7 @@
+{
+  "training_run": "outputs/adaptation/runs/task0_adaptation",
+  "baseline_run": "outputs/language_pilot",
+  "output_root": "outputs/adaptation_evaluation",
+  "models": ["untuned_fp32", "original_language", "augmented_language"],
+  "instruction_ids": ["original", "original_repeat", "paraphrase_01", "paraphrase_02"]
+}

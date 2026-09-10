@@ -1,0 +1,29 @@
+{
+  "protocol_version": 1,
+  "suite": "libero_spatial",
+  "task_id": 0,
+  "task_name": "pick_up_the_black_bowl_between_the_plate_and_the_ramekin_and_place_it_on_the_plate",
+  "init_state_index": 0,
+  "environment_seed": 0,
+  "policy_seed": 0,
+  "instruction_catalog": "configs/instructions/task0.jsonl",
+  "pairing_output": "outputs/language_pairing",
+  "environment": {
+    "obs_type": "pixels_agent_pos",
+    "observation_height": 256,
+    "observation_width": 256,
+    "control_freq": 20,
+    "control_mode": "relative",
+    "hard_reset": true,
+    "num_steps_wait": 10,
+    "episode_length": 280
+  },
+  "policy": {"n_action_steps": 1, "num_steps": 10, "use_amp": false},
+  "goals": {
+    "original_bowl": ["on", "akita_black_bowl_1", "plate_1"],
+    "other_bowl": ["on", "akita_black_bowl_2", "plate_1"],
+    "ramekin": ["on", "glazed_rim_porcelain_ramekin_1", "plate_1"]
+  },
+  "planned_termination": "Fixed 280 policy steps for every condition; record every goal at every step. Do not terminate on the original goal.",
+  "scope": "One task/state/seed engineering pilot. No population success-rate or robustness-improvement claim."
+}

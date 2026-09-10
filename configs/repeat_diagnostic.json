@@ -1,0 +1,6 @@
+{
+  "source_run": "outputs/language_pilot",
+  "source_audit": "outputs/language_pilot_review/audit.json",
+  "output_dir": "outputs/repeat_diagnostic",
+  "protocol": "Repeat the two original-instruction trials with their existing 280-step horizon. Record actual policy inputs, pre/post RNG, sampled noise and normalized actions. Replay the previously observed and newly observed first divergent steps twice per recorded input. Keep model precision and backend settings unchanged."
+}

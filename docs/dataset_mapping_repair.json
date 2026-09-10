@@ -1,0 +1,46 @@
+{
+  "problem": "Pinned upstream episode metadata points selected episodes to unrelated shards",
+  "repo_id": "HuggingFaceVLA/libero",
+  "revision": "86958911c0f959db2bbbdb107eb3e17c5f9c798e",
+  "incorrect_file": {
+    "path": "data/chunk-000/file-055.parquet",
+    "sha256": "76759e5093591703da410d597e063321e7d5a27320373cabb48a5dcda66735fa",
+    "requested_episode_ids": [
+      1272,
+      1273,
+      1275,
+      1282
+    ],
+    "actual_episode_ids": [
+      137,
+      138,
+      139
+    ],
+    "actual_rows": 823
+  },
+  "mapping_source": {
+    "repo_id": "lerobot/libero",
+    "revision": "a1aaacb7f6cd6ee5fb43120f673cebb0cfea7dd4",
+    "path": "meta/episodes/chunk-000/file-000.parquet",
+    "bytes": 87332,
+    "sha256": "324db6d3f8efbfb340177507c11bfa2e78b1753c46802b3700fa8c8b4be461db"
+  },
+  "corrected_sample": {
+    "path": "data/chunk-000/file-309.parquet",
+    "episode_index": 1272,
+    "task_index": 34,
+    "frames": 84,
+    "global_index_start": 221834,
+    "global_index_end_inclusive": 221917,
+    "numeric_validation": "passed",
+    "range_download_bytes": 120489,
+    "images_validated": false
+  },
+  "corrected_shards": 36,
+  "corrected_download_bytes": 3483030726,
+  "selected_demonstrations": 45,
+  "split_train": 36,
+  "split_held_out": 9,
+  "split_status": "existing selection checked unchanged; migration occurs on interactive continuation",
+  "full_preparation_status": "pending user-run downloads and frame/image validation"
+}

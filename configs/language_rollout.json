@@ -1,0 +1,5 @@
+{
+  "output_dir": "outputs/language_pilot",
+  "pairing_report": "outputs/language_pairing/pairing_validation_20260908T210740_377576Z.json",
+  "notes": "Uses the six conditions and fixed horizon in language_pilot.json. After reproducing B1 on another machine, point pairing_report to that machine's passed report."
+}

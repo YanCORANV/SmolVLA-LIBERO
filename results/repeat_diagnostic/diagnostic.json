@@ -1,0 +1,183 @@
+{
+  "execution_complete": true,
+  "source_run_fingerprint": "80e2125d9a4be64860c1425a6d5de90d8d25f23aa64c53403a8d4c69738b6831",
+  "trials": [
+    {
+      "instruction_id": "original",
+      "attempt": "original/attempt_001",
+      "goals": {
+        "original_bowl": {
+          "ever": true,
+          "final": true,
+          "first_step": 78
+        },
+        "other_bowl": {
+          "ever": false,
+          "final": false,
+          "first_step": null
+        },
+        "ramekin": {
+          "ever": false,
+          "final": false,
+          "first_step": null
+        }
+      },
+      "steps": 280,
+      "trial_seconds": 244.55400335500053,
+      "torch_peak_reserved_bytes": 1327497216,
+      "trace_archive_bytes": 84945656
+    },
+    {
+      "instruction_id": "original_repeat",
+      "attempt": "original_repeat/attempt_001",
+      "goals": {
+        "original_bowl": {
+          "ever": true,
+          "final": true,
+          "first_step": 78
+        },
+        "other_bowl": {
+          "ever": false,
+          "final": false,
+          "first_step": null
+        },
+        "ramekin": {
+          "ever": false,
+          "final": false,
+          "first_step": null
+        }
+      },
+      "steps": 280,
+      "trial_seconds": 236.99414598300064,
+      "torch_peak_reserved_bytes": 1327497216,
+      "trace_archive_bytes": 86386697
+    }
+  ],
+  "trace_comparison": {
+    "first_different_step": {
+      "raw_pixels": 46,
+      "input": 46,
+      "rng_before": null,
+      "noise": null,
+      "normalized_action": 46,
+      "rng_after": null
+    },
+    "evidence_at_first_action_difference": {
+      "raw_pixels_equal": false,
+      "input_equal": false,
+      "rng_before_equal": true,
+      "noise_equal": true,
+      "normalized_action_equal": false,
+      "rng_after_equal": true
+    },
+    "interpretation": "Hash comparisons localize observed differences; replay evidence is needed before assigning a cause."
+  },
+  "replay": {
+    "cases": [
+      {
+        "trial": "original",
+        "step": 46,
+        "replays": [
+          {
+            "repetition": 1,
+            "input_equal_to_recorded": true,
+            "rng_equal_to_recorded": true,
+            "noise_equal_to_recorded": true,
+            "action_equal_to_recorded": true,
+            "action_hash": {
+              "action": "0a586d9d657ad04d4c326ca80f824dd2c576c8d4b25328f3cd46ba1464e0c5e7"
+            },
+            "normalized_action": [
+              [
+                0.1556333601474762,
+                -0.005078319925814867,
+                0.826770544052124,
+                -0.7383533120155334,
+                -0.15626516938209534,
+                -1.2852978706359863,
+                1.0467337369918823
+              ]
+            ]
+          },
+          {
+            "repetition": 2,
+            "input_equal_to_recorded": true,
+            "rng_equal_to_recorded": true,
+            "noise_equal_to_recorded": true,
+            "action_equal_to_recorded": true,
+            "action_hash": {
+              "action": "0a586d9d657ad04d4c326ca80f824dd2c576c8d4b25328f3cd46ba1464e0c5e7"
+            },
+            "normalized_action": [
+              [
+                0.1556333601474762,
+                -0.005078319925814867,
+                0.826770544052124,
+                -0.7383533120155334,
+                -0.15626516938209534,
+                -1.2852978706359863,
+                1.0467337369918823
+              ]
+            ]
+          }
+        ],
+        "two_replay_actions_equal": true
+      },
+      {
+        "trial": "original_repeat",
+        "step": 46,
+        "replays": [
+          {
+            "repetition": 1,
+            "input_equal_to_recorded": true,
+            "rng_equal_to_recorded": true,
+            "noise_equal_to_recorded": true,
+            "action_equal_to_recorded": true,
+            "action_hash": {
+              "action": "a01b682df0fc59309f6eb26fc750d17cfd8741443bbd41d3fb9567ce4da0cb8f"
+            },
+            "normalized_action": [
+              [
+                0.15361157059669495,
+                -0.0026332209818065166,
+                0.8218950033187866,
+                -0.7377458214759827,
+                -0.15288767218589783,
+                -1.2788028717041016,
+                1.047065019607544
+              ]
+            ]
+          },
+          {
+            "repetition": 2,
+            "input_equal_to_recorded": true,
+            "rng_equal_to_recorded": true,
+            "noise_equal_to_recorded": true,
+            "action_equal_to_recorded": true,
+            "action_hash": {
+              "action": "a01b682df0fc59309f6eb26fc750d17cfd8741443bbd41d3fb9567ce4da0cb8f"
+            },
+            "normalized_action": [
+              [
+                0.15361157059669495,
+                -0.0026332209818065166,
+                0.8218950033187866,
+                -0.7377458214759827,
+                -0.15288767218589783,
+                -1.2788028717041016,
+                1.047065019607544
+              ]
+            ]
+          }
+        ],
+        "two_replay_actions_equal": true
+      }
+    ],
+    "scope": "Two replays per recorded input; equality does not prove universal determinism."
+  },
+  "limitations": [
+    "Tracing adds synchronization and may change timing-dependent behavior.",
+    "Differences with equal input/noise implicate inference or unrecorded model state, not necessarily a specific CUDA kernel.",
+    "No backend flags or precision settings were changed."
+  ]
+}

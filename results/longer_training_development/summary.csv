@@ -1,0 +1,13 @@
+model,instruction,episodes,success_ever,success_final,repeat_control
+untuned_fp32,original,3,1,1,False
+untuned_fp32,original_repeat,3,1,1,True
+untuned_fp32,paraphrase_01,3,0,0,False
+untuned_fp32,paraphrase_02,3,0,0,False
+original_language,original,3,3,3,False
+original_language,original_repeat,3,2,2,True
+original_language,paraphrase_01,3,0,0,False
+original_language,paraphrase_02,3,0,0,False
+augmented_language,original,3,2,2,False
+augmented_language,original_repeat,3,2,2,True
+augmented_language,paraphrase_01,3,0,0,False
+augmented_language,paraphrase_02,3,2,2,False

@@ -1,0 +1,9 @@
+# Linux environment passed CUDA/import/EGL checks; policy rollout is pending.
+# Direct pins only; see docs/environment_validation.json for observed versions.
+# CUDA wheels are installed first by scripts/setup_environment.sh.
+lerobot[smolvla,libero,evaluation]==0.6.1
+hf-libero==0.1.4
+torch==2.10.0
+torchvision==0.25.0
+torchcodec==0.10.0
+mujoco==3.3.2

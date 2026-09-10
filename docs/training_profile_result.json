@@ -1,0 +1,43 @@
+{
+  "step_passed": true,
+  "reload_passed": true,
+  "update": {
+    "steps": 1,
+    "samples": 1,
+    "episodes": 0.010247651579846286,
+    "epochs": 0.0002846569883290635,
+    "loss": 0.2923470735549927,
+    "grad_norm": 3.573275089263916,
+    "lr": 0.0001,
+    "update_s": 3.6868237010021403,
+    "gpu_mem_gb": 2.843290328979492,
+    "losses_after_forward": 0.2923470735549927,
+    "losses_after_in_ep_bound": 0.2923470735549927,
+    "losses_after_rm_padding": 0.2923470735549927,
+    "finite_gradient_tensors": 299,
+    "wall_seconds": 3.694921907997923,
+    "torch_peak_reserved_bytes": 3303014400,
+    "torch_peak_allocated_bytes": 3052959744,
+    "free_device_bytes_after_update": 4047503360,
+    "timing_scope": "First update including finite-gradient guard; not steady-state throughput",
+    "optimizer_updates": 1
+  },
+  "parameter_counts": {
+    "frozen:torch.bfloat16": 507482304,
+    "trainable:torch.float32": 97451872
+  },
+  "strict_reload": true,
+  "all_parameter_bytes_equal": true,
+  "optimizer_step": 1,
+  "data_ready_sha256": "992ddd84d44436d7eab99c3e13a0b5da13c53cc4f711fe58b24a0521d9787415",
+  "packages": {
+    "lerobot": "0.6.1",
+    "torch": "2.10.0+cu128",
+    "accelerate": "1.14.0",
+    "datasets": "4.8.5",
+    "pyarrow": "25.0.1",
+    "safetensors": "0.8.0",
+    "transformers": "5.5.4"
+  },
+  "scope": "One real optimizer update and fresh-process policy/optimizer reload; no rollout or robustness gain measured"
+}

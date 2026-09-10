@@ -1,0 +1,27 @@
+{
+  "source_sha256": "e4edff85c45bfffdb92e891596200a4b814fc85e2f27300ff4c0dcf69dcc5571",
+  "updates_per_arm": 200,
+  "learning_rate": 1e-05,
+  "controls": {
+    "same_frame_tensors": true,
+    "same_learning_rates": true,
+    "same_update_budget": true,
+    "different_noise_or_rng_steps": [],
+    "interpretation": "Training controls only; language robustness requires simulator evaluation",
+    "same_initial_parameter_bytes": true
+  },
+  "reference_training_controls_equal": true,
+  "simulator_evaluation": "Pending",
+  "arms": {
+    "original_language": {
+      "peak_reserved_bytes": 3372220416,
+      "mean_seconds_per_update": 0.8503069140454681,
+      "last_20_mean_loss": 0.7097022764384746
+    },
+    "augmented_language": {
+      "peak_reserved_bytes": 3374317568,
+      "mean_seconds_per_update": 0.7947598813250807,
+      "last_20_mean_loss": 0.7438720025122165
+    }
+  }
+}

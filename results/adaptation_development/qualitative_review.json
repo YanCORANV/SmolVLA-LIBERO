@@ -1,0 +1,499 @@
+{
+  "source_evidence_sha256": "3553f7b299edb06d8b53877d791afb46cd8d19a92ebd55bd6846f80a3835f780",
+  "review_basis": "Two-camera frames at 0/40/80/120/160/200/240/280 plus complete object-position logs; assistant annotations, not independent human labels",
+  "cases": [
+    {
+      "case": "untuned_fp32_state_0_original",
+      "label": "success",
+      "target_motion": {
+        "max_z_rise_from_step_1_m": 0.1161094973863438,
+        "peak_z_step": 64,
+        "final_xy_displacement_from_step_1_m": 0.12014985142164349,
+        "final_xyz_m": [
+          0.05658055172725917,
+          0.1972503851306967,
+          0.9064720214635432
+        ]
+      },
+      "all_object_motion": {
+        "akita_black_bowl_1": {
+          "max_z_rise_from_step_1_m": 0.1161094973863438,
+          "peak_z_step": 64,
+          "final_xy_displacement_from_step_1_m": 0.12014985142164349,
+          "final_xyz_m": [
+            0.05658055172725917,
+            0.1972503851306967,
+            0.9064720214635432
+          ]
+        },
+        "akita_black_bowl_2": {
+          "max_z_rise_from_step_1_m": 7.603341556361443e-08,
+          "peak_z_step": 15,
+          "final_xy_displacement_from_step_1_m": 7.2037561585153666e-12,
+          "final_xyz_m": [
+            -0.18872204348866806,
+            0.32034760556817143,
+            0.898404150188853
+          ]
+        },
+        "glazed_rim_porcelain_ramekin_1": {
+          "max_z_rise_from_step_1_m": 6.82825335163173e-08,
+          "peak_z_step": 127,
+          "final_xy_displacement_from_step_1_m": 1.6868776190847517e-12,
+          "final_xyz_m": [
+            -0.19738350632009882,
+            0.1891407402732012,
+            0.8993413701303521
+          ]
+        },
+        "plate_1": {
+          "max_z_rise_from_step_1_m": 0.0054114889801022414,
+          "peak_z_step": 161,
+          "final_xy_displacement_from_step_1_m": 0.006444511207212811,
+          "final_xyz_m": [
+            0.0588000103632481,
+            0.20872377150553786,
+            0.9024936567064781
+          ]
+        }
+      },
+      "source_hashes": {
+        "outputs/adaptation_evaluation/runs/task0_adaptation_eval/untuned_fp32/state_0000_seed_0000_original/attempt_001/steps.jsonl": "25f0495a8b7b93c387806c13d82435c02afd6e37aa9573fe3c44d395888e7f00",
+        "outputs/adaptation_evaluation/runs/task0_adaptation_eval/untuned_fp32/state_0000_seed_0000_original/attempt_001/image.mp4": "b31f2536d3f4999757e3d933db511c3154dcb5f848f9e556c07626d2a104ccb6",
+        "outputs/adaptation_evaluation/runs/task0_adaptation_eval/untuned_fp32/state_0000_seed_0000_original/attempt_001/image2.mp4": "bd0190834c4d30ff8ebd21e8df937234a543000525d5c5d8e79bb968c970f155"
+      }
+    },
+    {
+      "case": "untuned_fp32_state_0_paraphrase_01",
+      "label": "grasp_lift_failure",
+      "target_motion": {
+        "max_z_rise_from_step_1_m": 0.004913590928115719,
+        "peak_z_step": 63,
+        "final_xy_displacement_from_step_1_m": 0.007932474849140008,
+        "final_xyz_m": [
+          -0.06503877271434383,
+          0.2098023471861511,
+          0.898404150188853
+        ]
+      },
+      "all_object_motion": {
+        "akita_black_bowl_1": {
+          "max_z_rise_from_step_1_m": 0.004913590928115719,
+          "peak_z_step": 63,
+          "final_xy_displacement_from_step_1_m": 0.007932474849140008,
+          "final_xyz_m": [
+            -0.06503877271434383,
+            0.2098023471861511,
+            0.898404150188853
+          ]
+        },
+        "akita_black_bowl_2": {
+          "max_z_rise_from_step_1_m": 7.603341556361443e-08,
+          "peak_z_step": 15,
+          "final_xy_displacement_from_step_1_m": 7.2037561585153666e-12,
+          "final_xyz_m": [
+            -0.18872204348866806,
+            0.32034760556817143,
+            0.898404150188853
+          ]
+        },
+        "glazed_rim_porcelain_ramekin_1": {
+          "max_z_rise_from_step_1_m": 6.82825336273396e-08,
+          "peak_z_step": 113,
+          "final_xy_displacement_from_step_1_m": 1.6868776190847517e-12,
+          "final_xyz_m": [
+            -0.19738350632009882,
+            0.1891407402732012,
+            0.8993413701303522
+          ]
+        },
+        "plate_1": {
+          "max_z_rise_from_step_1_m": 6.921196549214415e-08,
+          "peak_z_step": 15,
+          "final_xy_displacement_from_step_1_m": 1.235739127954617e-11,
+          "final_xyz_m": [
+            0.05341726861586711,
+            0.20518007063397525,
+            0.9024998346667837
+          ]
+        }
+      },
+      "source_hashes": {
+        "outputs/adaptation_evaluation/runs/task0_adaptation_eval/untuned_fp32/state_0000_seed_0000_paraphrase_01/attempt_001/steps.jsonl": "b6d68092381bba2f385799a96739f5db45739083e32b4a06f243d93e4ebde7fc",
+        "outputs/adaptation_evaluation/runs/task0_adaptation_eval/untuned_fp32/state_0000_seed_0000_paraphrase_01/attempt_001/image.mp4": "5db215660ce3b7a6653ae61ee36ac559ede343e60d3324bd187111f143c68623",
+        "outputs/adaptation_evaluation/runs/task0_adaptation_eval/untuned_fp32/state_0000_seed_0000_paraphrase_01/attempt_001/image2.mp4": "410addd9f417418eb9431ea570db0c57d2b32dcd7e11493cf2349c1ed64989b2"
+      }
+    },
+    {
+      "case": "untuned_fp32_state_0_paraphrase_02",
+      "label": "transfer_placement_incomplete",
+      "target_motion": {
+        "max_z_rise_from_step_1_m": 0.040793670739100674,
+        "peak_z_step": 86,
+        "final_xy_displacement_from_step_1_m": 0.13459606636763238,
+        "final_xyz_m": [
+          0.06840847639182963,
+          0.22891463464237444,
+          0.9140864184296804
+        ]
+      },
+      "all_object_motion": {
+        "akita_black_bowl_1": {
+          "max_z_rise_from_step_1_m": 0.040793670739100674,
+          "peak_z_step": 86,
+          "final_xy_displacement_from_step_1_m": 0.13459606636763238,
+          "final_xyz_m": [
+            0.06840847639182963,
+            0.22891463464237444,
+            0.9140864184296804
+          ]
+        },
+        "akita_black_bowl_2": {
+          "max_z_rise_from_step_1_m": 7.603341556361443e-08,
+          "peak_z_step": 15,
+          "final_xy_displacement_from_step_1_m": 7.2037561585153666e-12,
+          "final_xyz_m": [
+            -0.18872204348866806,
+            0.32034760556817143,
+            0.898404150188853
+          ]
+        },
+        "glazed_rim_porcelain_ramekin_1": {
+          "max_z_rise_from_step_1_m": 6.82825332942727e-08,
+          "peak_z_step": 15,
+          "final_xy_displacement_from_step_1_m": 1.6868776190847517e-12,
+          "final_xyz_m": [
+            -0.19738350632009882,
+            0.1891407402732012,
+            0.8993413701303519
+          ]
+        },
+        "plate_1": {
+          "max_z_rise_from_step_1_m": 0.01771945201908809,
+          "peak_z_step": 75,
+          "final_xy_displacement_from_step_1_m": 0.06226645572340558,
+          "final_xyz_m": [
+            0.09161295748993721,
+            0.156004864881708,
+            0.9024964632995426
+          ]
+        }
+      },
+      "source_hashes": {
+        "outputs/adaptation_evaluation/runs/task0_adaptation_eval/untuned_fp32/state_0000_seed_0000_paraphrase_02/attempt_001/steps.jsonl": "898dddc3c06c7cc755e0c6cae4ed982a9ea7caa5ebbc2445d0f26838d2ba5ee1",
+        "outputs/adaptation_evaluation/runs/task0_adaptation_eval/untuned_fp32/state_0000_seed_0000_paraphrase_02/attempt_001/image.mp4": "0d0d89c4ddf7d4a356d80cb1479860fa0179eff00c8bd97206328ecd6ab532a9",
+        "outputs/adaptation_evaluation/runs/task0_adaptation_eval/untuned_fp32/state_0000_seed_0000_paraphrase_02/attempt_001/image2.mp4": "81498bc6b862d00460aa644a7d15a31545bdd826d8c2f55f9a2911559f355a89"
+      }
+    },
+    {
+      "case": "original_language_state_0_original",
+      "label": "grasp_lift_failure",
+      "target_motion": {
+        "max_z_rise_from_step_1_m": 6.154643645972513e-05,
+        "peak_z_step": 62,
+        "final_xy_displacement_from_step_1_m": 0.003583318653436886,
+        "final_xyz_m": [
+          -0.0658399509858322,
+          0.20471716694508216,
+          0.8984041501888531
+        ]
+      },
+      "all_object_motion": {
+        "akita_black_bowl_1": {
+          "max_z_rise_from_step_1_m": 6.154643645972513e-05,
+          "peak_z_step": 62,
+          "final_xy_displacement_from_step_1_m": 0.003583318653436886,
+          "final_xyz_m": [
+            -0.0658399509858322,
+            0.20471716694508216,
+            0.8984041501888531
+          ]
+        },
+        "akita_black_bowl_2": {
+          "max_z_rise_from_step_1_m": 7.603341567463673e-08,
+          "peak_z_step": 121,
+          "final_xy_displacement_from_step_1_m": 5.452741570127913e-12,
+          "final_xyz_m": [
+            -0.1887220434897971,
+            0.3203476055695909,
+            0.8984041501888531
+          ]
+        },
+        "glazed_rim_porcelain_ramekin_1": {
+          "max_z_rise_from_step_1_m": 6.82825332942727e-08,
+          "peak_z_step": 15,
+          "final_xy_displacement_from_step_1_m": 1.6398670002947708e-12,
+          "final_xyz_m": [
+            -0.19738350632007448,
+            0.1891407402732477,
+            0.8993413701303519
+          ]
+        },
+        "plate_1": {
+          "max_z_rise_from_step_1_m": 0.010805271745144562,
+          "peak_z_step": 118,
+          "final_xy_displacement_from_step_1_m": 0.004361613526314572,
+          "final_xyz_m": [
+            0.049392120229732564,
+            0.20685990782937005,
+            0.9024998346667837
+          ]
+        }
+      },
+      "source_hashes": {
+        "outputs/adaptation_evaluation/runs/task0_adaptation_eval/original_language/state_0000_seed_0000_original/attempt_001/steps.jsonl": "771931572e05d2b68e51b414ff3a988859a2e714d437d4cd02476016d0848a03",
+        "outputs/adaptation_evaluation/runs/task0_adaptation_eval/original_language/state_0000_seed_0000_original/attempt_001/image.mp4": "a9b71939ece36767101ead73d5351ac2a8151691e82956facffdfd7f6f1e6543",
+        "outputs/adaptation_evaluation/runs/task0_adaptation_eval/original_language/state_0000_seed_0000_original/attempt_001/image2.mp4": "b14997b731dae8251cf42e0d1871f8418c1a45eb65ee33eec3defb8ad4d5a777"
+      }
+    },
+    {
+      "case": "augmented_language_state_0_original",
+      "label": "grasp_lift_failure",
+      "target_motion": {
+        "max_z_rise_from_step_1_m": 0.0016289298450862244,
+        "peak_z_step": 53,
+        "final_xy_displacement_from_step_1_m": 0.04286085258624495,
+        "final_xyz_m": [
+          -0.09698502330279601,
+          0.22874810080751184,
+          0.8982792159621551
+        ]
+      },
+      "all_object_motion": {
+        "akita_black_bowl_1": {
+          "max_z_rise_from_step_1_m": 0.0016289298450862244,
+          "peak_z_step": 53,
+          "final_xy_displacement_from_step_1_m": 0.04286085258624495,
+          "final_xyz_m": [
+            -0.09698502330279601,
+            0.22874810080751184,
+            0.8982792159621551
+          ]
+        },
+        "akita_black_bowl_2": {
+          "max_z_rise_from_step_1_m": 7.603652130150351e-08,
+          "peak_z_step": 122,
+          "final_xy_displacement_from_step_1_m": 7.801254366629539e-12,
+          "final_xyz_m": [
+            -0.18872204348828706,
+            0.3203476055676922,
+            0.8984041501891101
+          ]
+        },
+        "glazed_rim_porcelain_ramekin_1": {
+          "max_z_rise_from_step_1_m": 6.828777532330577e-08,
+          "peak_z_step": 122,
+          "final_xy_displacement_from_step_1_m": 1.7030910263241239e-12,
+          "final_xyz_m": [
+            -0.19738350632010723,
+            0.18914074027318525,
+            0.8993413701307851
+          ]
+        },
+        "plate_1": {
+          "max_z_rise_from_step_1_m": 0.02682318873826328,
+          "peak_z_step": 225,
+          "final_xy_displacement_from_step_1_m": 0.04619255048679552,
+          "final_xyz_m": [
+            0.09806229416578743,
+            0.19332370465722215,
+            0.9026320901279833
+          ]
+        }
+      },
+      "source_hashes": {
+        "outputs/adaptation_evaluation/runs/task0_adaptation_eval/augmented_language/state_0000_seed_0000_original/attempt_001/steps.jsonl": "b1351dbe3236061a83f9a5ffa821427bf61d3bd06c88d8044c679343c70f9b95",
+        "outputs/adaptation_evaluation/runs/task0_adaptation_eval/augmented_language/state_0000_seed_0000_original/attempt_001/image.mp4": "b771b9cfc692140393abba9542ead7b892157e5044b0c50516b1214d69910e96",
+        "outputs/adaptation_evaluation/runs/task0_adaptation_eval/augmented_language/state_0000_seed_0000_original/attempt_001/image2.mp4": "f89ea6c54b8fb48355f3b60fc2682e152ba1a3f92bf889286fbebab24aacda5c"
+      }
+    },
+    {
+      "case": "augmented_language_state_0_paraphrase_01",
+      "label": "grasp_lift_failure",
+      "target_motion": {
+        "max_z_rise_from_step_1_m": 0.004651564004773734,
+        "peak_z_step": 66,
+        "final_xy_displacement_from_step_1_m": 0.028814083198734606,
+        "final_xyz_m": [
+          -0.08517060440227218,
+          0.2209868004334263,
+          0.898404150188853
+        ]
+      },
+      "all_object_motion": {
+        "akita_black_bowl_1": {
+          "max_z_rise_from_step_1_m": 0.004651564004773734,
+          "peak_z_step": 66,
+          "final_xy_displacement_from_step_1_m": 0.028814083198734606,
+          "final_xyz_m": [
+            -0.08517060440227218,
+            0.2209868004334263,
+            0.898404150188853
+          ]
+        },
+        "akita_black_bowl_2": {
+          "max_z_rise_from_step_1_m": 7.603341567463673e-08,
+          "peak_z_step": 163,
+          "final_xy_displacement_from_step_1_m": 7.198828389009154e-12,
+          "final_xyz_m": [
+            -0.18872204348867122,
+            0.3203476055681754,
+            0.8984041501888531
+          ]
+        },
+        "glazed_rim_porcelain_ramekin_1": {
+          "max_z_rise_from_step_1_m": 6.82825332942727e-08,
+          "peak_z_step": 15,
+          "final_xy_displacement_from_step_1_m": 1.6867650460896915e-12,
+          "final_xyz_m": [
+            -0.19738350632009877,
+            0.18914074027320132,
+            0.8993413701303519
+          ]
+        },
+        "plate_1": {
+          "max_z_rise_from_step_1_m": 0.01967993917530575,
+          "peak_z_step": 227,
+          "final_xy_displacement_from_step_1_m": 0.02775493394416871,
+          "final_xyz_m": [
+            0.08047342141028904,
+            0.19899129416217837,
+            0.9024998346667839
+          ]
+        }
+      },
+      "source_hashes": {
+        "outputs/adaptation_evaluation/runs/task0_adaptation_eval/augmented_language/state_0000_seed_0000_paraphrase_01/attempt_001/steps.jsonl": "e767d29d486239d704b6f295337e63841fcd5ca16ef4e28721d208a2e31b45db",
+        "outputs/adaptation_evaluation/runs/task0_adaptation_eval/augmented_language/state_0000_seed_0000_paraphrase_01/attempt_001/image.mp4": "d4fc934cc68b510cc1af7a1caaa0d1517344cd6a089051577b4d3a1b221b2fd8",
+        "outputs/adaptation_evaluation/runs/task0_adaptation_eval/augmented_language/state_0000_seed_0000_paraphrase_01/attempt_001/image2.mp4": "09ace5dc8d7bfc8cf8908b44992000808b7a915f2a201f5a11149852399fb6ae"
+      }
+    },
+    {
+      "case": "augmented_language_state_0_paraphrase_02",
+      "label": "transient_lift_transfer_incomplete",
+      "target_motion": {
+        "max_z_rise_from_step_1_m": 0.03671338639511179,
+        "peak_z_step": 74,
+        "final_xy_displacement_from_step_1_m": 0.047371172207683894,
+        "final_xyz_m": [
+          -0.09441768866547308,
+          0.2378940183297731,
+          0.8984041501888531
+        ]
+      },
+      "all_object_motion": {
+        "akita_black_bowl_1": {
+          "max_z_rise_from_step_1_m": 0.03671338639511179,
+          "peak_z_step": 74,
+          "final_xy_displacement_from_step_1_m": 0.047371172207683894,
+          "final_xyz_m": [
+            -0.09441768866547308,
+            0.2378940183297731,
+            0.8984041501888531
+          ]
+        },
+        "akita_black_bowl_2": {
+          "max_z_rise_from_step_1_m": 7.603341567463673e-08,
+          "peak_z_step": 165,
+          "final_xy_displacement_from_step_1_m": 7.104607112668555e-12,
+          "final_xyz_m": [
+            -0.1887220434887314,
+            0.3203476055682512,
+            0.8984041501888531
+          ]
+        },
+        "glazed_rim_porcelain_ramekin_1": {
+          "max_z_rise_from_step_1_m": 6.82825332942727e-08,
+          "peak_z_step": 15,
+          "final_xy_displacement_from_step_1_m": 1.6841755375324219e-12,
+          "final_xyz_m": [
+            -0.19738350632009746,
+            0.18914074027320388,
+            0.8993413701303519
+          ]
+        },
+        "plate_1": {
+          "max_z_rise_from_step_1_m": 0.01640448023431662,
+          "peak_z_step": 240,
+          "final_xy_displacement_from_step_1_m": 0.02831139656077466,
+          "final_xyz_m": [
+            0.0767719539760117,
+            0.1891771381772558,
+            0.9112080639327395
+          ]
+        }
+      },
+      "source_hashes": {
+        "outputs/adaptation_evaluation/runs/task0_adaptation_eval/augmented_language/state_0000_seed_0000_paraphrase_02/attempt_001/steps.jsonl": "c8f57b460b73e0bb702b87fe934976e29e15c0d83777ba875b95513d92104c17",
+        "outputs/adaptation_evaluation/runs/task0_adaptation_eval/augmented_language/state_0000_seed_0000_paraphrase_02/attempt_001/image.mp4": "5ae69bff054cddcf3d3006a9b70c756d22407650ea9cf326f1eb603fae8269fa",
+        "outputs/adaptation_evaluation/runs/task0_adaptation_eval/augmented_language/state_0000_seed_0000_paraphrase_02/attempt_001/image2.mp4": "fc018e662c5037d65da0b2c76d3a0cf06474f4c0ff4c16f193a55acdf6132f22"
+      }
+    },
+    {
+      "case": "augmented_language_state_1_original",
+      "label": "success",
+      "target_motion": {
+        "max_z_rise_from_step_1_m": 0.09897835688718049,
+        "peak_z_step": 82,
+        "final_xy_displacement_from_step_1_m": 0.10617517847582017,
+        "final_xyz_m": [
+          0.03762367936259132,
+          0.22666301160204358,
+          0.9058745767649852
+        ]
+      },
+      "all_object_motion": {
+        "akita_black_bowl_1": {
+          "max_z_rise_from_step_1_m": 0.09897835688718049,
+          "peak_z_step": 82,
+          "final_xy_displacement_from_step_1_m": 0.10617517847582017,
+          "final_xyz_m": [
+            0.03762367936259132,
+            0.22666301160204358,
+            0.9058745767649852
+          ]
+        },
+        "akita_black_bowl_2": {
+          "max_z_rise_from_step_1_m": 7.603341556361443e-08,
+          "peak_z_step": 15,
+          "final_xy_displacement_from_step_1_m": 7.2037561585153666e-12,
+          "final_xyz_m": [
+            -0.18464649731396843,
+            0.3301729021410767,
+            0.898404150188853
+          ]
+        },
+        "glazed_rim_porcelain_ramekin_1": {
+          "max_z_rise_from_step_1_m": 6.82825332942727e-08,
+          "peak_z_step": 15,
+          "final_xy_displacement_from_step_1_m": 1.6868776190847517e-12,
+          "final_xyz_m": [
+            -0.20142685519972822,
+            0.1872995512257049,
+            0.8993413701303519
+          ]
+        },
+        "plate_1": {
+          "max_z_rise_from_step_1_m": 0.004817075873490229,
+          "peak_z_step": 98,
+          "final_xy_displacement_from_step_1_m": 0.02611376101692429,
+          "final_xyz_m": [
+            0.039730838979211355,
+            0.20977251707126446,
+            0.9004451778643162
+          ]
+        }
+      },
+      "source_hashes": {
+        "outputs/adaptation_evaluation/runs/task0_adaptation_eval/augmented_language/state_0001_seed_0000_original/attempt_001/steps.jsonl": "c097514f90a2329f38732d5c4b3ab9f9ac974f5044be89e459ef83243f6a0af5",
+        "outputs/adaptation_evaluation/runs/task0_adaptation_eval/augmented_language/state_0001_seed_0000_original/attempt_001/image.mp4": "6a5fae676f62a5073a54ae1e7430b741236836c87bd07b3c0a4945e3a57a5cc1",
+        "outputs/adaptation_evaluation/runs/task0_adaptation_eval/augmented_language/state_0001_seed_0000_original/attempt_001/image2.mp4": "2a91db0cebb1ff43b9a2e0d586facdb38162f5d6b1df29d0597db5540d11e389"
+      }
+    }
+  ],
+  "limitations": [
+    "Purposive sample; no failure-frequency estimate",
+    "No contact-based grasp predicate or causal diagnosis",
+    "No claim that language was correctly understood"
+  ]
+}

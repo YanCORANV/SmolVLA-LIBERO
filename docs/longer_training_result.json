@@ -1,0 +1,29 @@
+{
+  "source_comparison_sha256": "2e2c40a68b1994a75d1a99e7100335a2558185501b33679615463a94e7a32cdd",
+  "updates_per_arm": 1000,
+  "controls": {
+    "same_frame_tensors": true,
+    "same_learning_rates": true,
+    "same_update_budget": true,
+    "different_noise_or_rng_steps": [],
+    "interpretation": "Training controls only; language robustness requires simulator evaluation",
+    "same_initial_parameter_bytes": true
+  },
+  "reference_sampling_rng_prefix_equal": true,
+  "schedule_note": "Longer budget and longer cosine decay horizon; LR prefix differs from 200-update reference.",
+  "simulator_evaluation": "Pending",
+  "arms": {
+    "original_language": {
+      "checkpoint": "step_001000/attempt_001",
+      "peak_reserved_bytes": 3372220416,
+      "mean_seconds_per_update": 0.7028580424820393,
+      "last_20_mean_loss": 0.568822767585516
+    },
+    "augmented_language": {
+      "checkpoint": "step_001000/attempt_001",
+      "peak_reserved_bytes": 3374317568,
+      "mean_seconds_per_update": 0.7185400833454186,
+      "last_20_mean_loss": 0.5815569907426834
+    }
+  }
+}

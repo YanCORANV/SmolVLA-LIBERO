@@ -1,0 +1,60 @@
+{
+  "basis": "Assistant review of selected dual-camera frames and complete recorded object-position/goal timelines; two purposively selected state-0 cases",
+  "cases": [
+    {
+      "instruction": "paraphrase_01",
+      "model": "augmented_language",
+      "state": 0,
+      "seed": 0,
+      "selected_video_frames": [
+        0,
+        40,
+        80,
+        120,
+        160,
+        200,
+        240,
+        280
+      ],
+      "target_max_z_rise_from_step1_m": 0.00247221436227385,
+      "source_hashes": {
+        "steps.jsonl": "bd0023480c4b72e83238a321c03cebffe20cd4dc84307d714bd6caa53187f886",
+        "image.mp4": "96f673f1a5c1a3ad7b9ce810f123be821f14900ddc65a92d3332097dc5ecff9e",
+        "image2.mp4": "96f40f67ebf30d15bdbcec15ffe51c23a6d81c7e6e3bb3f06165abaa9a8322cf"
+      },
+      "contact_sheet": "paraphrase_01_state0.png",
+      "contact_sheet_sha256": "f5de16cc270efdca188852e9a36879e81ba3915f53f1dc99fd154989346d3278",
+      "annotation": "Grasp/lift failure"
+    },
+    {
+      "instruction": "paraphrase_02",
+      "model": "augmented_language",
+      "state": 0,
+      "seed": 0,
+      "selected_video_frames": [
+        80,
+        160,
+        200,
+        210,
+        240,
+        260,
+        270,
+        280
+      ],
+      "target_max_z_rise_from_step1_m": 0.044552193264661866,
+      "source_hashes": {
+        "steps.jsonl": "b3cbc64b14aee44a67ea00a6a438fcdeb5e0e1672ffa8444cebfbee802b03a26",
+        "image.mp4": "21d2fd1371e8bfe7b4f3bdae3f5447aff8761fb37354d87a43e6522cb27c8bc9",
+        "image2.mp4": "d3e96c568bc997db2e142ee1bb91ee4996df98de677d01896fd4548c03033595"
+      },
+      "contact_sheet": "paraphrase_02_state0.png",
+      "contact_sheet_sha256": "3c2b79499e8fb27a27f73ba82dad511fb2ada706968677e28d3f2e5ac90ff3c2",
+      "annotation": "Native goal temporarily achieved, then lost while arm and bowl/plate continue moving; contact mechanism not verified"
+    }
+  ],
+  "limitations": [
+    "No contact-force analysis",
+    "No failure-category prevalence estimate",
+    "No causal claim about language understanding or optimization"
+  ]
+}

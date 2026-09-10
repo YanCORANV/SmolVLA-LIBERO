@@ -1,0 +1,6 @@
+{
+  "source_run": "outputs/language_pilot",
+  "output_root": "outputs/state_benchmark",
+  "protocol_version": 1,
+  "scope": "LIBERO-Spatial task 0 only. Choose official initial-state indices and policy seeds interactively; environment seed and six instructions are inherited from the audited pilot."
+}

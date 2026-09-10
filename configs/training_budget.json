@@ -1,0 +1,8 @@
+{
+  "reference_run": "outputs/adaptation/runs/task0_lower_lr",
+  "default_run_name": "task0_longer_training",
+  "default_updates": 1000,
+  "default_checkpoint_every": 500,
+  "hypothesis": "More low-learning-rate task demonstrations may improve grasp/transfer execution across wording; benefit is unproven.",
+  "scope": "Restart both arms from the original checkpoint at the existing 1e-5 peak. Extend the update budget and cosine decay horizon together; do not call this continuation at an identical learning-rate trajectory."
+}

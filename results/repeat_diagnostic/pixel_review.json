@@ -1,0 +1,215 @@
+{
+  "diagnostic_identity_fingerprint": "d565328ab56f11dca0c889d449dafd7693a34ea87384e0c4d1559790c52a5fdf",
+  "policy_step": 46,
+  "observation_after_action": 45,
+  "actions_equal_before_this_step": true,
+  "saved_sim_states_equal_through_observation": true,
+  "input_tensor_equality": {
+    "observation.images.image": false,
+    "observation.images.image2": true,
+    "observation.language.attention_mask": true,
+    "observation.language.tokens": true,
+    "observation.state": true
+  },
+  "cameras": [
+    {
+      "camera": "image",
+      "stats": {
+        "changed_pixels": 4,
+        "total_pixels": 65536,
+        "changed_channels": 12,
+        "max_abs_channel_delta_uint8": 1,
+        "mean_abs_channel_delta_uint8": 6.103515625e-05,
+        "bbox_xyxy_inclusive": [
+          140,
+          113,
+          142,
+          115
+        ],
+        "pixels": [
+          {
+            "x": 141,
+            "y": 113,
+            "original_rgb": [
+              93,
+              93,
+              93
+            ],
+            "repeat_rgb": [
+              94,
+              94,
+              94
+            ]
+          },
+          {
+            "x": 142,
+            "y": 113,
+            "original_rgb": [
+              90,
+              90,
+              90
+            ],
+            "repeat_rgb": [
+              91,
+              91,
+              91
+            ]
+          },
+          {
+            "x": 141,
+            "y": 114,
+            "original_rgb": [
+              99,
+              99,
+              99
+            ],
+            "repeat_rgb": [
+              100,
+              100,
+              100
+            ]
+          },
+          {
+            "x": 140,
+            "y": 115,
+            "original_rgb": [
+              106,
+              106,
+              106
+            ],
+            "repeat_rgb": [
+              107,
+              107,
+              107
+            ]
+          }
+        ]
+      },
+      "raw_hash_verified": true,
+      "comparison": "image/attempt_001/comparison.png"
+    },
+    {
+      "camera": "image2",
+      "stats": {
+        "changed_pixels": 0,
+        "total_pixels": 65536,
+        "changed_channels": 0,
+        "max_abs_channel_delta_uint8": 0,
+        "mean_abs_channel_delta_uint8": 0.0,
+        "bbox_xyxy_inclusive": null,
+        "pixels": []
+      },
+      "raw_hash_verified": true,
+      "comparison": "image2/attempt_001/comparison.png"
+    }
+  ],
+  "source_replay": {
+    "cases": [
+      {
+        "trial": "original",
+        "step": 46,
+        "replays": [
+          {
+            "repetition": 1,
+            "input_equal_to_recorded": true,
+            "rng_equal_to_recorded": true,
+            "noise_equal_to_recorded": true,
+            "action_equal_to_recorded": true,
+            "action_hash": {
+              "action": "0a586d9d657ad04d4c326ca80f824dd2c576c8d4b25328f3cd46ba1464e0c5e7"
+            },
+            "normalized_action": [
+              [
+                0.1556333601474762,
+                -0.005078319925814867,
+                0.826770544052124,
+                -0.7383533120155334,
+                -0.15626516938209534,
+                -1.2852978706359863,
+                1.0467337369918823
+              ]
+            ]
+          },
+          {
+            "repetition": 2,
+            "input_equal_to_recorded": true,
+            "rng_equal_to_recorded": true,
+            "noise_equal_to_recorded": true,
+            "action_equal_to_recorded": true,
+            "action_hash": {
+              "action": "0a586d9d657ad04d4c326ca80f824dd2c576c8d4b25328f3cd46ba1464e0c5e7"
+            },
+            "normalized_action": [
+              [
+                0.1556333601474762,
+                -0.005078319925814867,
+                0.826770544052124,
+                -0.7383533120155334,
+                -0.15626516938209534,
+                -1.2852978706359863,
+                1.0467337369918823
+              ]
+            ]
+          }
+        ],
+        "two_replay_actions_equal": true
+      },
+      {
+        "trial": "original_repeat",
+        "step": 46,
+        "replays": [
+          {
+            "repetition": 1,
+            "input_equal_to_recorded": true,
+            "rng_equal_to_recorded": true,
+            "noise_equal_to_recorded": true,
+            "action_equal_to_recorded": true,
+            "action_hash": {
+              "action": "a01b682df0fc59309f6eb26fc750d17cfd8741443bbd41d3fb9567ce4da0cb8f"
+            },
+            "normalized_action": [
+              [
+                0.15361157059669495,
+                -0.0026332209818065166,
+                0.8218950033187866,
+                -0.7377458214759827,
+                -0.15288767218589783,
+                -1.2788028717041016,
+                1.047065019607544
+              ]
+            ]
+          },
+          {
+            "repetition": 2,
+            "input_equal_to_recorded": true,
+            "rng_equal_to_recorded": true,
+            "noise_equal_to_recorded": true,
+            "action_equal_to_recorded": true,
+            "action_hash": {
+              "action": "a01b682df0fc59309f6eb26fc750d17cfd8741443bbd41d3fb9567ce4da0cb8f"
+            },
+            "normalized_action": [
+              [
+                0.15361157059669495,
+                -0.0026332209818065166,
+                0.8218950033187866,
+                -0.7377458214759827,
+                -0.15288767218589783,
+                -1.2788028717041016,
+                1.047065019607544
+              ]
+            ]
+          }
+        ],
+        "two_replay_actions_equal": true
+      }
+    ],
+    "scope": "Two replays per recorded input; equality does not prove universal determinism."
+  },
+  "interpretation": "A small primary-camera difference is already present before action selection. Its exact rendering/hidden-state cause remains unproven.",
+  "limitations": [
+    "Saved simulator arrays do not cover every derived renderer/controller state.",
+    "Replays establish repeatability for these recorded inputs only.",
+    "This checks an observed natural perturbation, not adversarial or population robustness."
+  ]
+}

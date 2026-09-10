@@ -1,0 +1,7 @@
+{
+  "reference_run": "outputs/adaptation/runs/task0_adaptation",
+  "default_run_name": "task0_lower_lr",
+  "default_learning_rate": 0.00001,
+  "hypothesis": "A smaller peak learning rate may reduce original-instruction regression; improvement is not assumed.",
+  "fixed": "Same original starting weights, 200-update schedule, demonstration split, language assignments, policy randomness and scheduler floor as the completed reference. Only peak learning rate changes."
+}

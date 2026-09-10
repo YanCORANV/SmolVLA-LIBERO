@@ -1,0 +1,9 @@
+{
+  "training_run": "outputs/adaptation/runs/task0_longer_training",
+  "baseline_run": "outputs/language_pilot",
+  "reference_evaluation": "outputs/adaptation_evaluation/runs/task0_lower_lr_eval",
+  "output_root": "outputs/adaptation_evaluation",
+  "default_run_name": "task0_longer_training_eval",
+  "models": ["untuned_fp32", "original_language", "augmented_language"],
+  "instruction_ids": ["original", "original_repeat", "paraphrase_01", "paraphrase_02"]
+}

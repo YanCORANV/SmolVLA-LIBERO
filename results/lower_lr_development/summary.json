@@ -1,0 +1,282 @@
+{
+  "source_comparison_sha256": "d4c0ef2a3c2eba19fdfb7b4f2240bf001f4af3b0c23f93f99ce862d1c6aa26fa",
+  "all_complete": true,
+  "completed_matched_groups": 3,
+  "new_episodes": 24,
+  "reused_baseline_episodes": 12,
+  "outcomes": [
+    {
+      "model": "untuned_fp32",
+      "instruction": "original",
+      "episodes": 3,
+      "success_ever": 1,
+      "success_final": 1,
+      "repeat_control": false
+    },
+    {
+      "model": "untuned_fp32",
+      "instruction": "original_repeat",
+      "episodes": 3,
+      "success_ever": 1,
+      "success_final": 1,
+      "repeat_control": true
+    },
+    {
+      "model": "untuned_fp32",
+      "instruction": "paraphrase_01",
+      "episodes": 3,
+      "success_ever": 0,
+      "success_final": 0,
+      "repeat_control": false
+    },
+    {
+      "model": "untuned_fp32",
+      "instruction": "paraphrase_02",
+      "episodes": 3,
+      "success_ever": 0,
+      "success_final": 0,
+      "repeat_control": false
+    },
+    {
+      "model": "original_language",
+      "instruction": "original",
+      "episodes": 3,
+      "success_ever": 1,
+      "success_final": 1,
+      "repeat_control": false
+    },
+    {
+      "model": "original_language",
+      "instruction": "original_repeat",
+      "episodes": 3,
+      "success_ever": 1,
+      "success_final": 1,
+      "repeat_control": true
+    },
+    {
+      "model": "original_language",
+      "instruction": "paraphrase_01",
+      "episodes": 3,
+      "success_ever": 0,
+      "success_final": 0,
+      "repeat_control": false
+    },
+    {
+      "model": "original_language",
+      "instruction": "paraphrase_02",
+      "episodes": 3,
+      "success_ever": 0,
+      "success_final": 0,
+      "repeat_control": false
+    },
+    {
+      "model": "augmented_language",
+      "instruction": "original",
+      "episodes": 3,
+      "success_ever": 3,
+      "success_final": 3,
+      "repeat_control": false
+    },
+    {
+      "model": "augmented_language",
+      "instruction": "original_repeat",
+      "episodes": 3,
+      "success_ever": 3,
+      "success_final": 3,
+      "repeat_control": true
+    },
+    {
+      "model": "augmented_language",
+      "instruction": "paraphrase_01",
+      "episodes": 3,
+      "success_ever": 0,
+      "success_final": 0,
+      "repeat_control": false
+    },
+    {
+      "model": "augmented_language",
+      "instruction": "paraphrase_02",
+      "episodes": 3,
+      "success_ever": 1,
+      "success_final": 0,
+      "repeat_control": false
+    }
+  ],
+  "paired_cases": [
+    {
+      "initial_state_index": 0,
+      "policy_seed": 0,
+      "instruction_id": "original",
+      "untuned_fp32_ever": 1,
+      "original_language_ever": 1,
+      "augmented_language_ever": 1,
+      "original_language_minus_untuned_ever": 0,
+      "augmented_language_minus_untuned_ever": 0,
+      "augmented_minus_original_tuning_ever": 0,
+      "untuned_fp32_final": 1,
+      "original_language_final": 1,
+      "augmented_language_final": 1,
+      "original_language_minus_untuned_final": 0,
+      "augmented_language_minus_untuned_final": 0,
+      "augmented_minus_original_tuning_final": 0
+    },
+    {
+      "initial_state_index": 0,
+      "policy_seed": 0,
+      "instruction_id": "paraphrase_01",
+      "untuned_fp32_ever": 0,
+      "original_language_ever": 0,
+      "augmented_language_ever": 0,
+      "original_language_minus_untuned_ever": 0,
+      "augmented_language_minus_untuned_ever": 0,
+      "augmented_minus_original_tuning_ever": 0,
+      "untuned_fp32_final": 0,
+      "original_language_final": 0,
+      "augmented_language_final": 0,
+      "original_language_minus_untuned_final": 0,
+      "augmented_language_minus_untuned_final": 0,
+      "augmented_minus_original_tuning_final": 0
+    },
+    {
+      "initial_state_index": 0,
+      "policy_seed": 0,
+      "instruction_id": "paraphrase_02",
+      "untuned_fp32_ever": 0,
+      "original_language_ever": 0,
+      "augmented_language_ever": 1,
+      "original_language_minus_untuned_ever": 0,
+      "augmented_language_minus_untuned_ever": 1,
+      "augmented_minus_original_tuning_ever": 1,
+      "untuned_fp32_final": 0,
+      "original_language_final": 0,
+      "augmented_language_final": 0,
+      "original_language_minus_untuned_final": 0,
+      "augmented_language_minus_untuned_final": 0,
+      "augmented_minus_original_tuning_final": 0
+    },
+    {
+      "initial_state_index": 1,
+      "policy_seed": 0,
+      "instruction_id": "original",
+      "untuned_fp32_ever": 0,
+      "original_language_ever": 0,
+      "augmented_language_ever": 1,
+      "original_language_minus_untuned_ever": 0,
+      "augmented_language_minus_untuned_ever": 1,
+      "augmented_minus_original_tuning_ever": 1,
+      "untuned_fp32_final": 0,
+      "original_language_final": 0,
+      "augmented_language_final": 1,
+      "original_language_minus_untuned_final": 0,
+      "augmented_language_minus_untuned_final": 1,
+      "augmented_minus_original_tuning_final": 1
+    },
+    {
+      "initial_state_index": 1,
+      "policy_seed": 0,
+      "instruction_id": "paraphrase_01",
+      "untuned_fp32_ever": 0,
+      "original_language_ever": 0,
+      "augmented_language_ever": 0,
+      "original_language_minus_untuned_ever": 0,
+      "augmented_language_minus_untuned_ever": 0,
+      "augmented_minus_original_tuning_ever": 0,
+      "untuned_fp32_final": 0,
+      "original_language_final": 0,
+      "augmented_language_final": 0,
+      "original_language_minus_untuned_final": 0,
+      "augmented_language_minus_untuned_final": 0,
+      "augmented_minus_original_tuning_final": 0
+    },
+    {
+      "initial_state_index": 1,
+      "policy_seed": 0,
+      "instruction_id": "paraphrase_02",
+      "untuned_fp32_ever": 0,
+      "original_language_ever": 0,
+      "augmented_language_ever": 0,
+      "original_language_minus_untuned_ever": 0,
+      "augmented_language_minus_untuned_ever": 0,
+      "augmented_minus_original_tuning_ever": 0,
+      "untuned_fp32_final": 0,
+      "original_language_final": 0,
+      "augmented_language_final": 0,
+      "original_language_minus_untuned_final": 0,
+      "augmented_language_minus_untuned_final": 0,
+      "augmented_minus_original_tuning_final": 0
+    },
+    {
+      "initial_state_index": 2,
+      "policy_seed": 0,
+      "instruction_id": "original",
+      "untuned_fp32_ever": 0,
+      "original_language_ever": 0,
+      "augmented_language_ever": 1,
+      "original_language_minus_untuned_ever": 0,
+      "augmented_language_minus_untuned_ever": 1,
+      "augmented_minus_original_tuning_ever": 1,
+      "untuned_fp32_final": 0,
+      "original_language_final": 0,
+      "augmented_language_final": 1,
+      "original_language_minus_untuned_final": 0,
+      "augmented_language_minus_untuned_final": 1,
+      "augmented_minus_original_tuning_final": 1
+    },
+    {
+      "initial_state_index": 2,
+      "policy_seed": 0,
+      "instruction_id": "paraphrase_01",
+      "untuned_fp32_ever": 0,
+      "original_language_ever": 0,
+      "augmented_language_ever": 0,
+      "original_language_minus_untuned_ever": 0,
+      "augmented_language_minus_untuned_ever": 0,
+      "augmented_minus_original_tuning_ever": 0,
+      "untuned_fp32_final": 0,
+      "original_language_final": 0,
+      "augmented_language_final": 0,
+      "original_language_minus_untuned_final": 0,
+      "augmented_language_minus_untuned_final": 0,
+      "augmented_minus_original_tuning_final": 0
+    },
+    {
+      "initial_state_index": 2,
+      "policy_seed": 0,
+      "instruction_id": "paraphrase_02",
+      "untuned_fp32_ever": 0,
+      "original_language_ever": 0,
+      "augmented_language_ever": 0,
+      "original_language_minus_untuned_ever": 0,
+      "augmented_language_minus_untuned_ever": 0,
+      "augmented_minus_original_tuning_ever": 0,
+      "untuned_fp32_final": 0,
+      "original_language_final": 0,
+      "augmented_language_final": 0,
+      "original_language_minus_untuned_final": 0,
+      "augmented_language_minus_untuned_final": 0,
+      "augmented_minus_original_tuning_final": 0
+    }
+  ],
+  "transient_C_state0": {
+    "goal_true_step_intervals_inclusive": [
+      [
+        206,
+        206
+      ],
+      [
+        208,
+        208
+      ],
+      [
+        210,
+        270
+      ]
+    ],
+    "goal_true_steps": 63,
+    "final_goal": false,
+    "steps_log_sha256": "b3cbc64b14aee44a67ea00a6a438fcdeb5e0e1672ffa8444cebfbee802b03a26"
+  },
+  "scope": "Task-0 development evaluation; 280-step fixed horizon, native original goal. No untouched-test or standard LIBERO score claimed.",
+  "video_review": "Pending for this lower-learning-rate evaluation",
+  "interpretation": "Original instruction improved on these three development cases. B did not improve; C has one transient success but no final successes."
+}

@@ -1,0 +1,31 @@
+{
+  "scope": "Completed paired training; simulator robustness results not yet measured",
+  "source_sha256": "a69b33439ae355a2192a1b90f37b7ad75b3048fe4c4f54464b176bc5ab6e263b",
+  "updates_per_arm": 200,
+  "controls": {
+    "same_frame_tensors": true,
+    "same_learning_rates": true,
+    "same_update_budget": true,
+    "different_noise_or_rng_steps": [],
+    "interpretation": "Training controls only; language robustness requires simulator evaluation",
+    "same_initial_parameter_bytes": true
+  },
+  "arms": {
+    "original_language": {
+      "step": 200,
+      "peak_reserved_bytes": 3372220416,
+      "last_20_mean_loss": 0.8846497640013695,
+      "mean_seconds_per_update": 0.700911084084928,
+      "changed_trainable_tensors": 299,
+      "frozen_unchanged": true
+    },
+    "augmented_language": {
+      "step": 200,
+      "peak_reserved_bytes": 3374317568,
+      "last_20_mean_loss": 0.899268876761198,
+      "mean_seconds_per_update": 0.695919161020156,
+      "changed_trainable_tensors": 299,
+      "frozen_unchanged": true
+    }
+  }
+}

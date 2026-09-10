@@ -1,0 +1,26 @@
+# Upstream lerobot-eval config; model validation passed, full rollout is next.
+# The policy path must be in this YAML so the upstream parser extracts its overrides.
+seed: 0
+job_name: first_libero_rollout
+output_dir: outputs/first_rollout
+env:
+  type: libero
+  task: libero_spatial
+  task_ids: [0]
+  init_states: true
+  hard_reset: true
+  control_mode: relative
+  max_parallel_tasks: 1
+  observation_height: 256
+  observation_width: 256
+eval:
+  n_episodes: 1
+  batch_size: 1
+  use_async_envs: false
+policy:
+  path: checkpoints/smolvla_libero
+  device: cuda
+  use_amp: false
+  push_to_hub: false
+  n_action_steps: 1
+  num_steps: 10

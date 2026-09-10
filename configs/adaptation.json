@@ -1,0 +1,14 @@
+{
+  "profile_directory": "outputs/training_profile/20260909T035618_978381088Z",
+  "profile_config": "configs/training_profile.json",
+  "training_catalog": "configs/instructions/task0_train.jsonl",
+  "development_catalog": "configs/instructions/task0.jsonl",
+  "output_root": "outputs/adaptation",
+  "arms": ["original_language", "augmented_language"],
+  "default_updates": 200,
+  "default_seed": 0,
+  "checkpoint_every": 100,
+  "log_every": 10,
+  "language_seed": 20260909,
+  "scope": "Task-0 development comparison; matched frames, updates and seeds; no rollout gains established"
+}

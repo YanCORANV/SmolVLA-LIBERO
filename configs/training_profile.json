@@ -1,0 +1,15 @@
+{
+  "source_run": "outputs/language_pilot",
+  "data_ready": "outputs/task0_data/ready.json",
+  "output_root": "outputs/training_profile",
+  "seed": 0,
+  "batch_size": 1,
+  "optimizer_updates": 1,
+  "mixed_precision": "bf16",
+  "trainable_parameter_dtype": "float32",
+  "freeze_vision_encoder": true,
+  "train_expert_only": true,
+  "train_state_proj": true,
+  "learning_rate": 0.0001,
+  "purpose": "One real official update plus separate-process checkpoint reload; not a trained research model or steady-state timing"
+}
