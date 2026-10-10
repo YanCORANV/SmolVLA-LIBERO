@@ -1,3 +1,5 @@
+> 历史说明（2026-10-09）：本文是首次发布 v0.1 时的流程记录。当前仓库已有 `origin`，最终 v4 实验也已完成；不要直接照抄文中的 `git add .`、`git remote add` 或旧项目描述。当前公开叙事见 [README](../README.md) 和 [最终结果](results.md)。
+
 # 第一次发布到 GitHub
 
 目标仓库：`YanCORANV/SmolVLA-LIBERO`。第一版定位为已有可运行代码和小规模

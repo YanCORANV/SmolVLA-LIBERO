@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-10-09 — completed language-robustness study and public documentation
+
+- First confirmatory, anchored and paired development, action/trajectory diagnosis, and amended final v4 evaluation are complete.
+- Final v4: 153/153 Task-0 rollouts on States 33–49. `paired_bc` improved observed canonical success but did not improve unseen-paraphrase success; the development result did not generalize.
+- Added a current README, experiment/method/results documents, curated result copies and reproducible figures. Historical protocol records and failed partial attempts remain preserved.
+
+
 ## v0.1.0 — prepared for initial publication
 
 - Official SmolVLA/LIBERO evaluation running on an RTX 4070 Laptop GPU with 8 GB VRAM.

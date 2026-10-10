@@ -1,15 +1,12 @@
-# Reproducing the project
+# Reproduction notes
 
-## What has been verified
+This is the staged workflow that ran in the project's Linux/WSL2 environment. It is **not** a verified one-command clean-clone reproduction: official datasets/model weights, local source checkpoints and prior-stage reports are not committed, and several frozen configs refer to those local artifacts. Raw GPU training and rollouts can take many hours. The [setup guide](setup.md) covers the environment.
 
-The staged workflow has run on one Linux/WSL2 machine with an RTX 4070 Laptop GPU
-(8 GB). All three development training/evaluation rounds completed there. A clean
-clone has not yet been independently validated end to end on another machine.
-Direct dependency pins and the recorded environment are provided, but are not a
-complete portable lockfile.
+## Orientation
 
-Run commands from the repository root, in Linux/WSL2. Follow [setup](setup.md) for
-native build tools and uv installation before starting:
+The current scientific result is in [results.md](results.md), with small machine-readable copies under [results/](../results/README.md). Do not interpret historical development notes as final evidence. No additional training or test rollout is needed to view or regenerate the portfolio figures.
+
+From the repository root in Linux/WSL2, the early integration path was:
 
 ```bash
 bash scripts/setup_environment.sh
@@ -20,60 +17,43 @@ bash scripts/run_first_rollout.sh
 python scripts/summarize_first_rollout.py
 ```
 
-Check each command's completion before proceeding. The last command decodes the
-saved video and exports a small public summary; it does not rerun the policy.
-Model/data downloads and raw videos are deliberately not included in Git.
+The official checkpoint is `HuggingFaceVLA/smolvla_libero`, pinned in this project to revision `6721902bc4d61e50a3bfdb11dfb4cb626f05d102`. See [requirements](../requirements.txt) and [recorded environment versions](environment-packages.txt). The direct dependency pins are not a complete portable lockfile.
 
-## Experiment sequence
+## Completed experiment entry points
 
-The commands below are stage entry points, not one independent copy-paste batch.
-Each stage requires artifacts from preceding stages; consult its linked protocol
-in the [documentation index](README.md) before running it.
+These are the *actual scripts* used by the staged study. Each requires successful artifacts from preceding stages and may refuse to run when frozen source/config hashes differ. They are shown for inspection and controlled reproduction, not as a recommendation to rerun consumed states.
 
-| Stage | Command |
-| --- | --- |
-| Verify exact language and identical reset observations | `python scripts/check_language_pairing.py` |
-| Run the six-condition one-state pilot | `bash scripts/run_language_pilot.sh` |
-| Diagnose identical-instruction repeat differences | `bash scripts/run_repeat_diagnostic.sh` |
-| Evaluate the matched state groups | `bash scripts/run_state_benchmark.sh` |
-| Prepare official demonstrations | `python scripts/prepare_task0_data.py` |
-| Measure a real optimizer update and verify reload | `bash scripts/profile_training.sh` |
-| Train both arms for the first comparison | `bash scripts/run_adaptation.sh` |
-| Evaluate the untuned model and both trained arms | `bash scripts/run_adaptation_evaluation.sh` |
-| Train/evaluate at the lower learning rate | `bash scripts/run_learning_rate_comparison.sh`, then `bash scripts/run_learning_rate_evaluation.sh` |
-| Train/evaluate with the longer budget | `bash scripts/run_training_budget.sh`, then `bash scripts/run_training_budget_evaluation.sh` |
+| Stage | Entrypoint | Required context |
+| --- | --- | --- |
+| Pairing and pilot | `python scripts/check_language_pairing.py`, `bash scripts/run_language_pilot.sh` | Official checkpoint, simulator and language catalogs |
+| Prepare task data | `python scripts/prepare_task0_data.py` | Official exact-task LIBERO demonstrations |
+| Original/augmented training history | `bash scripts/run_adaptation.sh`, `bash scripts/run_training_budget.sh` | Prepared data and prior study reports; see [historical training guide](paired_finetuning.md) |
+| First confirmatory held-out evaluation | `python scripts/run_held_out_evaluation.py` | Frozen [first matrix](../configs/held_out_evaluation/confirmatory_matrix.json) and all three checkpoints |
+| Anchored sampling | `python scripts/run_anchored_training.py` | Frozen [anchored config](../configs/anchored_training.json) |
+| Anchored development comparison | `python scripts/run_development_evaluation.py` | States 23–32, anchored/canonical/augmented checkpoints |
+| Action/trajectory diagnosis | `python scripts/diagnose_language_divergence.py` | Existing held-out and development trajectories; no new rollouts |
+| Paired BC and consistency training | `python scripts/run_paired_training.py` | Frozen [paired config](../configs/paired_training.json), Task-0 ready data and canonical step-1000 checkpoint |
+| Paired development selection | `python scripts/run_paired_development_evaluation.py` | Both committed paired checkpoints, States 23–32 |
+| Amended final v4 evaluation | `python scripts/run_final_confirmatory_evaluation.py` | Frozen [v4 matrix](../configs/final_confirmatory/final_matrix_v4.json), model manifest, final prompts and active 50-state asset |
 
-### Local artifact references must be updated for a new study
+The final entrypoint has completed **153/153** valid rollouts. Its `complete.json` journal skips committed trials and retains incomplete attempts; running it again does not create a new independent test. States 33–49 and their final prompts are now consumed for this project. The initially configured 50–52 are out of range in the active Task-0 initialization asset. [Amendment audit](../configs/final_confirmatory/freeze_final_protocol_v4.json).
 
-The checked-in configurations preserve the acceptance study's artifact names.
-For example, `configs/language_rollout.json` points to its timestamped pairing
-report, and `configs/adaptation.json` points to its timestamped training profile.
-On another machine, replace those references with the corresponding reports from
-your own successful runs **before** starting dependent experiments. Other configs
-reference named preceding runs; keep those names consistent with your new run choices.
+## Rebuild public figures without simulation
 
-Do not substitute public summary JSON files for raw acceptance reports: they are
-different artifacts. The scripts verify source/configuration hashes and matched
-controls. Changing a source or config after starting a run may intentionally block
-resumption; start a separate experiment instead of bypassing that check. Config edits
-therefore need to be settled before generating the evidence used by later stages.
+The curated input copies are checked in. This command reads only the existing [diagnostic CSV](../results/language_divergence/pair_level_divergence_measurements.csv), [development summaries](../results/development_selection/) and [final summary](../results/final_confirmatory_v4/summary.json):
 
-This artifact coupling is a current usability limitation. A portable, independently
-checked training quickstart is a follow-up item rather than a completed v0.1 claim.
+```bash
+python scripts/make_portfolio_figures.py
+```
 
-## Budgets and outputs
+It writes three PNGs under `assets/figures/`. It does not load SmolVLA, reset a LIBERO state, or run inference.
 
-Training uses batch size 1, a frozen vision-language backbone and FP32 trainable
-expert/projection parameters with BF16 autocast. The measured paired-training peak
-was approximately 3.14 GiB of PyTorch reserved GPU memory. This excludes some
-non-PyTorch allocations and is not a total-device memory guarantee.
+## Audit, resume and local artifacts
 
-Run choices and resumption use the existing interactive prompts. For evaluation,
-start with one worker; the recorded two-worker run did not establish a speedup.
-Available system RAM, not just free GPU memory, limits safe concurrency.
+- `outputs/`, `data/`, `checkpoints/`, `.venv/`, raw MP4s and model weights are Git-ignored. The public repository contains code, configs, protocol hashes, selected summary/CSV copies and figures.
+- Training checkpoints are committed through the existing benchmark journal. Evaluations count only attempts with a valid `complete.json`; interrupted attempts remain available for forensic review.
+- The [frozen model manifest](../configs/final_confirmatory/frozen_model_manifest_v4.json) identifies checkpoints; the [v4 freeze](../configs/final_confirmatory/freeze_final_protocol_v4.json) records source/config/model/prompt/state-asset hashes and the corrected matrix.
+- The final uncertainty calculation is a 10,000-replicate paired bootstrap over **17 state IDs**, keeping the three models and three prompt outcomes together for each sampled state.
+- CPU record/protocol checks can be run with `python -m unittest discover -s tests -v`; real SmolVLA checks need the configured project environment. The full suite was last run in the project WSL `.venv` before the v4 freeze.
 
-Raw logs, checkpoints and MP4s remain in ignored directories. Curated CSV/JSON
-results and keyframes are under `results/`. Success counts must be checked against
-episode records and videos; training loss alone is not a rollout success result.
-
-For CPU-only record checks, see [Contributing](../CONTRIBUTING.md).
+A new independent study needs its own source artifacts, language catalog, state partition and preregistered protocol. The existing test prompts and State 33–49 outcomes must not be reused to select another method.
