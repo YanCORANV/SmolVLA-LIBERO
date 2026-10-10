@@ -1,0 +1,64 @@
+{
+  "role": "canonical_competence_screen",
+  "status": "COMPLETED",
+  "scientific_evidence": false,
+  "model": "untuned_fp32",
+  "states": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "completed_rollouts": 30,
+  "eligibility_rule": {
+    "minimum_successes": 3,
+    "trials_per_task": 5
+  },
+  "matrix_sha256": "3df871daf377d2d9f900b306887d9dd320eb8e95de3a6a1cb5b9943ead9aa17f",
+  "manifest_sha256": "0ac6c25af01922334ce7c3a8790047115125ae8cc4ba87d7ec8ab19288e3e9f5",
+  "per_task": [
+    {
+      "suite": "libero_spatial",
+      "task_id": 1,
+      "successes": 3,
+      "trials": 5,
+      "classification": "eligible_for_language_robustness"
+    },
+    {
+      "suite": "libero_spatial",
+      "task_id": 4,
+      "successes": 5,
+      "trials": 5,
+      "classification": "eligible_for_language_robustness"
+    },
+    {
+      "suite": "libero_object",
+      "task_id": 0,
+      "successes": 5,
+      "trials": 5,
+      "classification": "eligible_for_language_robustness"
+    },
+    {
+      "suite": "libero_goal",
+      "task_id": 0,
+      "successes": 2,
+      "trials": 5,
+      "classification": "insufficient_canonical_competence"
+    },
+    {
+      "suite": "libero_goal",
+      "task_id": 5,
+      "successes": 5,
+      "trials": 5,
+      "classification": "eligible_for_language_robustness"
+    },
+    {
+      "suite": "libero_goal",
+      "task_id": 7,
+      "successes": 5,
+      "trials": 5,
+      "classification": "eligible_for_language_robustness"
+    }
+  ]
+}

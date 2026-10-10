@@ -113,3 +113,7 @@ The historical confirmatory entry points are `scripts/run_held_out_evaluation.py
 ## Scope and attribution
 
 This is one task and a small set of instruction paraphrases. The final effect intervals include zero, and the plots describe associations in observed trajectories rather than a proven causal mechanism. SmolVLA, LeRobot, LIBERO and simulator assets are upstream work; see [attribution and license scope](THIRD_PARTY.md). Project-specific code and documentation are [MIT-licensed](LICENSE).
+
+## Multi-task canonical competence screen
+
+Before the development language pilot, the untuned official SmolVLA checkpoint was screened on six additional LIBERO tasks using canonical instructions and initial states 0–4. Five tasks reached the predeclared 3/5 competence threshold: spatial/1 (3/5), spatial/4 (5/5), object/0 (5/5), goal/5 (5/5), and goal/7 (5/5). Goal/0 (2/5) was excluded. These 30 canonical rollouts select feasible pilot tasks; they are not evidence of language robustness. The compact [screening summary](results/multitask_canonical_screen/summary.json) and [frozen matrix](configs/multitask_evaluation/canonical_screen_matrix.json) are public; raw trajectories and videos remain local under `outputs/multitask_evaluation/`.

@@ -28,3 +28,9 @@ src/smolvla_grounding/flow_velocity.py -text -eol
 src/smolvla_grounding/libero_pairing.py -text -eol
 src/smolvla_grounding/protocol.py -text -eol
 src/smolvla_grounding/training_policy.py -text -eol
+
+# Preserve the screened multi-task manifest's exact source/config bytes.
+configs/multitask_evaluation/** -text -eol
+scripts/run_multitask_canonical_screen.py -text -eol
+src/smolvla_grounding/multitask_protocol.py -text -eol
+src/smolvla_grounding/multitask_evaluator.py -text -eol

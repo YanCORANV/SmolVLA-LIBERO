@@ -28,3 +28,8 @@ wandb/
 *.avi
 .DS_Store
 Thumbs.db
+
+# Raw trajectories and simulator data
+*.npz
+*.hdf5
+*.h5
