@@ -1,0 +1,263 @@
+--- a/src/smolvla_grounding/final_confirmatory_evaluator.py@v2
++++ b/src/smolvla_grounding/final_confirmatory_evaluator.py@v3
+@@ -16,7 +16,7 @@
+ 
+ MATRIX_PATH = "configs/final_confirmatory/final_matrix.json"
+ MANIFEST_PATH = "configs/final_confirmatory/frozen_model_manifest.json"
+-FREEZE_PATH = "configs/final_confirmatory/freeze_final_protocol_v2.json"
++FREEZE_PATH = "configs/final_confirmatory/freeze_final_protocol_v3.json"
+ CATALOG_PATH = "configs/final_confirmatory/instructions/task0_final.jsonl"
+ OUTPUT_ROOT = "outputs/final_confirmatory"
+ RUN_NAME = "task0_paired_bc_final_confirmatory"
+@@ -131,8 +131,31 @@
+         raise RuntimeError("Final catalog SHA256 mismatch")
+     if manifest["final_prompt_text_sha256"] != matrix["tasks"][0]["prompt_text_sha256"]:
+         raise RuntimeError("Final prompt hash registry mismatch")
+-    for rel, expected in manifest["training_source_config_sha256"].items():
+-        if file_sha256(root / rel) != expected:
++    freeze = root / FREEZE_PATH
++    if not freeze.is_file():
++        raise RuntimeError("Missing final protocol freeze record")
++    frozen = json.loads(freeze.read_text(encoding="utf-8"))
++    if frozen.get("version") != 3:
++        raise RuntimeError("Final protocol freeze version changed")
++    if file_sha256(root / frozen["historical_v2_freeze_path"]) != frozen["historical_v2_freeze_sha256"]:
++        raise RuntimeError("Historical v2 final freeze changed")
++    training = frozen["training_provenance"]
++    historical = training["historical_source_config_sha256"]
++    if manifest["training_source_config_sha256"] != historical:
++        raise RuntimeError("Historical paired-training hash registry changed")
++    paired_freeze = root / training["historical_freeze_path"]
++    if file_sha256(paired_freeze) != training["historical_freeze_sha256"]:
++        raise RuntimeError("Historical paired-training freeze changed")
++    paired_record = json.loads(paired_freeze.read_text(encoding="utf-8"))
++    if any(paired_record["file_sha256"].get(rel) != expected for rel, expected in historical.items()):
++        raise RuntimeError("Historical paired-training hashes disagree with paired freeze")
++    excluded = {"src/smolvla_grounding/benchmark_runtime.py"}
++    if (set(training["current_byte_assertions"]) != set(historical) - excluded
++            or set(training["archival_only_hashes"]) != excluded
++            or training["archival_only_hashes"] != {rel: historical[rel] for rel in excluded}):
++        raise RuntimeError("Training provenance scope changed")
++    for rel in training["current_byte_assertions"]:
++        if file_sha256(root / rel) != historical[rel]:
+             raise RuntimeError(f"Training source/config changed: {rel}")
+     train_catalog = "configs/instructions/task0_train.jsonl"
+     if manifest["training_instruction_catalog_sha256"] != file_sha256(root / train_catalog):
+@@ -186,13 +209,24 @@
+     for rel, expected in paired["committed_artifact_sha256"].items():
+         if file_sha256(arm_dir / rel) != expected:
+             raise RuntimeError(f"Paired BC committed artifact changed: {rel}")
+-    freeze = root / FREEZE_PATH
+-    if not freeze.is_file():
+-        raise RuntimeError("Missing final protocol freeze record")
+-    frozen = json.loads(freeze.read_text(encoding="utf-8"))
+-    for rel, expected in frozen["file_sha256"].items():
++    runtime = frozen["evaluation_runtime_provenance"]["file_sha256"]
++    if "src/smolvla_grounding/benchmark_runtime.py" not in runtime:
++        raise RuntimeError("Final runtime provenance omits benchmark_runtime.py")
++    artifacts = frozen["final_protocol_artifacts"]
++    if (artifacts["matrix_sha256"] != manifest["final_matrix_sha256"]
++            or artifacts["catalog_sha256"] != manifest["final_prompt_catalog_sha256"]
++            or artifacts["prompt_text_sha256"] != manifest["final_prompt_text_sha256"]
++            or artifacts["checkpoint_artifact_sha256"] != {
++                model: manifest["evaluated_models"][model]["checkpoint_artifact_sha256"]
++                for model in MODELS
++            }):
++        raise RuntimeError("Final frozen artifact registry changed")
++    for rel, expected in runtime.items():
+         if file_sha256(root / rel) != expected:
+-            raise RuntimeError(f"Final protocol implementation changed: {rel}")
++            raise RuntimeError(f"Final evaluation runtime changed: {rel}")
++    for rel, expected in artifacts["file_sha256"].items():
++        if file_sha256(root / rel) != expected:
++            raise RuntimeError(f"Final protocol artifact changed: {rel}")
+     return rows
+ 
+ 
+@@ -242,7 +276,7 @@
+ 
+ 
+ def _prepare_run_metadata(output_dir, expected_meta, historical_freeze_sha256):
+-    """Preserve failed v1 provenance and permit exactly one zero-commit v2 transition."""
++    """Preserve failed v1/v2 provenance and permit a zero-commit v3 transition."""
+     meta_path = output_dir / "experiment_meta.json"
+     if not meta_path.exists():
+         atomic_json(meta_path, {
+@@ -257,24 +291,28 @@
+     if any(saved.get(key) != value for key, value in historical.items()):
+         raise RuntimeError("Existing final run has different frozen provenance")
+     v2_path = output_dir / "experiment_meta_v2.json"
+-    v2_expected = {
++    if v2_path.exists():
++        raise RuntimeError("Unexpected v2 final metadata after read-only failed preflight")
++    v3_path = output_dir / "experiment_meta_v3.json"
++    v3_expected = {
+         **expected_meta,
+         "historical_failed_meta_sha256": file_sha256(meta_path),
+         "historical_completed_rollouts": 0,
+-        "historical_failure": "State 33 reset before policy inference; no action or outcome observed",
++        "historical_failure": "v1 State 33 reset before policy inference; v2 read-only preflight failed; no action or outcome observed",
+     }
+-    if v2_path.exists():
+-        current = json.loads(v2_path.read_text(encoding="utf-8"))
+-        if any(current.get(key) != value for key, value in v2_expected.items()):
+-            raise RuntimeError("Existing v2 final run has different frozen provenance")
++    if v3_path.exists():
++        current = json.loads(v3_path.read_text(encoding="utf-8"))
++        if any(current.get(key) != value for key, value in v3_expected.items()):
++            raise RuntimeError("Existing v3 final run has different frozen provenance")
+     else:
+         if any(output_dir.glob("*/task_00/state_*/attempt_*/complete.json")):
+-            raise RuntimeError("Cannot transition a final run with committed v1 rollouts")
+-        atomic_json(v2_path, {
+-            **v2_expected,
++            raise RuntimeError("Cannot transition a final run with committed v1/v2 rollouts")
++        atomic_json(v3_path, {
++            **v3_expected,
+             "created_at_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+         })
+-    return v2_path
++    return v3_path
++
+ 
+ def run_final_confirmatory_evaluation():
+     root = Path(__file__).resolve().parents[2]
+--- a/src/smolvla_grounding/final_confirmatory_summary.py@v2
++++ b/src/smolvla_grounding/final_confirmatory_summary.py@v3
+@@ -120,7 +120,9 @@
+ def summarize_final_run(run_dir):
+     """Require every committed outcome before revealing any aggregate success rate."""
+     run_dir = Path(run_dir)
+-    meta_file = run_dir / "experiment_meta_v2.json"
++    meta_file = run_dir / "experiment_meta_v3.json"
++    if not meta_file.exists():
++        meta_file = run_dir / "experiment_meta_v2.json"
+     if not meta_file.exists():
+         meta_file = run_dir / "experiment_meta.json"
+     meta = json.loads(meta_file.read_text(encoding="utf-8"))
+--- a/tests/test_final_confirmatory.py@v2
++++ b/tests/test_final_confirmatory.py@v3
+@@ -6,12 +6,15 @@
+ import sys
+ import tempfile
+ import unittest
++from unittest.mock import patch
+ 
+ ROOT = Path(__file__).resolve().parents[1]
+ sys.path.insert(0, str(ROOT / "src"))
+ 
++from smolvla_grounding import final_confirmatory_evaluator as final_runtime
++from smolvla_grounding.protocol import file_sha256
+ from smolvla_grounding.final_confirmatory_evaluator import (
+-    _completed_attempt, _new_attempt, _prepare_run_metadata, validate_scope,
++    _completed_attempt, _new_attempt, _prepare_run_metadata, validate_scope, validate_frozen_artifacts,
+ )
+ from smolvla_grounding.final_confirmatory_summary import (
+     MODELS, PROMPTS, compute_statistics,
+@@ -67,7 +70,7 @@
+         with self.assertRaises(ValueError):
+             compute_statistics(outcomes, states)
+ 
+-    def test_failed_zero_commit_v1_run_transitions_to_v2_without_overwrite(self):
++    def test_failed_zero_commit_v1_run_transitions_to_v3_without_overwrite(self):
+         with tempfile.TemporaryDirectory() as directory:
+             run = Path(directory)
+             old = run / "experiment_meta.json"
+@@ -75,9 +78,9 @@
+             original_bytes = old.read_bytes()
+             partial = run / "paired_bc/task_00/state_0000_seed_0000_original/attempt_001"
+             partial.mkdir(parents=True)
+-            expected = {"run_name": "synthetic", "freeze_record_sha256": "v2"}
++            expected = {"run_name": "synthetic", "freeze_record_sha256": "v3"}
+             active = _prepare_run_metadata(run, expected, "v1")
+-            self.assertEqual(active.name, "experiment_meta_v2.json")
++            self.assertEqual(active.name, "experiment_meta_v3.json")
+             self.assertEqual(old.read_bytes(), original_bytes)
+             self.assertTrue(partial.is_dir())
+             self.assertEqual(_prepare_run_metadata(run, expected, "v1"), active)
+@@ -90,8 +93,84 @@
+             committed = run / "paired_bc/task_00/state_0000_seed_0000_original/attempt_001"
+             committed.mkdir(parents=True)
+             (committed / "complete.json").write_text("{}", encoding="utf-8")
+-            with self.assertRaisesRegex(RuntimeError, "committed v1 rollouts"):
++            with self.assertRaisesRegex(RuntimeError, "committed v1/v2 rollouts"):
+                 _prepare_run_metadata(run, expected, "v1")
++
++    def test_production_preflight_provenance_scopes_and_mutations(self):
++        """Invoke the exact read-only preflight called before the first rollout."""
++        historical = json.loads((ROOT / "configs/final_confirmatory/freeze_final_protocol_v2.json").read_text(encoding="utf-8"))
++        training = self.manifest["training_source_config_sha256"]
++        archival = "src/smolvla_grounding/benchmark_runtime.py"
++        self.assertNotEqual(file_sha256(ROOT / archival), training[archival])
++        runtime_files = (
++            "scripts/run_final_confirmatory_evaluation.py",
++            "src/smolvla_grounding/final_confirmatory_evaluator.py",
++            "src/smolvla_grounding/final_confirmatory_summary.py",
++            "src/smolvla_grounding/development_evaluator.py",
++            "src/smolvla_grounding/adaptation_eval_runtime.py",
++            "src/smolvla_grounding/benchmark_runtime.py",
++            "src/smolvla_grounding/diagnostic_policy.py",
++            "src/smolvla_grounding/diagnostic_records.py",
++            "src/smolvla_grounding/libero_pairing.py",
++            "src/smolvla_grounding/training_policy.py",
++            "src/smolvla_grounding/protocol.py",
++        )
++        candidate = {
++            "version": 3,
++            "historical_v2_freeze_path": "configs/final_confirmatory/freeze_final_protocol_v2.json",
++            "historical_v2_freeze_sha256": file_sha256(ROOT / "configs/final_confirmatory/freeze_final_protocol_v2.json"),
++            "training_provenance": {
++                "historical_freeze_path": "outputs/adaptation/runs/task0_paired_flow_training/freeze_implementation_v2.json",
++                "historical_freeze_sha256": file_sha256(ROOT / "outputs/adaptation/runs/task0_paired_flow_training/freeze_implementation_v2.json"),
++                "historical_source_config_sha256": training,
++                "current_byte_assertions": [rel for rel in training if rel != archival],
++                "archival_only_hashes": {archival: training[archival]},
++            },
++            "evaluation_runtime_provenance": {"file_sha256": {rel: file_sha256(ROOT / rel) for rel in runtime_files}},
++            "final_protocol_artifacts": {
++                "matrix_sha256": self.manifest["final_matrix_sha256"],
++                "catalog_sha256": self.manifest["final_prompt_catalog_sha256"],
++                "prompt_text_sha256": self.manifest["final_prompt_text_sha256"],
++                "checkpoint_artifact_sha256": {
++                    model: info["checkpoint_artifact_sha256"]
++                    for model, info in self.manifest["evaluated_models"].items()
++                },
++                "file_sha256": {
++                    rel: file_sha256(ROOT / rel) for rel in (
++                        "configs/final_confirmatory/final_matrix.json",
++                        "configs/final_confirmatory/instructions/task0_final.jsonl",
++                        "configs/final_confirmatory/frozen_model_manifest.json",
++                    )
++                },
++            },
++        }
++        with tempfile.TemporaryDirectory() as directory:
++            candidate_path = Path(directory) / "freeze_v3_candidate.json"
++            candidate_path.write_text(json.dumps(candidate), encoding="utf-8")
++            with patch.object(final_runtime, "FREEZE_PATH", candidate_path):
++                with patch.object(final_runtime, "_execute_dev_episode", side_effect=AssertionError("environment accessed")):
++                    rows = validate_frozen_artifacts(ROOT, self.matrix, self.manifest)
++                    self.assertEqual([row["id"] for row in rows], list(PROMPTS))
++                    for rel, expected_message in (
++                        ("src/smolvla_grounding/flow_velocity.py", "Training source/config changed"),
++                        ("src/smolvla_grounding/benchmark_runtime.py", "Final evaluation runtime changed"),
++                        ("configs/final_confirmatory/final_matrix.json", "Final matrix SHA256 mismatch"),
++                        ("configs/final_confirmatory/instructions/task0_final.jsonl", "Final prompt catalog SHA256 mismatch"),
++                        (self.manifest["evaluated_models"]["paired_bc"]["checkpoint"] + "/pretrained_model/model.safetensors", "Frozen checkpoint hash changed"),
++                    ):
++                        with self.subTest(rel=rel):
++                            target = ROOT / rel
++                            actual_hash = final_runtime.file_sha256
++                            def altered_hash(path, target=target, actual_hash=actual_hash):
++                                return "0" * 64 if Path(path) == target else actual_hash(path)
++                            with patch.object(final_runtime, "file_sha256", side_effect=altered_hash):
++                                with self.assertRaisesRegex(RuntimeError, expected_message):
++                                    validate_frozen_artifacts(ROOT, self.matrix, self.manifest)
++                    bad = deepcopy(self.manifest)
++                    bad["training_source_config_sha256"][archival] = "0" * 64
++                    with self.assertRaisesRegex(RuntimeError, "Historical paired-training hash registry changed"):
++                        validate_frozen_artifacts(ROOT, self.matrix, bad)
++        self.assertEqual(historical["training_source_config_sha256"], training)
+ 
+     def test_complete_marker_resume_and_partial_preservation(self):
+         with tempfile.TemporaryDirectory() as directory:

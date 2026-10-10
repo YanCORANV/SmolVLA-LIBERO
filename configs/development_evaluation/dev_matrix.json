@@ -1,0 +1,63 @@
+{
+  "matrix_version": 1,
+  "role": "model_selection_development_evaluation",
+  "description": "Development model-selection evaluation comparing original_language, augmented_language, and anchored_language on States 23-32.",
+  "suite": "libero_spatial",
+  "manifest_path": "configs/development_evaluation/dev_manifest.json",
+  "output_root": "outputs/development_evaluation",
+  "models": ["original_language", "augmented_language", "anchored_language"],
+  "tasks": [
+    {
+      "task_id": 0,
+      "task_name": "pick_up_the_black_bowl_between_the_plate_and_the_ramekin_and_place_it_on_the_plate",
+      "category": "development_model_selection_task",
+      "initial_states": [23, 24, 25, 26, 27, 28, 29, 30, 31, 32],
+      "instruction_catalog": "configs/development_evaluation/instructions/task0_dev.jsonl",
+      "notes": "Strictly 10 new development states (23-32). States 0-2 (historic dev) and 3-22 (consumed test) strictly excluded. States 33-52 (confirmatory) strictly untouched."
+    }
+  ],
+  "environment": {
+    "obs_type": "pixels_agent_pos",
+    "observation_height": 256,
+    "observation_width": 256,
+    "control_freq": 20,
+    "control_mode": "relative",
+    "hard_reset": true,
+    "num_steps_wait": 10,
+    "episode_length": 280,
+    "environment_seed": 0
+  },
+  "policy": {
+    "n_action_steps": 1,
+    "num_steps": 10,
+    "use_amp": false,
+    "policy_seed": 0
+  },
+  "execution": {
+    "default_workers": 1,
+    "worker_isolation": "Serial execution (1 worker) is mandatory to eliminate concurrent rendering non-determinism."
+  },
+  "statistical_rules": {
+    "primary_metric": "goal_ever",
+    "secondary_metric": "goal_final",
+    "evaluation_states_count": 10,
+    "conditions_per_state": 3,
+    "total_episodes_per_model": 30,
+    "total_rollouts": 90
+  },
+  "model_selection_rule": {
+    "role": "Frozen development model-selection gate (pre-registered prior to rollout execution)",
+    "definitions": {
+      "O": "success rate on the original instruction across States 23-32 (denominator = 10)",
+      "P": "pooled success rate across paraphrase_dev_01 and paraphrase_dev_02 (denominator = 20)",
+      "H": "balanced robustness-retention score: 2 * O * P / (O + P) if (O + P) > 0 else 0.0",
+      "robustness_gap": "P - O"
+    },
+    "gate_conditions": [
+      "O_anchor >= O_augmented",
+      "P_anchor >= P_original_language",
+      "H_anchor >= max(H_original_language, H_augmented_language)"
+    ],
+    "notes": "anchored_language passes development gate only if ALL three conditions hold. This is a development/model-selection rule, NOT a statistical significance claim."
+  }
+}

@@ -1,0 +1,3 @@
+{"id":"original","condition":"original","text":"pick up the black bowl between the plate and the ramekin and place it on the plate","goal_id":"task_goal"}
+{"id":"paraphrase_final_01","condition":"paraphrase","text":"Lift the black bowl from the space between the plate and the ramekin, then lower it onto the plate.","goal_id":"task_goal"}
+{"id":"paraphrase_final_02","condition":"paraphrase","text":"The black bowl positioned between the ramekin and the plate should be lifted and set down on the plate.","goal_id":"task_goal"}

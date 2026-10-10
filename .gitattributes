@@ -5,3 +5,26 @@
 *.json text eol=lf
 *.yaml text eol=lf
 *.txt text eol=lf
+# Preserve exact bytes of frozen experiment evidence across checkouts.
+configs/final_confirmatory/** -text -eol
+configs/final_confirmatory_reserved/** -text -eol
+configs/held_out_evaluation/** -text -eol
+configs/development_evaluation/** -text -eol
+configs/paired_training.json -text -eol
+configs/anchored_training.json -text -eol
+results/** -text -eol
+scripts/run_final_confirmatory_evaluation.py -text -eol
+scripts/run_paired_training.py -text -eol
+scripts/train_paired_arm.py -text -eol
+src/smolvla_grounding/adaptation_eval_runtime.py -text -eol
+src/smolvla_grounding/adaptation_records.py -text -eol
+src/smolvla_grounding/benchmark_runtime.py -text -eol
+src/smolvla_grounding/development_evaluator.py -text -eol
+src/smolvla_grounding/diagnostic_policy.py -text -eol
+src/smolvla_grounding/diagnostic_records.py -text -eol
+src/smolvla_grounding/final_confirmatory_evaluator.py -text -eol
+src/smolvla_grounding/final_confirmatory_summary.py -text -eol
+src/smolvla_grounding/flow_velocity.py -text -eol
+src/smolvla_grounding/libero_pairing.py -text -eol
+src/smolvla_grounding/protocol.py -text -eol
+src/smolvla_grounding/training_policy.py -text -eol

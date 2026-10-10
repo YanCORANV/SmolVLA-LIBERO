@@ -1,0 +1,74 @@
+{
+  "source_checkpoint": {
+    "arm": "original_language",
+    "step": 1000,
+    "path": "outputs/adaptation/runs/task0_longer_training/original_language/step_001000/attempt_001/pretrained_model",
+    "parameters_file": "outputs/adaptation/runs/task0_longer_training/original_language/step_001000/attempt_001/parameters.json",
+    "parameters_sha256": "11d83b0f3280475235e19276f144c9db95f118cc846341ce71a2faeb64d9e66c",
+    "model_hashes": {
+      "config.json": "bacefa083b4f7b83a2c3f4e55675d27111fc39b794662aa86d076577c620cb9a",
+      "model.safetensors": "2e9ac11dfbf49a3219bb56fb1440f12c8a721d64ae568e6de1982ad6a3caa030",
+      "policy_postprocessor.json": "ad2d22405cb63be4932c4a4d9a69bc9953df02a01235c5f420b679dbe6bfe7c5",
+      "policy_postprocessor_step_1_unnormalizer_processor.safetensors": "7008ba73c73887e5a7e631d478de9563ec5a0c51b7f0327f2530d7326c4b039e",
+      "policy_preprocessor.json": "bfd249051690f195db955e0a526f03ca98d49550da625dfdb9112caa46e04033",
+      "policy_preprocessor_step_5_normalizer_processor.safetensors": "7008ba73c73887e5a7e631d478de9563ec5a0c51b7f0327f2530d7326c4b039e"
+    }
+  },
+  "training": {
+    "arms": [
+      "paired_bc",
+      "paired_flow_consistency"
+    ],
+    "updates": 1000,
+    "checkpoint_every": 500,
+    "batch_size": 1,
+    "seed": 0,
+    "language_seed": 20260909,
+    "learning_rate": 1e-05,
+    "lambda_cons": 1.0,
+    "paraphrase_variants": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "paraphrases_per_variant": 250,
+    "train_catalog": "configs/instructions/task0_train.jsonl",
+    "data_ready": "outputs/task0_data/ready.json"
+  },
+  "frozen_development_gate": {
+    "description": "Pre-registered model-selection gate for paired_flow_consistency on States 23-32",
+    "evaluation_states": [
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32
+    ],
+    "prompts": [
+      "original",
+      "paraphrase_dev_01",
+      "paraphrase_dev_02"
+    ],
+    "H_baseline_original_language": 0.5538,
+    "conditions": {
+      "1_O_consistency_ge_080": {
+        "rule": "O_consistency >= 0.80",
+        "threshold": 0.8
+      },
+      "2_P_consistency_ge_045": {
+        "rule": "P_consistency >= 0.45",
+        "threshold": 0.45
+      },
+      "3_H_consistency_gt_max_controls": {
+        "rule": "H_consistency > max(0.5538, H_paired_bc)",
+        "baseline_h": 0.5538
+      }
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "matrix_version": 2,
+  "default_matrix": "configs/held_out_evaluation/confirmatory_matrix.json",
+  "exploratory_matrix": "configs/held_out_evaluation/exploratory_cross_task_matrix.json",
+  "notes": "evaluation_matrix.json points to the primary confirmatory matrix by default."
+}

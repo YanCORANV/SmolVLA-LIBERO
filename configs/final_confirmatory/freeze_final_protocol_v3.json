@@ -1,0 +1,125 @@
+{
+  "version": 3,
+  "frozen_at_utc": "2026-10-09T02:39:06.727184+00:00",
+  "historical_v1_freeze_path": "configs/final_confirmatory/freeze_final_protocol.json",
+  "historical_v1_freeze_sha256": "8cd06eacc4240e6dc8f3419a5c5adea1d9b6442c71c5ea48046949bb1c6df853",
+  "historical_v2_freeze_path": "configs/final_confirmatory/freeze_final_protocol_v2.json",
+  "historical_v2_freeze_sha256": "e47ecb3dc3430894347eea2852f6b5fe365f3ee1b23a2b98f7e5d1e3faf2c5b3",
+  "historical_launches": {
+    "v1": "State 33 was instantiated once during a failed infrastructure launch before policy inference; no action, trajectory, or success outcome observed; 0/180 valid rollouts.",
+    "v2": "Failed during read-only preflight; no environment reset or state access; 0/180 valid rollouts."
+  },
+  "training_provenance": {
+    "dependency_audit": "paired_bc training enters scripts/run_paired_training.py and scripts/train_paired_arm.py. Targeted direct and transitive project import audit found no import or execution of benchmark_runtime.py. Its historical hash is archival, not a current-byte training assertion. Other imported project modules not in the original training hash registry cannot acquire retrospective training-time hashes.",
+    "historical_freeze_path": "outputs/adaptation/runs/task0_paired_flow_training/freeze_implementation_v2.json",
+    "historical_freeze_sha256": "795a707a097254a13916f655f16d187769ffd9af398fcaf8ece93f1342e25004",
+    "historical_source_config_sha256": {
+      "src/smolvla_grounding/flow_velocity.py": "233d82734d6a22e2ff821776bcadf36c018916ad8e7de4a4ff484f51c081bf89",
+      "src/smolvla_grounding/adaptation_records.py": "1ead97648dba30030613f6c6bd11aed7424720fabe647ed6c4c849700eac5ccd",
+      "src/smolvla_grounding/benchmark_runtime.py": "dda95ecc3d50b1a8b3de748c144621db72949c45a0f354c909f379e10f6c3ba5",
+      "scripts/train_paired_arm.py": "7f87c5f171e11628506faa1482ab60082c9067cb0469c11c5426b5d8a1f38781",
+      "scripts/run_paired_training.py": "7beff951a30e48101f26fa7c30be65b0ca381bdc9e4e56bdd6d53894ed51f2dc",
+      "configs/paired_training.json": "9dab6e4ec3cbe7c47d83144be66c0c41ab89aac1a515cd7692b517bec47c9bed",
+      "configs/instructions/task0_train.jsonl": "efa31593c88b175d45ea532a5ff224cedf8c83cb1292de2f58ad5b76dd158810"
+    },
+    "current_byte_assertions": [
+      "src/smolvla_grounding/flow_velocity.py",
+      "src/smolvla_grounding/adaptation_records.py",
+      "scripts/train_paired_arm.py",
+      "scripts/run_paired_training.py",
+      "configs/paired_training.json",
+      "configs/instructions/task0_train.jsonl"
+    ],
+    "archival_only_hashes": {
+      "src/smolvla_grounding/benchmark_runtime.py": "dda95ecc3d50b1a8b3de748c144621db72949c45a0f354c909f379e10f6c3ba5"
+    },
+    "training_schedule_sha256": "6d50cc0713130f1ae785d041f57a2f87941a97f2557b516439a0c8e71461b37c",
+    "training_schedule_content_hash": "2d950b9c08c47039a425991ad3d88ee1dc1034dee22085b4249c49367056140e",
+    "training_instruction_catalog_sha256": "efa31593c88b175d45ea532a5ff224cedf8c83cb1292de2f58ad5b76dd158810",
+    "original_language_source_checkpoint_sha256": {
+      "parameters.json": "11d83b0f3280475235e19276f144c9db95f118cc846341ce71a2faeb64d9e66c",
+      "pretrained_model/config.json": "bacefa083b4f7b83a2c3f4e55675d27111fc39b794662aa86d076577c620cb9a",
+      "pretrained_model/model.safetensors": "2e9ac11dfbf49a3219bb56fb1440f12c8a721d64ae568e6de1982ad6a3caa030",
+      "pretrained_model/policy_preprocessor.json": "bfd249051690f195db955e0a526f03ca98d49550da625dfdb9112caa46e04033",
+      "pretrained_model/policy_preprocessor_step_5_normalizer_processor.safetensors": "7008ba73c73887e5a7e631d478de9563ec5a0c51b7f0327f2530d7326c4b039e",
+      "pretrained_model/policy_postprocessor.json": "ad2d22405cb63be4932c4a4d9a69bc9953df02a01235c5f420b679dbe6bfe7c5",
+      "pretrained_model/policy_postprocessor_step_1_unnormalizer_processor.safetensors": "7008ba73c73887e5a7e631d478de9563ec5a0c51b7f0327f2530d7326c4b039e"
+    }
+  },
+  "evaluation_runtime_provenance": {
+    "scope_explanation": "benchmark_runtime.py implements the approved final-confirmatory scope-aware runtime; current bytes belong to evaluation provenance.",
+    "file_sha256": {
+      "scripts/run_final_confirmatory_evaluation.py": "2c2b80af74215813be220b92d1363f0cd800e18bd2a13effaecab290b9827858",
+      "src/smolvla_grounding/final_confirmatory_evaluator.py": "830b6096625e1a93132eb734a1bec2f07c571f5490f168a99a3296500ede39bf",
+      "src/smolvla_grounding/final_confirmatory_summary.py": "85210b9b2960c233e74223f78c094cb3c70df4aeee7bb5ee77d377df41a35cf5",
+      "src/smolvla_grounding/development_evaluator.py": "56cf0439e19ffb67cac676ea7a1bebbd7e049bbdc44fcb3234210705714d9e83",
+      "src/smolvla_grounding/adaptation_eval_runtime.py": "a51d15a513020830e91debe2c7a72455da9711897cdeab04ccaf3dcc4c2ad24e",
+      "src/smolvla_grounding/benchmark_runtime.py": "8e9073b1caf0d90b79168a65544669ec818224b9a48d0f2e3c87222e23b3b68c",
+      "src/smolvla_grounding/diagnostic_policy.py": "afb38a34ead97d611053e72761be70cb2bbcdc66a2b292d94ad6ea7ff5a910ae",
+      "src/smolvla_grounding/diagnostic_records.py": "da24234d0e095c7d02522eddb3decd4377eaf6ae1b627233891a4ba772eb8110",
+      "src/smolvla_grounding/libero_pairing.py": "b2c97ef7a4ff89c1a46b29d8433ef5e0635a9a4748bba93eb97ef94b0513364e",
+      "src/smolvla_grounding/training_policy.py": "1aa2a60c5302f13bff4857cd6159c99db225615080c1a6671d2642c8e05909a3",
+      "src/smolvla_grounding/protocol.py": "cfe31ddaa8cf191d2a79da77ba307b23f041fc465d7d17140f1292cd284ded44"
+    }
+  },
+  "final_protocol_artifacts": {
+    "matrix_sha256": "49ce03d002dc4eb46a2b213977ea776c0761c87e1b6113c32aea63670d31701e",
+    "catalog_sha256": "b9e386c0d49497740eb9fee09515ec36bfe358942ab976739d3995237c23b0d4",
+    "prompt_text_sha256": {
+      "original": "0a91f8c396de41e282d3640365a14df8f0090791bbf2c2eb917423f4779752a9",
+      "paraphrase_final_01": "9827a47a67214293b11617fe010414ae77f4b201c1b57c9bed4003c2beeadba6",
+      "paraphrase_final_02": "c0591e60fa5dcb85ec75379849f680d8c5b79bed2965c3260224a72512ce3d9f"
+    },
+    "checkpoint_artifact_sha256": {
+      "original_language": {
+        "parameters.json": "11d83b0f3280475235e19276f144c9db95f118cc846341ce71a2faeb64d9e66c",
+        "pretrained_model/config.json": "bacefa083b4f7b83a2c3f4e55675d27111fc39b794662aa86d076577c620cb9a",
+        "pretrained_model/model.safetensors": "2e9ac11dfbf49a3219bb56fb1440f12c8a721d64ae568e6de1982ad6a3caa030",
+        "pretrained_model/policy_preprocessor.json": "bfd249051690f195db955e0a526f03ca98d49550da625dfdb9112caa46e04033",
+        "pretrained_model/policy_preprocessor_step_5_normalizer_processor.safetensors": "7008ba73c73887e5a7e631d478de9563ec5a0c51b7f0327f2530d7326c4b039e",
+        "pretrained_model/policy_postprocessor.json": "ad2d22405cb63be4932c4a4d9a69bc9953df02a01235c5f420b679dbe6bfe7c5",
+        "pretrained_model/policy_postprocessor_step_1_unnormalizer_processor.safetensors": "7008ba73c73887e5a7e631d478de9563ec5a0c51b7f0327f2530d7326c4b039e"
+      },
+      "augmented_language": {
+        "parameters.json": "85d0583c4ba6484be18d72d82ab32da595d6829c057eb9607bd463374b2dec5e",
+        "pretrained_model/config.json": "bacefa083b4f7b83a2c3f4e55675d27111fc39b794662aa86d076577c620cb9a",
+        "pretrained_model/model.safetensors": "601ace3487c4fc3609bca4550bd9ae7860a8aefb9922bd2ec8d2fff6c489f350",
+        "pretrained_model/policy_preprocessor.json": "bfd249051690f195db955e0a526f03ca98d49550da625dfdb9112caa46e04033",
+        "pretrained_model/policy_preprocessor_step_5_normalizer_processor.safetensors": "7008ba73c73887e5a7e631d478de9563ec5a0c51b7f0327f2530d7326c4b039e",
+        "pretrained_model/policy_postprocessor.json": "ad2d22405cb63be4932c4a4d9a69bc9953df02a01235c5f420b679dbe6bfe7c5",
+        "pretrained_model/policy_postprocessor_step_1_unnormalizer_processor.safetensors": "7008ba73c73887e5a7e631d478de9563ec5a0c51b7f0327f2530d7326c4b039e"
+      },
+      "paired_bc": {
+        "parameters.json": "dc899523482f652ced5c932fc33639f820e5399963dc6bb9125386b2422e8dfd",
+        "pretrained_model/config.json": "bacefa083b4f7b83a2c3f4e55675d27111fc39b794662aa86d076577c620cb9a",
+        "pretrained_model/model.safetensors": "949979e616f33cfa48ae5c8f15b4f71aba1ac9e1406520252252080b03fd2a35",
+        "pretrained_model/policy_preprocessor.json": "bfd249051690f195db955e0a526f03ca98d49550da625dfdb9112caa46e04033",
+        "pretrained_model/policy_preprocessor_step_5_normalizer_processor.safetensors": "7008ba73c73887e5a7e631d478de9563ec5a0c51b7f0327f2530d7326c4b039e",
+        "pretrained_model/policy_postprocessor.json": "ad2d22405cb63be4932c4a4d9a69bc9953df02a01235c5f420b679dbe6bfe7c5",
+        "pretrained_model/policy_postprocessor_step_1_unnormalizer_processor.safetensors": "7008ba73c73887e5a7e631d478de9563ec5a0c51b7f0327f2530d7326c4b039e"
+      }
+    },
+    "file_sha256": {
+      "configs/final_confirmatory/final_matrix.json": "49ce03d002dc4eb46a2b213977ea776c0761c87e1b6113c32aea63670d31701e",
+      "configs/final_confirmatory/instructions/task0_final.jsonl": "b9e386c0d49497740eb9fee09515ec36bfe358942ab976739d3995237c23b0d4",
+      "configs/final_confirmatory/frozen_model_manifest.json": "1b1d31102707c74c8f862b38fa11d3e0d4d07d6083c2fcf394d37ca7b23bfc82",
+      "configs/final_confirmatory/runtime_provenance_fix_v3.diff": "81e253c469c97438653fd2cce789b474e39e21f6c2c48abda38f230b49179dbe",
+      "configs/final_confirmatory/runtime_scope_fix_v2.diff": "4bb2d35a043e997802cae483cc6e5d418a9a6c2ff9fa7169d2a36162798b6f80"
+    }
+  },
+  "exact_v2_to_v3_code_diff": "configs/final_confirmatory/runtime_provenance_fix_v3.diff",
+  "exact_v2_to_v3_code_diff_sha256": "81e253c469c97438653fd2cce789b474e39e21f6c2c48abda38f230b49179dbe",
+  "old_source_sha256": {
+    "src/smolvla_grounding/final_confirmatory_evaluator.py": "dc06fc04a9f81ee2baedef188d50e651d0a002b18af1f45ec01b7b69d3a5507e",
+    "src/smolvla_grounding/final_confirmatory_summary.py": "2b04bf14b3ae9229c82afc8b52b2ae4c8a9dcaf2d9e4387bd86726ce47239328",
+    "tests/test_final_confirmatory.py": "0adfc52c41d32a4cf1659432ca728fdd90118010b8a1371841ccb0dcbadf6f3c"
+  },
+  "new_source_sha256": {
+    "src/smolvla_grounding/final_confirmatory_evaluator.py": "830b6096625e1a93132eb734a1bec2f07c571f5490f168a99a3296500ede39bf",
+    "src/smolvla_grounding/final_confirmatory_summary.py": "85210b9b2960c233e74223f78c094cb3c70df4aeee7bb5ee77d377df41a35cf5",
+    "tests/test_final_confirmatory.py": "85daa68c577d3cc78161eba09ce1abcd3dc663c12bf5f23e67ca6dd144cfabd7"
+  },
+  "tests": "101/101 real WSL .venv unittest cases passed, including exact production preflight and hash mutation regressions; no State 33-52 environment access in tests.",
+  "git_status_snapshot": "configs/final_confirmatory/git_status_at_final_freeze_v3.txt",
+  "git_status_snapshot_sha256": "d1a78445ba827d034e67f3d0075b2ba20b363910e563920a9928ebc38dce7c7e"
+}

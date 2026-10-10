@@ -1,0 +1,51 @@
+{
+  "manifest_version": 1,
+  "description": "Development manifest for model selection on States 23-32.",
+  "development_boundary": {
+    "historical_dev_states": [0, 1, 2],
+    "consumed_test_states": [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
+    "model_selection_dev_states": [23, 24, 25, 26, 27, 28, 29, 30, 31, 32],
+    "untouched_final_confirmatory_states": [33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52]
+  },
+  "evaluated_models": {
+    "original_language": {
+      "role": "equal-budget original-language fine-tuning control",
+      "checkpoint": "outputs/adaptation/runs/task0_longer_training/original_language/step_001000/attempt_001",
+      "parameters": "outputs/adaptation/runs/task0_longer_training/original_language/step_001000/attempt_001/parameters.json",
+      "training_updates": 1000,
+      "peak_lr": 1e-05,
+      "provenance": "outputs/adaptation/runs/task0_longer_training",
+      "artifact_sha256": {
+        "parameters.json": "11d83b0f3280475235e19276f144c9db95f118cc846341ce71a2faeb64d9e66c",
+        "pretrained_model/config.json": "bacefa083b4f7b83a2c3f4e55675d27111fc39b794662aa86d076577c620cb9a",
+        "pretrained_model/model.safetensors": "2e9ac11dfbf49a3219bb56fb1440f12c8a721d64ae568e6de1982ad6a3caa030"
+      }
+    },
+    "augmented_language": {
+      "role": "language-augmented fine-tuning candidate",
+      "checkpoint": "outputs/adaptation/runs/task0_longer_training/augmented_language/step_001000/attempt_001",
+      "parameters": "outputs/adaptation/runs/task0_longer_training/augmented_language/step_001000/attempt_001/parameters.json",
+      "training_updates": 1000,
+      "peak_lr": 1e-05,
+      "provenance": "outputs/adaptation/runs/task0_longer_training",
+      "artifact_sha256": {
+        "parameters.json": "85d0583c4ba6484be18d72d82ab32da595d6829c057eb9607bd463374b2dec5e",
+        "pretrained_model/config.json": "bacefa083b4f7b83a2c3f4e55675d27111fc39b794662aa86d076577c620cb9a",
+        "pretrained_model/model.safetensors": "601ace3487c4fc3609bca4550bd9ae7860a8aefb9922bd2ec8d2fff6c489f350"
+      }
+    },
+    "anchored_language": {
+      "role": "anchored-language fine-tuning candidate (P=0.50 original, P=0.125 paraphrases)",
+      "checkpoint": "outputs/adaptation/runs/task0_anchored_training/anchored_language/step_001000/attempt_001",
+      "parameters": "outputs/adaptation/runs/task0_anchored_training/anchored_language/step_001000/attempt_001/parameters.json",
+      "training_updates": 1000,
+      "peak_lr": 1e-05,
+      "provenance": "outputs/adaptation/runs/task0_anchored_training",
+      "artifact_sha256": {
+        "parameters.json": "1f4d779527e28342d2d115b2fd4a7159faafcfc08afdd0ac7d66052197b5239a",
+        "pretrained_model/config.json": "bacefa083b4f7b83a2c3f4e55675d27111fc39b794662aa86d076577c620cb9a",
+        "pretrained_model/model.safetensors": "241886227818d47e8953d99601d144129bcae2ccc769df7f0f8293c298e302fb"
+      }
+    }
+  }
+}

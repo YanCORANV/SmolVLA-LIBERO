@@ -166,7 +166,7 @@ def main():
                     if sample["task"] != data_config["original_instruction"]:
                         raise RuntimeError("Demonstration task text changed")
                     data_hash = fingerprint(pack_tensors({k: v for k, v in sample.items() if isinstance(v, torch.Tensor)}, "sample", {}, {}))
-                    variant = planned["augmented_variant"] if arm == "augmented_language" else 0
+                    variant = planned["augmented_variant"] if arm == "augmented_language" else (planned["anchored_variant"] if arm == "anchored_language" else 0)
                     sample["task"] = rows[variant]["text"]
                     pre.reset()
                     batch = pre(lerobot_collate_fn([sample]))

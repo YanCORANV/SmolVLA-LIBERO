@@ -1,0 +1,464 @@
+diff --git a/scripts/train_adaptation_arm.py b/scripts/train_adaptation_arm.py
+index a53615b..432804f 100644
+--- a/scripts/train_adaptation_arm.py
++++ b/scripts/train_adaptation_arm.py
+@@ -166,7 +166,7 @@ def main():
+                     if sample["task"] != data_config["original_instruction"]:
+                         raise RuntimeError("Demonstration task text changed")
+                     data_hash = fingerprint(pack_tensors({k: v for k, v in sample.items() if isinstance(v, torch.Tensor)}, "sample", {}, {}))
+-                    variant = planned["augmented_variant"] if arm == "augmented_language" else 0
++                    variant = planned["augmented_variant"] if arm == "augmented_language" else (planned["anchored_variant"] if arm == "anchored_language" else 0)
+                     sample["task"] = rows[variant]["text"]
+                     pre.reset()
+                     batch = pre(lerobot_collate_fn([sample]))
+diff --git a/src/smolvla_grounding/adaptation_eval_runtime.py b/src/smolvla_grounding/adaptation_eval_runtime.py
+index 073b0bb..14df47b 100644
+--- a/src/smolvla_grounding/adaptation_eval_runtime.py
++++ b/src/smolvla_grounding/adaptation_eval_runtime.py
+@@ -4,19 +4,33 @@ from copy import deepcopy
+ from dataclasses import asdict
+ import json
+ 
+-from .benchmark_runtime import BenchmarkRuntime
++from .benchmark_runtime import BenchmarkRuntime, file_sha256
+ from .adaptation_eval_records import verify_training_checkpoint
+ 
+ 
+ class AdaptationEvalRuntime(BenchmarkRuntime):
+-    def __init__(self, root, baseline, model_id, model, rows):
+-        super().__init__(root, baseline)
++    def __init__(self, root, baseline, model_id, model, rows, confirmatory_spec=None):
++        super().__init__(root, baseline, confirmatory_spec=confirmatory_spec)
+         self.original_path = self.path
+         self.model_id, self.model, self.rows = model_id, model, rows
+         if model_id != "untuned_fp32":
+-            print("  Verify committed training checkpoint artifacts", flush=True)
+-            verify_training_checkpoint(self.root, model)
+-            self.path = self.root / model["checkpoint"]
++            if self.confirmatory_spec is not None:
++                # Confirmatory mode: verify checkpoint artifacts against frozen manifest
++                self.path = self.root / model["checkpoint"]
++                expected_hashes = model.get("artifact_sha256", {})
++                if not expected_hashes:
++                    raise RuntimeError(f"Missing artifact_sha256 for confirmatory model {model_id}")
++                for rel_name, exp_hash in expected_hashes.items():
++                    act_hash = file_sha256(self.path / rel_name)
++                    if act_hash != exp_hash:
++                        raise RuntimeError(f"Confirmatory checkpoint artifact {rel_name} SHA256 mismatch: {act_hash} != {exp_hash}")
++                if (self.path / "pretrained_model").is_dir():
++                    self.path = self.path / "pretrained_model"
++            else:
++                # Historical pilot mode
++                print("  Verify committed training checkpoint artifacts", flush=True)
++                verify_training_checkpoint(self.root, model)
++                self.path = self.root / model["checkpoint"]
+ 
+     def load_policy(self):
+         import torch
+diff --git a/src/smolvla_grounding/adaptation_records.py b/src/smolvla_grounding/adaptation_records.py
+index 6196713..57d2a2e 100644
+--- a/src/smolvla_grounding/adaptation_records.py
++++ b/src/smolvla_grounding/adaptation_records.py
+@@ -46,7 +46,84 @@ def build_schedule(episodes, updates, seed, language_seed, variant_count):
+     return schedule
+ 
+ 
++def build_anchored_schedule(episodes, updates, seed, language_seed, variant_count=5):
++    """Balanced block sampling with P(original=0) = 0.50, P(paraphrases=1..4) = 0.125 each."""
++    if updates < 2 or variant_count != 5:
++        raise ValueError("Anchored schedule requires at least two updates and exactly 5 variants")
++    # Separate local RNGs: language selection never changes frame sampling or policy RNG.
++    frame_rng, language_rng = random.Random(seed), random.Random(language_seed)
++    positions = [(r["episode_index"], frame) for r in sorted(episodes, key=lambda x: x["episode_index"])
++                 for frame in range(r["frames"])]
++    if not positions or len(set(positions)) != len(positions):
++        raise ValueError("Training frames must be nonempty and uniquely indexed")
++    schedule, block = [], []
++    for step in range(1, updates + 1):
++        if not block:
++            block = [0, 0, 0, 0, 1, 2, 3, 4]
++            language_rng.shuffle(block)
++        ep, frame = positions[frame_rng.randrange(len(positions))]
++        schedule.append({"step": step, "episode_index": ep, "frame_index": frame, "anchored_variant": block.pop()})
++    return schedule
++
++
++def build_paired_schedule(episodes, updates, seed, language_seed, paraphrase_variants=(1, 2, 3, 4)):
++    """Balanced paired schedule: exactly equal sampling across paraphrase variants (250 each over 1000 steps)."""
++    if updates < 2:
++        raise ValueError("Updates must be at least 2")
++    if updates % len(paraphrase_variants) != 0:
++        raise ValueError(f"Updates {updates} must be divisible by variant count {len(paraphrase_variants)}")
++    frame_rng = random.Random(seed)
++    language_rng = random.Random(language_seed)
++    positions = [(r["episode_index"], frame) for r in sorted(episodes, key=lambda x: x["episode_index"])
++                 for frame in range(r["frames"])]
++    if not positions or len(set(positions)) != len(positions):
++        raise ValueError("Training frames must be nonempty and uniquely indexed")
++    schedule = []
++    block = []
++    for step in range(1, updates + 1):
++        if not block:
++            block = list(paraphrase_variants)
++            language_rng.shuffle(block)
++        ep, frame = positions[frame_rng.randrange(len(positions))]
++        schedule.append({
++            "step": step,
++            "episode_index": ep,
++            "frame_index": frame,
++            "canonical_variant": 0,
++            "paraphrase_variant": block.pop()
++        })
++    return schedule
++
++
++def paired_flow_seed(training_seed, step):
++    """Isolated flow RNG identity independent of arm and global RNG consumption."""
++    if step < 1:
++        raise ValueError("Paired update steps start at 1")
++    payload = f"paired-flow-v1:{training_seed}:{step}".encode("ascii")
++    return int.from_bytes(hashlib.sha256(payload).digest()[:8], "big") % (2**63 - 1)
++
++
++def compare_paired_training_logs(bc_rows, consistency_rows, schedule, training_seed):
++    """Require every registered training control to match at every update."""
++    if len(bc_rows) != len(schedule) or len(consistency_rows) != len(schedule):
++        raise ValueError("Paired training histories do not cover the full schedule")
++    keys = ("step", "episode_index", "frame_index", "paraphrase_variant",
++            "data_hash", "action_hash", "flow_seed", "noise_hash", "time_hash", "lr_used")
++    for planned, bc, consistency in zip(schedule, bc_rows, consistency_rows):
++        for row in (bc, consistency):
++            for key in ("step", "episode_index", "frame_index", "paraphrase_variant"):
++                if row[key] != planned[key]:
++                    raise ValueError(f"Schedule mismatch at step {planned['step']}: {key}")
++            if row["flow_seed"] != paired_flow_seed(training_seed, planned["step"]):
++                raise ValueError(f"Flow seed mismatch at step {planned['step']}")
++        for key in keys:
++            if bc[key] != consistency[key]:
++                raise ValueError(f"Paired arms differ at step {planned['step']}: {key}")
++    return {"updates_compared": len(schedule), "matched_fields": list(keys),
++            "all_updates_identical": True}
++
+ def checkpoint_steps(updates, interval):
++
+     if updates < 2 or interval < 1:
+         raise ValueError("Invalid update/checkpoint interval")
+     return sorted(set(range(interval, updates + 1, interval)) | {updates})
+@@ -88,3 +165,22 @@ def compare_training_logs(original, augmented, schedule):
+     return {"same_frame_tensors": True, "same_learning_rates": True, "same_update_budget": True,
+             "different_noise_or_rng_steps": noise_differences,
+             "interpretation": "Training controls only; language robustness requires simulator evaluation"}
++
++
++def compare_anchored_training_logs(original, anchored, schedule):
++    if len(original) != len(schedule) or len(anchored) != len(schedule):
++        raise ValueError("Training histories do not cover the fixed budget")
++    noise_differences = []
++    for left, right, planned in zip(original, anchored, schedule):
++        for row in (left, right):
++            if any(row[k] != planned[k] for k in ("step", "episode_index", "frame_index")):
++                raise ValueError("Training histories differ from the paired frame schedule")
++        if left["variant_index"] != 0 or right["variant_index"] != planned["anchored_variant"]:
++            raise ValueError("Training language assignment differs from the registered anchored comparison")
++        if left["data_hash"] != right["data_hash"] or left["lr_used"] != right["lr_used"]:
++            raise ValueError("Training arms received different frame tensors or learning rates")
++        if left["noise_hash"] != right["noise_hash"] or left["rng_before"] != right["rng_before"]:
++            noise_differences.append(planned["step"])
++    return {"same_frame_tensors": True, "same_learning_rates": True, "same_update_budget": True,
++            "different_noise_or_rng_steps": noise_differences,
++            "interpretation": "Training controls only; language robustness requires simulator evaluation"}
+diff --git a/src/smolvla_grounding/benchmark_runtime.py b/src/smolvla_grounding/benchmark_runtime.py
+index de1c6b5..6ffa238 100644
+--- a/src/smolvla_grounding/benchmark_runtime.py
++++ b/src/smolvla_grounding/benchmark_runtime.py
+@@ -12,8 +12,205 @@ from .protocol import file_sha256
+ from .rollout_records import verify_pairing
+ 
+ 
++FROZEN_CONFIRMATORY_INSTRUCTIONS = {
++    "original": "pick up the black bowl between the plate and the ramekin and place it on the plate",
++    "original_repeat": "pick up the black bowl between the plate and the ramekin and place it on the plate",
++    "paraphrase_heldout_01": "transfer into the plate the black bowl that sits between the plate and the ramekin",
++    "paraphrase_heldout_02": "take the black bowl located between the ramekin and the plate, and set it down on the plate",
++}
++FROZEN_CONFIRMATORY_MODELS = ["untuned_fp32", "original_language", "augmented_language"]
++FROZEN_CONFIRMATORY_STATES = set(range(3, 23))  # States 3-22 (20 states)
++
++
++def verify_confirmatory_pairing(root, config, rows, confirmatory_spec):
++    """
++    Validate runtime configuration and instruction rows against the frozen confirmatory specification.
++    Does NOT compare states/instructions against historical pilot identity.
++    Enforces frozen matrix, manifest, task 0, states 3-22, 4 prompt texts, 3 models, seeds, and 280 steps.
++    """
++    root = Path(root)
++
++    # 1. Resolve matrix and manifest
++    matrix = confirmatory_spec.get("matrix")
++    if matrix is None:
++        matrix_path = root / confirmatory_spec.get("matrix_path", "configs/held_out_evaluation/confirmatory_matrix.json")
++        matrix = json.loads(matrix_path.read_text(encoding="utf-8"))
++
++    manifest = confirmatory_spec.get("manifest")
++    if manifest is None:
++        manifest_path = root / matrix.get("manifest_path", "configs/held_out_evaluation/frozen_training_manifest.json")
++        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
++
++    model_id = confirmatory_spec.get("model_id") or config.get("model_id")
++
++    # 2. Scope & matrix role
++    if matrix.get("role") != "primary_confirmatory_experiment":
++        raise RuntimeError(f"Confirmatory matrix role must be 'primary_confirmatory_experiment', got '{matrix.get('role')}'")
++    if matrix.get("suite") != "libero_spatial" or config.get("suite") != "libero_spatial":
++        raise RuntimeError("Confirmatory suite must be 'libero_spatial'")
++
++    # 3. Task ID: Task 0 only
++    task_cfgs = matrix.get("tasks", [])
++    if not task_cfgs or task_cfgs[0].get("task_id") != 0:
++        raise RuntimeError("Confirmatory matrix must specify Task 0")
++    if config.get("task_id") != 0:
++        raise RuntimeError(f"Confirmatory runtime task ID must be 0, got {config.get('task_id')}")
++
++    # 4. State IDs: 3-22 only, no development states (0, 1, 2)
++    matrix_states = set(task_cfgs[0].get("initial_states", []))
++    if matrix_states != FROZEN_CONFIRMATORY_STATES:
++        raise RuntimeError(f"Confirmatory matrix states must be exactly states 3-22, got {matrix_states}")
++
++    dev_states = set(manifest.get("development_boundary", {}).get("development_states", [0, 1, 2]))
++    init_state = config.get("init_state_index")
++    if init_state is None:
++        raise RuntimeError("Runtime config missing init_state_index")
++    if init_state not in FROZEN_CONFIRMATORY_STATES:
++        raise RuntimeError(f"Confirmatory state index {init_state} is not in frozen states 3-22")
++    if init_state in dev_states:
++        raise RuntimeError(f"Confirmatory state index {init_state} overlaps development states {dev_states}")
++
++    # 5. Exact four language-condition texts
++    catalog_rel = task_cfgs[0].get("instruction_catalog")
++    if not catalog_rel:
++        raise RuntimeError("Confirmatory matrix missing instruction_catalog")
++    cat_path = root / catalog_rel
++    if not cat_path.exists():
++        raise RuntimeError(f"Confirmatory instruction catalog missing: {cat_path}")
++
++    catalog_rows = [json.loads(line) for line in cat_path.read_text(encoding="utf-8").strip().splitlines() if line.strip()]
++    catalog_map = {r["id"]: r["text"].strip() for r in catalog_rows}
++    if catalog_map != FROZEN_CONFIRMATORY_INSTRUCTIONS:
++        raise RuntimeError(f"Instruction catalog differs from frozen confirmatory instructions: {catalog_map}")
++
++    # Verify rows passed to runtime
++    if not rows:
++        raise RuntimeError("Runtime received empty instruction rows")
++    for r in rows:
++        r_id = r.get("id")
++        if r_id not in FROZEN_CONFIRMATORY_INSTRUCTIONS:
++            raise RuntimeError(f"Confirmatory runtime instruction id '{r_id}' not in frozen specification")
++        r_text = r.get("text", "").strip()
++        if r_text != FROZEN_CONFIRMATORY_INSTRUCTIONS[r_id]:
++            raise RuntimeError(f"Confirmatory runtime instruction text for '{r_id}' ('{r_text}') differs from frozen text ('{FROZEN_CONFIRMATORY_INSTRUCTIONS[r_id]}')")
++
++    # 6. Three frozen model arms
++    if matrix.get("models") != FROZEN_CONFIRMATORY_MODELS:
++        raise RuntimeError(f"Matrix models {matrix.get('models')} != frozen confirmatory models {FROZEN_CONFIRMATORY_MODELS}")
++    if model_id:
++        if model_id not in FROZEN_CONFIRMATORY_MODELS:
++            raise RuntimeError(f"Runtime model '{model_id}' is not one of the frozen models {FROZEN_CONFIRMATORY_MODELS}")
++        if model_id not in manifest.get("evaluated_models", {}):
++            raise RuntimeError(f"Runtime model '{model_id}' is not registered in manifest evaluated_models")
++
++    # 7. Policy / Environment Seeds: exactly 0
++    mat_env = matrix.get("environment", {})
++    mat_pol = matrix.get("policy", {})
++    if mat_env.get("environment_seed") != 0 or config.get("environment_seed") != 0:
++        raise RuntimeError("Environment seed must be strictly 0")
++    if mat_pol.get("policy_seed") != 0 or config.get("policy_seed") != 0:
++        raise RuntimeError("Policy seed must be strictly 0")
++
++    # 8. Horizon: exactly 280 steps
++    if mat_env.get("episode_length") != 280:
++        raise RuntimeError(f"Confirmatory matrix episode_length must be 280, got {mat_env.get('episode_length')}")
++    cfg_env = config.get("environment", {})
++    if cfg_env.get("episode_length") != 280:
++        raise RuntimeError(f"Confirmatory runtime episode_length must be 280, got {cfg_env.get('episode_length')}")
++
++    # 9. Relevant Preprocessing/Postprocessing Configuration
++    if cfg_env.get("obs_type") != mat_env.get("obs_type") or cfg_env.get("obs_type") != "pixels_agent_pos":
++        raise RuntimeError(f"obs_type must be 'pixels_agent_pos', got runtime={cfg_env.get('obs_type')}, matrix={mat_env.get('obs_type')}")
++    if cfg_env.get("observation_height") != 256 or cfg_env.get("observation_width") != 256:
++        raise RuntimeError("Observation size must be 256x256")
++    if cfg_env.get("control_freq") != 20 or cfg_env.get("control_mode") != "relative":
++        raise RuntimeError("Control configuration must be 20Hz relative")
++    if not cfg_env.get("hard_reset") or cfg_env.get("num_steps_wait") != 10:
++        raise RuntimeError("Reset configuration must be hard_reset=True, num_steps_wait=10")
++
++    cfg_pol = config.get("policy", {})
++    if cfg_pol.get("n_action_steps") != 1 or cfg_pol.get("num_steps") != 10 or cfg_pol.get("use_amp") is not False:
++        raise RuntimeError("Policy configuration must be n_action_steps=1, num_steps=10, use_amp=False")
++
++    if matrix.get("execution", {}).get("default_workers", 1) != 1:
++        raise RuntimeError("Execution default_workers must be 1")
++
++    # 10. Load base pairing identity for upstream sources and LIBERO asset hashes
++    pairing_out = config.get("pairing_output", "outputs/language_pairing")
++    identity_file = root / pairing_out / "identity.json"
++    if not identity_file.exists():
++        raise RuntimeError(f"Base pairing identity missing: {identity_file}")
++    pairing_identity = json.loads(identity_file.read_text(encoding="utf-8"))
++
++    return pairing_identity
++
++
++def verify_development_pairing(root, config, rows, confirmatory_spec):
++    """
++    Validate runtime configuration and instruction rows against development specification.
++    Enforces development matrix, manifest, task 0, states 23-32, 3 dev instructions, 3 models, seeds, and 280 steps.
++    """
++    root = Path(root)
++    matrix = confirmatory_spec.get("matrix")
++    if matrix is None:
++        matrix_path = root / confirmatory_spec.get("matrix_path", "configs/development_evaluation/dev_matrix.json")
++        matrix = json.loads(matrix_path.read_text(encoding="utf-8"))
++
++    manifest = confirmatory_spec.get("manifest")
++    if manifest is None:
++        manifest_path = root / matrix.get("manifest_path", "configs/development_evaluation/dev_manifest.json")
++        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
++
++    model_id = confirmatory_spec.get("model_id") or config.get("model_id")
++
++    if matrix.get("role") != "model_selection_development_evaluation":
++        raise RuntimeError(f"Development matrix role must be 'model_selection_development_evaluation', got '{matrix.get('role')}'")
++    if matrix.get("suite") != "libero_spatial" or config.get("suite") != "libero_spatial":
++        raise RuntimeError("Development suite must be 'libero_spatial'")
++
++    task_cfgs = matrix.get("tasks", [])
++    if not task_cfgs or task_cfgs[0].get("task_id") != 0:
++        raise RuntimeError("Development matrix must specify Task 0")
++    if config.get("task_id") != 0:
++        raise RuntimeError(f"Development runtime task ID must be 0, got {config.get('task_id')}")
++
++    matrix_states = set(task_cfgs[0].get("initial_states", []))
++    allowed_states = set(range(23, 33))
++    if matrix_states != allowed_states:
++        raise RuntimeError(f"Development matrix states must be exactly states 23-32, got {matrix_states}")
++
++    init_state = config.get("init_state_index")
++    if init_state not in allowed_states:
++        raise RuntimeError(f"Development state index {init_state} is not in states 23-32")
++
++    expected_models = (["paired_bc", "paired_flow_consistency"]
++                       if matrix.get("paired_training_config") == "configs/paired_training.json"
++                       else ["original_language", "augmented_language", "anchored_language"])
++    if matrix.get("models") != expected_models:
++        raise RuntimeError(f"Matrix models {matrix.get('models')} != development models {expected_models}")
++    if model_id not in expected_models:
++        raise RuntimeError(f"Runtime model '{model_id}' is not one of the development models {expected_models}")
++
++    mat_env = matrix.get("environment", {})
++    if mat_env.get("environment_seed") != 0 or config.get("environment_seed") != 0:
++        raise RuntimeError("Environment seed must be strictly 0")
++    if mat_env.get("episode_length") != 280 or config.get("environment", {}).get("episode_length") != 280:
++        raise RuntimeError("Episode length must be strictly 280 steps")
++
++    if matrix.get("execution", {}).get("default_workers", 1) != 1:
++        raise RuntimeError("Execution default_workers must be 1")
++
++    pairing_out = config.get("pairing_output", "outputs/language_pairing")
++    identity_file = root / pairing_out / "identity.json"
++    if not identity_file.exists():
++        raise RuntimeError(f"Base pairing identity missing: {identity_file}")
++    pairing_identity = json.loads(identity_file.read_text(encoding="utf-8"))
++
++    return pairing_identity
++
++
+ class BenchmarkRuntime:
+-    def __init__(self, root, baseline):
++    def __init__(self, root, baseline, confirmatory_spec=None):
+         import torch
+         from huggingface_hub import try_to_load_from_cache
+         from libero.libero import benchmark, get_libero_path
+@@ -21,6 +218,8 @@ class BenchmarkRuntime:
+ 
+         self.root, self.baseline = Path(root), baseline
+         self.config, self.rows = baseline["config"], baseline["instructions"]
++        self.confirmatory_spec = confirmatory_spec or baseline.get("confirmatory_spec")
++
+         for name, expected in baseline["project_sources"].items():
+             if file_sha256(self.root / name) != expected:
+                 raise RuntimeError(f"Audited pilot source changed: {name}")
+@@ -29,8 +228,16 @@ class BenchmarkRuntime:
+         versions = {name: importlib.metadata.version(name) for name in baseline["packages"]}
+         if versions != baseline["packages"]:
+             raise RuntimeError("Dependencies differ from the audited pilot")
+-        _, pairing = verify_pairing(self.root, self.config, self.rows,
+-                                   self.root / baseline["run_config"]["pairing_report"])
++
++        if self.confirmatory_spec is not None:
++            spec_mat = self.confirmatory_spec.get("matrix", {})
++            if spec_mat.get("role") == "model_selection_development_evaluation":
++                pairing = verify_development_pairing(self.root, self.config, self.rows, self.confirmatory_spec)
++            else:
++                pairing = verify_confirmatory_pairing(self.root, self.config, self.rows, self.confirmatory_spec)
++        else:
++            _, pairing = verify_pairing(self.root, self.config, self.rows,
++                                       self.root / baseline["run_config"]["pairing_report"])
+         modules = {**baseline["upstream_sources"], **pairing["upstream_sources"]}
+         for name, expected in modules.items():
+             if file_sha256(importlib.import_module(name).__file__) != expected:
+diff --git a/tests/test_adaptation_records.py b/tests/test_adaptation_records.py
+index 763dc86..7e645f3 100644
+--- a/tests/test_adaptation_records.py
++++ b/tests/test_adaptation_records.py
+@@ -11,7 +11,8 @@ import unittest
+ ROOT = Path(__file__).resolve().parents[1]
+ sys.path.insert(0, str(ROOT / "src"))
+ from smolvla_grounding.adaptation_records import (
+-    build_schedule, checkpoint_steps, compare_training_logs, latest_checkpoint, read_jsonl, validate_training_catalog,
++    build_anchored_schedule, build_schedule, checkpoint_steps, compare_anchored_training_logs,
++    compare_training_logs, latest_checkpoint, read_jsonl, validate_training_catalog,
+ )
+ from smolvla_grounding.benchmark_records import BenchmarkJournal
+ 
+@@ -78,6 +79,41 @@ class ScheduleTests(unittest.TestCase):
+         with self.assertRaises(ValueError):
+             compare_training_logs(left, right, schedule)
+ 
++    def test_anchored_schedule_distribution_and_independence(self):
++        state = random.getstate()
++        updates = 1000
++        sched = build_anchored_schedule(self.episodes(), updates, 7, 20260909, 5)
++        # Check reproducibility
++        sched2 = build_anchored_schedule(self.episodes(), updates, 7, 20260909, 5)
++        self.assertEqual(sched, sched2)
++        # Check global RNG state untouched
++        self.assertEqual(state, random.getstate())
++        # Check exact empirical counts: P(0) = 50%, P(1..4) = 12.5% each
++        counts = {i: sum(r["anchored_variant"] == i for r in sched) for i in range(5)}
++        self.assertEqual(counts[0], 500)
++        self.assertEqual(counts[0] / updates, 0.50)
++        for i in range(1, 5):
++            self.assertEqual(counts[i], 125)
++            self.assertEqual(counts[i] / updates, 0.125)
++        # Check frame sampling matches standard build_schedule with same frame seed
++        std_sched = build_schedule(self.episodes(), updates, 7, 9999, 5)
++        self.assertEqual([(r["episode_index"], r["frame_index"]) for r in sched],
++                         [(r["episode_index"], r["frame_index"]) for r in std_sched])
++
++    def test_anchored_training_comparison_validation(self):
++        schedule = build_anchored_schedule(self.episodes(), 8, 0, 1, 5)
++        def logs(anchored):
++            return [{**{k: r[k] for k in ("step", "episode_index", "frame_index")},
++                     "variant_index": r["anchored_variant"] if anchored else 0,
++                     "data_hash": "data", "noise_hash": "noise", "rng_before": "rng", "lr_used": 0.0001} for r in schedule]
++        left, right = logs(False), logs(True)
++        self.assertEqual(compare_anchored_training_logs(left, right, schedule)["different_noise_or_rng_steps"], [])
++        right[0]["noise_hash"] = "different"
++        self.assertEqual(compare_anchored_training_logs(left, right, schedule)["different_noise_or_rng_steps"], [1])
++        right[0]["variant_index"] = 999
++        with self.assertRaises(ValueError):
++            compare_anchored_training_logs(left, right, schedule)
++
+ 
+ if __name__ == "__main__":
+     unittest.main()

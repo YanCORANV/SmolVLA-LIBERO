@@ -1,0 +1,47 @@
+{
+  "matrix_version": 2,
+  "role": "exploratory_cross_task_retention",
+  "description": "Exploratory evaluation of cross-task spatial transfer and retention on Task 1 and Task 2. Kept separate from primary language robustness claim.",
+  "suite": "libero_spatial",
+  "manifest_path": "configs/held_out_evaluation/frozen_training_manifest.json",
+  "output_root": "outputs/held_out_evaluation/exploratory_cross_task",
+  "models": ["untuned_fp32", "original_language", "augmented_language"],
+  "tasks": [
+    {
+      "task_id": 1,
+      "task_name": "pick_up_the_black_bowl_next_to_the_ramekin_and_place_it_on_the_plate",
+      "category": "exploratory_spatial_task_1",
+      "initial_states": [0, 1, 2],
+      "instruction_catalog": "configs/held_out_evaluation/instructions/task1_heldout.jsonl",
+      "notes": "Task 1 source bowl next to ramekin; tests cross-task transfer/retention."
+    },
+    {
+      "task_id": 2,
+      "task_name": "pick_up_the_black_bowl_from_table_center_and_place_it_on_the_plate",
+      "category": "exploratory_spatial_task_2",
+      "initial_states": [0, 1, 2],
+      "instruction_catalog": "configs/held_out_evaluation/instructions/task2_heldout.jsonl",
+      "notes": "Task 2 source bowl in table center; tests cross-task transfer/retention."
+    }
+  ],
+  "environment": {
+    "obs_type": "pixels_agent_pos",
+    "observation_height": 256,
+    "observation_width": 256,
+    "control_freq": 20,
+    "control_mode": "relative",
+    "hard_reset": true,
+    "num_steps_wait": 10,
+    "episode_length": 280,
+    "environment_seed": 0
+  },
+  "policy": {
+    "n_action_steps": 1,
+    "num_steps": 10,
+    "use_amp": false,
+    "policy_seed": 0
+  },
+  "execution": {
+    "default_workers": 1
+  }
+}

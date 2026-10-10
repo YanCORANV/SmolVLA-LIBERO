@@ -1,0 +1,96 @@
+{
+  "matrix_version": 4,
+  "role": "final_confirmatory_evaluation",
+  "suite": "libero_spatial",
+  "manifest_path": "configs/final_confirmatory/frozen_model_manifest_v4.json",
+  "output_root": "outputs/final_confirmatory",
+  "run_name": "task0_paired_bc_final_confirmatory",
+  "models": [
+    "original_language",
+    "augmented_language",
+    "paired_bc"
+  ],
+  "tasks": [
+    {
+      "task_id": 0,
+      "task_name": "pick_up_the_black_bowl_between_the_plate_and_the_ramekin_and_place_it_on_the_plate",
+      "initial_states": [
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49
+      ],
+      "instruction_catalog": "configs/final_confirmatory/instructions/task0_final.jsonl",
+      "instruction_catalog_sha256": "b9e386c0d49497740eb9fee09515ec36bfe358942ab976739d3995237c23b0d4",
+      "prompt_text_sha256": {
+        "original": "0a91f8c396de41e282d3640365a14df8f0090791bbf2c2eb917423f4779752a9",
+        "paraphrase_final_01": "9827a47a67214293b11617fe010414ae77f4b201c1b57c9bed4003c2beeadba6",
+        "paraphrase_final_02": "c0591e60fa5dcb85ec75379849f680d8c5b79bed2965c3260224a72512ce3d9f"
+      }
+    }
+  ],
+  "environment": {
+    "obs_type": "pixels_agent_pos",
+    "observation_height": 256,
+    "observation_width": 256,
+    "control_freq": 20,
+    "control_mode": "relative",
+    "hard_reset": true,
+    "num_steps_wait": 10,
+    "episode_length": 280,
+    "environment_seed": 0
+  },
+  "policy": {
+    "n_action_steps": 1,
+    "num_steps": 10,
+    "use_amp": false,
+    "policy_seed": 0
+  },
+  "execution": {
+    "default_workers": 1,
+    "total_rollouts": 153,
+    "resume_marker": "complete.json"
+  },
+  "statistical_rules": {
+    "primary_metric": "goal_ever",
+    "secondary_metric": "goal_final",
+    "bootstrap_cluster_unit": "state_id",
+    "bootstrap_replicates": 10000,
+    "bootstrap_seed": 42,
+    "confidence_level": 0.95,
+    "definitions": {
+      "O": "successes on original / 17",
+      "P1": "successes on paraphrase_final_01 / 17",
+      "P2": "successes on paraphrase_final_02 / 17",
+      "P": "(successes on final_01 + final_02) / 34",
+      "Gap": "P - O",
+      "H": "2 * O * P / (O + P), or 0 if O + P = 0"
+    },
+    "headline_comparisons": [
+      "P_paired_bc - P_original_language",
+      "P_paired_bc - P_augmented_language",
+      "O_paired_bc - O_original_language",
+      "O_paired_bc - O_augmented_language",
+      "H_paired_bc versus H_original_language and H_augmented_language"
+    ],
+    "interpretation": {
+      "strong_positive": "paired_bc improves pooled unseen paraphrases over original_language, does not materially sacrifice canonical performance, and is competitive with or better than augmented_language on unseen paraphrases",
+      "mixed": "paraphrase performance improves but canonical performance degrades substantially, or vice versa",
+      "negative": "paired_bc does not improve robustness relative to existing baselines",
+      "no_post_hoc_significance_threshold": true
+    }
+  }
+}

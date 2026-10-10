@@ -1,0 +1,46 @@
+ M scripts/train_adaptation_arm.py
+ M src/smolvla_grounding/adaptation_eval_runtime.py
+ M src/smolvla_grounding/adaptation_records.py
+ M src/smolvla_grounding/benchmark_runtime.py
+ M tests/test_adaptation_records.py
+?? AGENTS.md
+?? configs/anchored_training.json
+?? configs/development_evaluation/
+?? configs/final_confirmatory/
+?? configs/final_confirmatory_reserved/
+?? configs/held_out_evaluation/
+?? configs/paired_training.json
+?? docs/agent_handoff_zh.md
+?? docs/held_out_evaluation.md
+?? scripts/development_stress_test.py
+?? scripts/diagnose_language_divergence.py
+?? scripts/run_anchored_training.py
+?? scripts/run_anchored_training.sh
+?? scripts/run_development_evaluation.py
+?? scripts/run_development_evaluation.sh
+?? scripts/run_final_confirmatory_evaluation.py
+?? scripts/run_held_out_evaluation.py
+?? scripts/run_held_out_evaluation.sh
+?? scripts/run_paired_development_evaluation.py
+?? scripts/run_paired_training.py
+?? scripts/train_paired_arm.py
+?? src/smolvla_grounding/development_evaluator.py
+?? src/smolvla_grounding/final_confirmatory_evaluator.py
+?? src/smolvla_grounding/final_confirmatory_summary.py
+?? src/smolvla_grounding/flow_velocity.py
+?? src/smolvla_grounding/held_out_evaluator.py
+?? src/smolvla_grounding/held_out_summary.py
+?? src/smolvla_grounding/paired_development_evaluator.py
+?? tests/__init__.py
+?? tests/test_anchored_training_setup.py
+?? tests/test_confirmatory_runtime_pairing.py
+?? tests/test_confirmatory_statistics.py
+?? tests/test_development_evaluation_setup.py
+?? tests/test_development_runtime_smoke.py
+?? tests/test_final_confirmatory.py
+?? tests/test_flow_velocity_equivalence.py
+?? tests/test_paired_checkpoint_resume.py
+?? tests/test_paired_development_evaluator.py
+?? tests/test_paired_flow_training.py
+?? tests/test_paired_optimizer_hook.py
+?? tests/test_paired_rng_alignment.py

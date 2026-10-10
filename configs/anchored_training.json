@@ -1,0 +1,11 @@
+{
+  "reference_run": "outputs/adaptation/runs/task0_longer_training",
+  "default_run_name": "task0_anchored_training",
+  "default_updates": 1000,
+  "default_checkpoint_every": 500,
+  "default_seed": 0,
+  "language_seed": 20260909,
+  "arm": "anchored_language",
+  "hypothesis": "Increasing canonical-language exposure (P=0.50) will recover original-instruction performance while retaining most of the paraphrase-robustness gain produced by language augmentation.",
+  "scope": "Task-0 anchored language training arm; identical demonstrations, updates (1000), LR schedule, and initial parameters as task0_longer_training, except for language sampling probability."
+}

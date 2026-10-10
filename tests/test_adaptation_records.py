@@ -11,7 +11,8 @@ import unittest
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 from smolvla_grounding.adaptation_records import (
-    build_schedule, checkpoint_steps, compare_training_logs, latest_checkpoint, read_jsonl, validate_training_catalog,
+    build_anchored_schedule, build_schedule, checkpoint_steps, compare_anchored_training_logs,
+    compare_training_logs, latest_checkpoint, read_jsonl, validate_training_catalog,
 )
 from smolvla_grounding.benchmark_records import BenchmarkJournal
 
@@ -77,6 +78,41 @@ class ScheduleTests(unittest.TestCase):
         right[0]["data_hash"] = "wrong frame"
         with self.assertRaises(ValueError):
             compare_training_logs(left, right, schedule)
+
+    def test_anchored_schedule_distribution_and_independence(self):
+        state = random.getstate()
+        updates = 1000
+        sched = build_anchored_schedule(self.episodes(), updates, 7, 20260909, 5)
+        # Check reproducibility
+        sched2 = build_anchored_schedule(self.episodes(), updates, 7, 20260909, 5)
+        self.assertEqual(sched, sched2)
+        # Check global RNG state untouched
+        self.assertEqual(state, random.getstate())
+        # Check exact empirical counts: P(0) = 50%, P(1..4) = 12.5% each
+        counts = {i: sum(r["anchored_variant"] == i for r in sched) for i in range(5)}
+        self.assertEqual(counts[0], 500)
+        self.assertEqual(counts[0] / updates, 0.50)
+        for i in range(1, 5):
+            self.assertEqual(counts[i], 125)
+            self.assertEqual(counts[i] / updates, 0.125)
+        # Check frame sampling matches standard build_schedule with same frame seed
+        std_sched = build_schedule(self.episodes(), updates, 7, 9999, 5)
+        self.assertEqual([(r["episode_index"], r["frame_index"]) for r in sched],
+                         [(r["episode_index"], r["frame_index"]) for r in std_sched])
+
+    def test_anchored_training_comparison_validation(self):
+        schedule = build_anchored_schedule(self.episodes(), 8, 0, 1, 5)
+        def logs(anchored):
+            return [{**{k: r[k] for k in ("step", "episode_index", "frame_index")},
+                     "variant_index": r["anchored_variant"] if anchored else 0,
+                     "data_hash": "data", "noise_hash": "noise", "rng_before": "rng", "lr_used": 0.0001} for r in schedule]
+        left, right = logs(False), logs(True)
+        self.assertEqual(compare_anchored_training_logs(left, right, schedule)["different_noise_or_rng_steps"], [])
+        right[0]["noise_hash"] = "different"
+        self.assertEqual(compare_anchored_training_logs(left, right, schedule)["different_noise_or_rng_steps"], [1])
+        right[0]["variant_index"] = 999
+        with self.assertRaises(ValueError):
+            compare_anchored_training_logs(left, right, schedule)
 
 
 if __name__ == "__main__":

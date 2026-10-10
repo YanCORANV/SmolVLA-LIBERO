@@ -4,19 +4,33 @@ from copy import deepcopy
 from dataclasses import asdict
 import json
 
-from .benchmark_runtime import BenchmarkRuntime
+from .benchmark_runtime import BenchmarkRuntime, file_sha256
 from .adaptation_eval_records import verify_training_checkpoint
 
 
 class AdaptationEvalRuntime(BenchmarkRuntime):
-    def __init__(self, root, baseline, model_id, model, rows):
-        super().__init__(root, baseline)
+    def __init__(self, root, baseline, model_id, model, rows, confirmatory_spec=None):
+        super().__init__(root, baseline, confirmatory_spec=confirmatory_spec)
         self.original_path = self.path
         self.model_id, self.model, self.rows = model_id, model, rows
         if model_id != "untuned_fp32":
-            print("  Verify committed training checkpoint artifacts", flush=True)
-            verify_training_checkpoint(self.root, model)
-            self.path = self.root / model["checkpoint"]
+            if self.confirmatory_spec is not None:
+                # Confirmatory mode: verify checkpoint artifacts against frozen manifest
+                self.path = self.root / model["checkpoint"]
+                expected_hashes = model.get("artifact_sha256", {})
+                if not expected_hashes:
+                    raise RuntimeError(f"Missing artifact_sha256 for confirmatory model {model_id}")
+                for rel_name, exp_hash in expected_hashes.items():
+                    act_hash = file_sha256(self.path / rel_name)
+                    if act_hash != exp_hash:
+                        raise RuntimeError(f"Confirmatory checkpoint artifact {rel_name} SHA256 mismatch: {act_hash} != {exp_hash}")
+                if (self.path / "pretrained_model").is_dir():
+                    self.path = self.path / "pretrained_model"
+            else:
+                # Historical pilot mode
+                print("  Verify committed training checkpoint artifacts", flush=True)
+                verify_training_checkpoint(self.root, model)
+                self.path = self.root / model["checkpoint"]
 
     def load_policy(self):
         import torch
