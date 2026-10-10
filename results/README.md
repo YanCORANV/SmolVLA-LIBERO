@@ -1,33 +1,25 @@
-# Research results
+# Curated research results
 
-The latest completed comparison is the [1000-update development experiment](longer_training_development/README.md).
-All comparisons remain task-0 pilot results; none is a full LIBERO benchmark or an
-untouched test. Each primary language condition has three initial-state cases.
+**Current conclusion:** the selected `paired_bc` arm achieved high canonical success in the amended final v4 evaluation but did **not** improve pooled success on newly frozen unseen paraphrases. The development gain did not generalize. Read the [full result interpretation](../docs/results.md) before using any number.
 
-| Evidence | What it establishes |
-| --- | --- |
-| [First rollout](first_rollout/README.md) | One successful original-instruction episode; official policy/environment integration |
-| [Language pilot](language_pilot/README.md) | Six instruction conditions on one state, including repeat and changed-goal probes |
-| [Repeat diagnostic](repeat_diagnostic/README.md) | Pixel/input divergence and recorded-input replay evidence |
-| [State benchmark protocol](../docs/state_benchmark.md) | 18 episodes across three matched state groups; raw summary retained locally |
-| [First fine-tuning comparison](adaptation_development/README.md) | Matched 200-update arms at peak learning rate 1e-4; B/C remain unsuccessful |
-| [Qualitative failure review](adaptation_development/qualitative_review.md) | Eight selected grasp/lift and transfer/placement cases |
-| [Lower learning rate](lower_lr_development/README.md) | 200 updates at 1e-5; augmented C reaches the goal in 1/3 cases but ends at 0/3 |
-| [Longer training](longer_training_development/README.md) | 1000 updates at 1e-5; augmented C succeeds in 2/3 cases, B in 0/3 |
+| Stage | Versioned public evidence | Role |
+| --- | --- | --- |
+| First 240-rollout confirmatory set, States 3–22 | [Summary](held_out_confirmatory/summary.json) | Canonical-only versus uniform augmentation; early robustness/retention trade-off |
+| Development, States 23–32 | [Anchored comparison](development_selection/anchored_summary.json), [paired comparison](development_selection/paired_summary.json) | Model selection only |
+| Action/trajectory diagnosis | [Summary](language_divergence/summary.json), [pair-level CSV](language_divergence/pair_level_divergence_measurements.csv) | Existing-rollout analysis |
+| Matched paired-training controls | [Schedule](paired_training/schedule.json), [control audit](paired_training/paired_control_audit.json) | Input/noise/time parity |
+| Final v4, States 33–49 | [Summary](final_confirmatory_v4/summary.json), [per-state CSV](final_confirmatory_v4/per_state_raw_outcomes.csv) | Amended frozen final evaluation, 153/153 valid rollouts |
 
-## Reading the numbers
+The data files above are byte-identical copies of completed local `outputs/` summaries. The final protocol amendment, checkpoint hashes and prompt hashes are in [the v4 freeze record](../configs/final_confirmatory/freeze_final_protocol_v4.json). Figures under [assets/figures](../assets/figures/) can be rebuilt with [the figure script](../scripts/make_portfolio_figures.py). Raw checkpoints, trajectories, videos and logs remain local and Git-ignored.
 
-The adaptation comparisons use a precision-matched untuned baseline. Do not merge
-its episodes with the earlier native-precision pilot as if all belonged to one
-experiment. Later rounds reuse verified baseline records rather than rerunning
-them; reuse does not increase the number of independent observations.
+## Earlier development archive
 
-Goal-ever means the goal held at least once; goal-final means it held at the final
-step. These differ in the lower-learning-rate C example. Identical-original repeat
-controls are reported separately and excluded from the main A/B/C table.
-Changed-goal metrics remain provisional and are not evidence of semantic sensitivity.
+The following pre-confirmatory materials remain available as historical engineering evidence. Their small samples and wordings must not be pooled with the final result.
 
-CSV/JSON files and selected keyframes are versioned here. Raw logs, model downloads
-and rollout videos stay in ignored local directories. Public video release attachments
-and comparison plots remain follow-up work. New results should retain failed cases,
-repeat disagreements, protocol differences and clear development/test labels.
+- [First official-policy rollout](first_rollout/README.md)
+- [Language pilot](language_pilot/README.md) and [repeat diagnostic](repeat_diagnostic/README.md)
+- [200-update adaptation comparison](adaptation_development/README.md) and [failure review](adaptation_development/qualitative_review.md)
+- [Lower-LR comparison](lower_lr_development/README.md)
+- [1,000-update early development comparison](longer_training_development/README.md)
+
+`goal_ever` means the task goal held at least once; `goal_final` means it held at the final step. They should not be interchanged. Earlier repeat controls and changed-goal probes are not the final held-out language outcome.

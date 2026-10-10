@@ -1,169 +1,115 @@
-# Robust Language Grounding and Adaptation for SmolVLA on LIBERO
+# SmolVLA Language Robustness on LIBERO
 
-**Does the same robot task still succeed when its instruction is rephrased?**
-This project evaluates language robustness of the official LIBERO-adapted SmolVLA
-policy and compares original-language versus language-augmented fine-tuning on
-an **RTX 4070 Laptop GPU (8 GB)**.
+**Status: experimental pipeline complete.** This project adapts and evaluates SmolVLA on one LIBERO-Spatial manipulation task to study what happens when the *same* task is phrased differently. Paired language training looked promising on development prompts, but **did not improve unseen-paraphrase success in the frozen final evaluation**.
 
-**Status: v0.1 research prototype prepared for publication.** Evaluation, data
-preparation and three controlled development training/evaluation rounds have run.
-The latest results show a gain on one paraphrase; another still fails. Current
-scope is one LIBERO Spatial task and three development initial states.
+[Experiment history](docs/experiments.md) · [Method](docs/method.md) · [Full results](docs/results.md) · [Setup](docs/setup.md) · [Reproduction notes](docs/reproduction.md)
 
-[Results](results/README.md) · [Setup](docs/setup.md) ·
-[Reproduction](docs/reproduction.md) · [Documentation](docs/README.md) ·
-[Contributing](CONTRIBUTING.md)
+## At a glance
 
-![Six frames from the first successful original-instruction rollout](results/first_rollout/keyframes.png)
-*Official pretrained-policy integration check. These frames show the first rollout,
-not the later fine-tuning comparison. [Episode evidence](results/first_rollout/README.md).*
+| Final v4, Task 0, States 33–49 | Canonical instruction | Two new paraphrases, pooled | Balanced score H |
+| --- | ---: | ---: | ---: |
+| Canonical-only fine-tuning (`original_language`) | 12/17 · 70.6% | 5/34 · 14.7% | 0.2434 |
+| Language augmentation (`augmented_language`) | 12/17 · 70.6% | 7/34 · 20.6% | 0.3188 |
+| Paired language training (`paired_bc`) | **16/17 · 94.1%** | 4/34 · 11.8% | 0.2092 |
 
-## Motivation
+The registered paired differences for pooled paraphrase success were −2.9 percentage points versus canonical-only (95% CI −14.7 to +8.8) and −8.8 points versus augmentation (95% CI −20.6 to +2.9). Both intervals include zero. The final result is a **negative robustness result**, with higher observed canonical success for `paired_bc`. See [all counts, intervals and protocol amendments](docs/results.md).
 
-A robot instruction can have many equivalent wordings. A useful policy should
-retain task success across those wordings and respond appropriately when the
-requested object or spatial relation actually changes. We study these separately:
-paraphrase robustness does not by itself establish correct semantic grounding.
+![Development and final success rates for the three final models](assets/figures/development_vs_final.png)
 
-## Method
+*Development and final prompts and states differ; this is a descriptive comparison, not a paired estimate of a common test set. Figure generated from [frozen summaries](results/).*
 
-1. Use the official pretrained SmolVLA LIBERO checkpoint and LeRobot/LIBERO environment.
-2. Pair language conditions by task, initial simulator state and policy seed; verify
-   reset observations and include an identical-instruction repeat control.
-3. Save fixed-horizon rollouts, goal timelines, actions, videos and CSV/JSON records.
-4. Select 45 exact-task official demonstrations: 36 for training, 9 held out.
-5. Compare the untuned policy with two matched fine-tuning arms:
-   **original-language** uses only the original wording; **language-augmented** uses
-   the original plus four meaning-preserving variants. Both receive the same
-   demonstration frames, update budget and controlled randomness.
+## Motivation and research question
 
-The original-language arm measures what extra task training achieves by itself.
-The augmented arm tests the additional effect of varied wording. Evaluation
-paraphrases B/C are excluded from the training catalog, but have been used for
-hyperparameter development; they are not an untouched test set.
+Two instructions can describe exactly the same robot task, yet a vision-language-action policy can predict different actions solely because the wording changes. We ask: **How sensitive is SmolVLA's behavior to semantically equivalent task instructions, and can simple language-training interventions improve robustness without losing canonical task performance?**
 
-Training freezes the vision-language backbone and updates the action expert and
-projection parameters. Batch size is 1, with BF16 autocast and FP32 trainable
-parameters. Measured peak PyTorch reserved memory was about **3.14 GiB**; this is
-not total-device memory. This is expert fine-tuning, not LoRA or full-model training.
+The concrete task is to pick up the black bowl between the plate and the ramekin and place it on the plate. This is a focused, single-task study, not a LIBERO-wide robustness benchmark.
 
-## Latest development results
+## Project overview
 
-LIBERO Spatial task 0; initial states 0/1/2; policy seed 0; 280-step fixed horizon.
-Each cell is **successful episodes / 3**, not a full-suite success rate.
-
-| Model | Original A | Paraphrase B | Paraphrase C |
-| --- | --- | --- | --- |
-| Untuned precision-matched baseline (reused) | 1/3 | 0/3 | 0/3 |
-| Original-language fine-tuning, 1000 updates | 3/3 | 0/3 | 0/3 |
-| Language-augmented fine-tuning, 1000 updates | 2/3 | 0/3 | 2/3 |
-
-Both fine-tuned models use a peak learning rate of `1e-5`. Goal-ever and final-step
-counts agree in this round. The original-language model's identical-A repeat
-succeeded in 2/3 rather than 3/3, showing outcome variability. The augmented model
-improves C but still fails B and has fewer A successes than the control.
-
-[Full comparison and caveats](results/longer_training_development/README.md) ·
-[CSV](results/longer_training_development/summary.csv) ·
-[JSON](results/longer_training_development/summary.json)
-
-<details>
-<summary>Exact evaluation wordings</summary>
-
-- **A (official task instruction):** pick up the black bowl between the plate and the ramekin and place it on the plate
-- **B:** lift the black bowl located between the plate and the ramekin, then put it onto the plate
-- **C:** place onto the plate the black bowl that is between the plate and the ramekin
-
-See the [evaluation catalog](configs/instructions/task0.jsonl) and
-[training catalog](configs/instructions/task0_train.jsonl).
-
-</details>
-
-Earlier rounds, repeat diagnostics and qualitative failures are retained in the
-[results index](results/README.md), including unsuccessful comparisons.
-
-## Setup and first rollout
-
-Use Linux/WSL2 with an NVIDIA CUDA GPU and Python 3.12. Install native build tools
-and uv following [setup](docs/setup.md), then run each command after the preceding
-stage passes:
-
-```bash
-bash scripts/setup_environment.sh
-source .venv/bin/activate
-python scripts/download_checkpoint.py
-python scripts/check_policy.py
-bash scripts/run_first_rollout.sh
-python scripts/summarize_first_rollout.py
+```mermaid
+flowchart LR
+    A["SmolVLA + LIBERO<br/>validated pipeline"] --> B["Canonical-only<br/>fine-tuning"]
+    B --> C["Held-out paraphrase<br/>evaluation"]
+    C --> D["Augmentation trade-off<br/>and anchored sampling"]
+    D --> E["Action / trajectory<br/>divergence diagnosis"]
+    E --> F["Paired BC and frozen-teacher<br/>flow consistency"]
+    F --> G["Development selection:<br/>paired BC"]
+    G --> H["Frozen final v4:<br/>no paraphrase gain"]
 ```
 
-The official policy is `HuggingFaceVLA/smolvla_libero`, pinned to revision
-`6721902bc4d61e50a3bfdb11dfb4cb626f05d102`. Dependencies and other revisions are
-recorded in [requirements](requirements.txt), [environment versions](docs/environment-packages.txt)
-and `configs/`. The first rollout saves an MP4 and evaluator logs under
-`outputs/first_rollout/`; its summary exporter writes small public artifacts.
+This progression matters: the intervention was motivated by a measured action-level failure mode, selected on development data, and then checked against newly frozen final language conditions. [Why each stage happened](docs/experiments.md).
 
-## Experiments and repository layout
+## Experimental setup
 
-The [reproduction guide](docs/reproduction.md) lists all benchmark, training and
-evaluation commands and their required preceding artifacts. Full training uses
-staged scripts with interactive budgets and resume checks. Some configurations
-reference the original study's local report names and must be updated for a new
-study; clean-clone end-to-end training has not yet been independently verified.
+- **Policy and simulator:** official SmolVLA LIBERO checkpoint and LeRobot observation/action pipeline in LIBERO-Spatial Task 0. The project adapts the action expert and projection parameters; it does not change SmolVLA's architecture.
+- **Training data:** 36 exact-task official demonstrations for training, with 9 held out in the earlier data audit. The paired arms start from the same frozen `original_language` step-1000 checkpoint and receive 1,000 additional matched updates.
+- **Evaluation:** 280-step rollouts, one worker, environment and policy seeds 0, primary metric `goal_ever` (the goal becomes true at least once). `goal_final` is secondary.
+- **Isolation:** initial exploratory States 0–2; first confirmatory States 3–22; model-selection States 23–32; final v4 States **33–49**. The installed official Task-0 initial-state asset has only 50 rows (indices 0–49); the originally planned 50–52 were invalid and removed before final outcomes were inspected. Training, development, earlier held-out, and final instruction catalogs are separate.
+
+The final matrix contains 3 models × 17 states × 3 prompts = **153 valid rollouts**. Its [frozen matrix](configs/final_confirmatory/final_matrix_v4.json), [model manifest](configs/final_confirmatory/frozen_model_manifest_v4.json), and [v4 freeze record](configs/final_confirmatory/freeze_final_protocol_v4.json) document the exact protocol and hashes.
+
+## What goes wrong under paraphrases?
+
+Matched rollout diagnostics compare the same initial physical state under canonical and paraphrased text. The identical-instruction repeat control had **zero Step-1 action difference**; paraphrase pairs had about **0.17 mean Step-1 action-vector L2 difference**. All 180 paraphrase pairs crossed the empirical action threshold at Step 1. End-effector paths typically exceeded 1 cm separation around Steps 5–6. Failed paraphrase episodes had larger average action divergence during the first 10% of the rollout than successful paraphrase episodes (0.294 versus 0.218 in this diagnostic set).
+
+These observations locate wording sensitivity in the predicted action field before substantial closed-loop interaction. Later trajectories often separate further; they do not, by themselves, prove that action divergence is the sole cause of failure. [Diagnostic methods and source data](docs/results.md#action-and-trajectory-diagnostics).
+
+![First-step action difference for repeat and paraphrase pairs](assets/figures/step1_action_divergence.png)
+
+![First timestep of greater than 1 cm end-effector trajectory separation](assets/figures/trajectory_divergence_onset.png)
+
+## Methods evaluated
+
+| Arm | Purpose |
+| --- | --- |
+| `original_language` | Canonical-only fine-tuning baseline. |
+| `augmented_language` | Baseline using four training paraphrases alongside the canonical instruction. |
+| `anchored_language` | Sampling ablation: 50% canonical, 12.5% for each training paraphrase. Failed its development gate. |
+| `paired_bc` | Data/update-matched control: the same physical sample, action target, flow noise and time under canonical and one paraphrased instruction. Selected on development data. |
+| `paired_flow_consistency` | Same paired controls plus a frozen canonical teacher's velocity-field consistency loss. Failed to beat `paired_bc` on development data and was not advanced to final evaluation. |
+
+[Losses, controlled inputs and schedule](docs/method.md).
+
+## Development versus final
+
+On States 23–32, `paired_bc` achieved canonical **10/10**, pooled development paraphrases **12/20**, and H = **0.7500**. `paired_flow_consistency` achieved 9/10, 11/20, H = 0.6828; its pre-registered selection gate failed. The earlier `original_language`, `augmented_language`, and `anchored_language` development H scores were 0.5538, 0.4364 and 0.4421.
+
+On final States 33–49 with two *new* frozen paraphrases, `paired_bc` retained high canonical success but reached only **4/34 (11.8%)** pooled paraphrase success, below both baselines' observed rates. Development gains did not generalize to these final prompts. [Complete tables and 95% paired state-bootstrap intervals](docs/results.md).
+
+## Key takeaways
+
+1. Semantically equivalent instructions can produce different first actions and large closed-loop trajectory differences in this SmolVLA task.
+2. Uniform language augmentation improved unseen-paraphrase success in the *first* confirmatory experiment while reducing canonical success; changing the sampling ratio did not solve that trade-off on development data.
+3. Strong development performance did not predict final unseen-language robustness for paired training. Strict state and prompt separation changed the scientific conclusion.
+
+## Reproducibility and repository map
+
+Experiment journals use `complete.json` as the committed-rollout marker; incomplete attempts remain available for audit and are not counted. Frozen protocols record model, prompt, source/config, checkpoint and state-asset hashes. The final report uses 10,000 paired bootstrap resamples of 17 state clusters, preserving all model/prompt outcomes for each sampled state. [Curated result JSON/CSV](results/) are checked-in copies of completed local outputs; raw checkpoints, videos and execution logs stay under ignored `outputs/`.
 
 ```text
-configs/                 Pinned revisions, instructions and experiment settings
-src/smolvla_grounding/    Protocol, data checks, records and experiment utilities
-scripts/                 Setup, evaluation, training and export entry points
-tests/                   CPU protocol and record-validation tests
-docs/                    Setup, methods, audits and reproduction instructions
-results/                 Curated CSV/JSON, keyframes and written analyses
+configs/                    Frozen training and evaluation catalogs/matrices
+src/smolvla_grounding/      Policy adapters, records, evaluators and statistics
+scripts/                    Staged training, evaluation and diagnostic entry points
+tests/                      Protocol, pairing, checkpoint and evaluator checks
+results/                    Small curated result tables and diagnostic data
+assets/figures/             Plots generated from those curated results
+docs/                       Experiment history, method, results and setup
+outputs/                    Local raw runs, videos, checkpoints and logs (Git-ignored)
 ```
 
-Local environments, downloads, weights and raw run artifacts are ignored by Git.
-Selected keyframes are included; raw MP4s are currently local, with public video
-attachments planned for a release. [CPU check instructions](CONTRIBUTING.md).
+### Verified entry points
 
-## Upstream and project contributions
+From the repository root in the configured Linux/WSL2 environment, after the prerequisites in [setup](docs/setup.md) and [reproduction notes](docs/reproduction.md):
 
-**Upstream:** LeRobot supplies the SmolVLA policy, processors, training utilities and
-evaluator; LIBERO supplies tasks, assets, instructions and goal predicates;
-MuJoCo/robosuite supply simulation. The starting checkpoint and demonstrations
-are official Hugging Face releases.
+```bash
+python scripts/run_paired_training.py
+python scripts/run_paired_development_evaluation.py
+python scripts/diagnose_language_divergence.py
+python scripts/make_portfolio_figures.py
+```
 
-**This project:** controlled language catalogs and initial-state pairing, repeat
-and replay diagnostics, demonstration selection/mapping checks, matched two-arm
-fine-tuning orchestration, resumable provenance records, and quantitative/qualitative
-analysis. A small loading adapter preserves FP32 trainable weights on reload; the
-policy architecture, forward pass, loss and sampler remain upstream.
+The historical confirmatory entry points are `scripts/run_held_out_evaluation.py` and `scripts/run_final_confirmatory_evaluation.py`. They use frozen matrices and existing committed-run resume rules; **do not rerun consumed test states to explore a new method**. Training and rollout stages can take many hours and depend on local checkpoints/data that are not in Git. The workflow has run in this project environment, but a clean-clone end-to-end reproduction on another machine has not been verified.
 
-See [upstream attribution and license scope](THIRD_PARTY.md). This project is not
-affiliated with Hugging Face or the LIBERO authors.
+## Scope and attribution
 
-## Limitations
-
-- One task, three initial states and one policy seed; these are development cases.
-- Reused baselines provide no additional independent observations. Repeated original
-  instructions can produce different outcomes despite controlled resets and seeds.
-- Fixed-horizon goal metrics differ from standard benchmark evaluation conventions.
-- Changed-object/relation scoring is provisional pending positive-case validation;
-  no semantic-sensitivity improvement is established.
-- Latest C successes still need video review. Existing failure reviews cover selected
-  earlier rollouts, not every episode or a demonstrated causal explanation.
-- No general robustness, statistical significance or causal overfitting claim follows
-  from these results. Dependency pins are not a complete portable environment lock.
-
-## Next milestones
-
-- [ ] Review latest C successes and the identical-A disagreement.
-- [ ] Freeze the candidate configuration; evaluate new states and new paraphrases.
-- [ ] Validate alternative-goal predicates before reporting semantic-change scores.
-- [ ] Export comparison plots and selected public rollout videos.
-- [ ] Verify the full workflow from a clean clone and simplify artifact references.
-- [ ] Extend beyond task 0 after the small experiment is validated.
-
-## License
-
-Project-specific code and documentation: [MIT](LICENSE).
-Upstream software, models, data and scene assets retain their own terms; see
-[THIRD_PARTY.md](THIRD_PARTY.md).
+This is one task and a small set of instruction paraphrases. The final effect intervals include zero, and the plots describe associations in observed trajectories rather than a proven causal mechanism. SmolVLA, LeRobot, LIBERO and simulator assets are upstream work; see [attribution and license scope](THIRD_PARTY.md). Project-specific code and documentation are [MIT-licensed](LICENSE).
