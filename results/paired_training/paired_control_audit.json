@@ -1,0 +1,19 @@
+{
+  "updates_compared": 1000,
+  "matched_fields": [
+    "step",
+    "episode_index",
+    "frame_index",
+    "paraphrase_variant",
+    "data_hash",
+    "action_hash",
+    "flow_seed",
+    "noise_hash",
+    "time_hash",
+    "lr_used"
+  ],
+  "all_updates_identical": true,
+  "schedule_hash": "2d950b9c08c47039a425991ad3d88ee1dc1034dee22085b4249c49367056140e",
+  "initial_parameters_identical": true,
+  "teacher_source_checkpoint_byte_identical": true
+}

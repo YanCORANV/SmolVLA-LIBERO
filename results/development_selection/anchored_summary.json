@@ -1,0 +1,136 @@
+{
+  "evaluation_name": "task0_anchored_dev_eval",
+  "evaluation_scope": "Model-selection development evaluation on States 23-32 (10 states)",
+  "models": [
+    "original_language",
+    "augmented_language",
+    "anchored_language"
+  ],
+  "primary_metric": "goal_ever",
+  "results": {
+    "original_language": {
+      "evaluated_states": [
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32
+      ],
+      "states_count": 10,
+      "O": 0.9,
+      "P": 0.4,
+      "H": 0.5538461538461539,
+      "robustness_gap": -0.5,
+      "original_success_count": "9/10",
+      "original_success_rate": 0.9,
+      "paraphrase_dev_01_count": "7/10",
+      "paraphrase_dev_01_rate": 0.7,
+      "paraphrase_dev_02_count": "1/10",
+      "paraphrase_dev_02_rate": 0.1,
+      "pooled_dev_paraphrase_count": "8/20",
+      "pooled_dev_paraphrase_success_rate": 0.4,
+      "goal_final_summary": {
+        "original_final_count": "9/10",
+        "paraphrase_dev_01_final_count": "7/10",
+        "paraphrase_dev_02_final_count": "1/10",
+        "pooled_dev_paraphrase_final_count": "8/20"
+      }
+    },
+    "augmented_language": {
+      "evaluated_states": [
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32
+      ],
+      "states_count": 10,
+      "O": 0.8,
+      "P": 0.3,
+      "H": 0.4363636363636363,
+      "robustness_gap": -0.5,
+      "original_success_count": "8/10",
+      "original_success_rate": 0.8,
+      "paraphrase_dev_01_count": "3/10",
+      "paraphrase_dev_01_rate": 0.3,
+      "paraphrase_dev_02_count": "3/10",
+      "paraphrase_dev_02_rate": 0.3,
+      "pooled_dev_paraphrase_count": "6/20",
+      "pooled_dev_paraphrase_success_rate": 0.3,
+      "goal_final_summary": {
+        "original_final_count": "7/10",
+        "paraphrase_dev_01_final_count": "1/10",
+        "paraphrase_dev_02_final_count": "3/10",
+        "pooled_dev_paraphrase_final_count": "4/20"
+      }
+    },
+    "anchored_language": {
+      "evaluated_states": [
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32
+      ],
+      "states_count": 10,
+      "O": 0.6,
+      "P": 0.35,
+      "H": 0.4421052631578947,
+      "robustness_gap": -0.25,
+      "original_success_count": "6/10",
+      "original_success_rate": 0.6,
+      "paraphrase_dev_01_count": "3/10",
+      "paraphrase_dev_01_rate": 0.3,
+      "paraphrase_dev_02_count": "4/10",
+      "paraphrase_dev_02_rate": 0.4,
+      "pooled_dev_paraphrase_count": "7/20",
+      "pooled_dev_paraphrase_success_rate": 0.35,
+      "goal_final_summary": {
+        "original_final_count": "6/10",
+        "paraphrase_dev_01_final_count": "2/10",
+        "paraphrase_dev_02_final_count": "4/10",
+        "pooled_dev_paraphrase_final_count": "6/20"
+      }
+    }
+  },
+  "model_selection_gate": {
+    "status": "FAIL",
+    "conditions": {
+      "1_O_anchor_ge_O_augmented": {
+        "rule": "O_anchor >= O_augmented",
+        "anchor_val": 0.6,
+        "threshold_val": 0.8,
+        "passed": false
+      },
+      "2_P_anchor_ge_P_original_language": {
+        "rule": "P_anchor >= P_original_language",
+        "anchor_val": 0.35,
+        "threshold_val": 0.4,
+        "passed": false
+      },
+      "3_H_anchor_ge_max_controls": {
+        "rule": "H_anchor >= max(H_original_language, H_augmented_language)",
+        "anchor_val": 0.4421052631578947,
+        "max_controls_val": 0.5538461538461539,
+        "H_original_language": 0.5538461538461539,
+        "H_augmented_language": 0.4363636363636363,
+        "passed": false
+      }
+    }
+  }
+}

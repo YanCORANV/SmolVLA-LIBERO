@@ -1,0 +1,232 @@
+{
+  "evaluation_scope": "Language Divergence Diagnostic Analysis",
+  "sample_counts": {
+    "total_pairs": 240,
+    "repeat_baseline_pairs": 60,
+    "paraphrase_pairs": 180,
+    "confirmatory_heldout_paraphrase_pairs": 120,
+    "development_paraphrase_pairs": 60,
+    "successful_paraphrase_pairs": 51,
+    "failed_paraphrase_pairs": 129,
+    "clean_both_success_pairs": 44,
+    "clean_divergent_failure_pairs": 104
+  },
+  "empirical_repeat_baseline": {
+    "description": "Nondeterminism baseline derived from original-vs-original_repeat trials (N=60)",
+    "action_difference": {
+      "step1_max": 0.0,
+      "early_10pct_mean": 0.00386061891913414,
+      "early_10pct_p95": 0.023993125185370445,
+      "early_10pct_p99": 0.049220189452171326,
+      "early_10pct_max": 0.08487583696842194,
+      "overall_p50": 0.0,
+      "overall_p75": 0.07961204648017883,
+      "overall_p90": 0.3285037875175476,
+      "overall_p95": 0.9088982343673706,
+      "overall_max": 2.7741971015930176
+    },
+    "eef_position_difference_meters": {
+      "step1_max": 0.0,
+      "early_10pct_mean": 8.359544153790921e-05,
+      "early_10pct_p95": 0.000619541562628001,
+      "early_10pct_p99": 0.0009835594100877643,
+      "early_10pct_max": 0.001702000736258924,
+      "overall_p50": 0.0,
+      "overall_p75": 0.012727569788694382,
+      "overall_p90": 0.04274144768714905,
+      "overall_p95": 0.06833852827548981,
+      "overall_max": 0.19774949550628662
+    },
+    "derived_thresholds": {
+      "action_divergence_threshold_tau_act": 0.05,
+      "action_threshold_justification": "Set to 0.05, slightly above early repeat p99 (0.0492); any action diff >= 0.05 exceeds normal early execution variation.",
+      "trajectory_divergence_threshold_tau_pos_meters": 0.01,
+      "trajectory_threshold_justification": "Set to 0.01 m (1 cm), which is ~10x early repeat drift (0.0010 m) and captures macroscopic end-effector path departure."
+    }
+  },
+  "successful_vs_failed_paraphrase_comparison": {
+    "step1_action_divergence": {
+      "successful_paraphrases": {
+        "count": 51,
+        "mean": 0.17121849559685764,
+        "std": 0.04273332101077815,
+        "median": 0.18536540865898132,
+        "p25": 0.14022543281316757,
+        "p75": 0.19825050979852676,
+        "iqr": 0.05802507698535919,
+        "min": 0.05005338788032532,
+        "max": 0.24428392946720123
+      },
+      "failed_paraphrases": {
+        "count": 129,
+        "mean": 0.17173001199036605,
+        "std": 0.03916175944140439,
+        "median": 0.1737644374370575,
+        "p25": 0.14036399126052856,
+        "p75": 0.19347776472568512,
+        "iqr": 0.053113773465156555,
+        "min": 0.06783026456832886,
+        "max": 0.28215035796165466
+      },
+      "mann_whitney_u_test": {
+        "statistic": 3081.0,
+        "p_value": 0.7464834401769962,
+        "hypothesis": "failed > successful"
+      }
+    },
+    "mean_action_diff_first_10pct": {
+      "successful_paraphrases": {
+        "count": 51,
+        "mean": 0.21767961701341704,
+        "std": 0.10667341542054032,
+        "median": 0.2076079398393631,
+        "p25": 0.14195381104946136,
+        "p75": 0.23524624109268188,
+        "iqr": 0.09329243004322052,
+        "min": 0.06829415261745453,
+        "max": 0.47788527607917786
+      },
+      "failed_paraphrases": {
+        "count": 129,
+        "mean": 0.29374308104431907,
+        "std": 0.14658795844407496,
+        "median": 0.34938332438468933,
+        "p25": 0.1583152860403061,
+        "p75": 0.42833247780799866,
+        "iqr": 0.27001719176769257,
+        "min": 0.06493007391691208,
+        "max": 0.5833345055580139
+      },
+      "mann_whitney_u_test": {
+        "statistic": 4254.0,
+        "p_value": 0.0011059821843480797,
+        "hypothesis": "failed > successful"
+      }
+    },
+    "first_trajectory_divergence_step": {
+      "successful_paraphrases": {
+        "count": 51,
+        "mean": 9.215686274509803,
+        "std": 6.168674818760334,
+        "median": 6.0,
+        "p25": 5.0,
+        "p75": 11.0,
+        "iqr": 6.0,
+        "min": 5.0,
+        "max": 27.0
+      },
+      "failed_paraphrases": {
+        "count": 129,
+        "mean": 9.03875968992248,
+        "std": 8.526065824846322,
+        "median": 5.0,
+        "p25": 5.0,
+        "p75": 7.0,
+        "iqr": 2.0,
+        "min": 4.0,
+        "max": 49.0
+      },
+      "mann_whitney_u_test": {
+        "statistic": 3900.5,
+        "p_value": 0.022900216674438905,
+        "hypothesis": "successful occurs later than failed"
+      }
+    },
+    "trajectory_divergence_onset_bins_proportions": {
+      "successful_paraphrases": {
+        "first_10%": 1.0
+      },
+      "failed_paraphrases": {
+        "first_10%": 0.9534883720930233,
+        "10_to_25%": 0.046511627906976744
+      }
+    },
+    "action_divergence_onset_bins_proportions": {
+      "successful_paraphrases": {
+        "first_10%": 1.0
+      },
+      "failed_paraphrases": {
+        "first_10%": 1.0
+      }
+    }
+  },
+  "dev_01_vs_dev_02_matched_comparison": {
+    "sample_size": 30,
+    "success_rate_dev_01": 0.43333333333333335,
+    "success_rate_dev_02": 0.26666666666666666,
+    "step1_action_diff": {
+      "dev_01": {
+        "count": 30,
+        "mean": 0.14187056422233582,
+        "std": 0.04810097912275119,
+        "median": 0.13863343000411987,
+        "p25": 0.10202832333743572,
+        "p75": 0.17523948848247528,
+        "iqr": 0.07321116514503956,
+        "min": 0.05005338788032532,
+        "max": 0.24428392946720123
+      },
+      "dev_02": {
+        "count": 30,
+        "mean": 0.15351659009854,
+        "std": 0.025249839154958518,
+        "median": 0.1537642851471901,
+        "p25": 0.13398459553718567,
+        "p75": 0.17325491085648537,
+        "iqr": 0.0392703153192997,
+        "min": 0.1031518280506134,
+        "max": 0.1946459710597992
+      },
+      "wilcoxon_signed_rank_p_value": 0.31839608028531075
+    },
+    "mean_action_diff_first_10pct": {
+      "dev_01": {
+        "count": 30,
+        "mean": 0.139927173157533,
+        "std": 0.04616400283959476,
+        "median": 0.1215631254017353,
+        "p25": 0.10253529995679855,
+        "p75": 0.17908896133303642,
+        "iqr": 0.07655366137623787,
+        "min": 0.08228667825460434,
+        "max": 0.23533077538013458
+      },
+      "dev_02": {
+        "count": 30,
+        "mean": 0.10504508366187414,
+        "std": 0.04036097147702973,
+        "median": 0.08407458290457726,
+        "p25": 0.07694718800485134,
+        "p75": 0.13381009548902512,
+        "iqr": 0.056862907484173775,
+        "min": 0.06493007391691208,
+        "max": 0.21310947835445404
+      },
+      "wilcoxon_signed_rank_p_value": 3.5390257835388184e-08
+    },
+    "trajectory_divergence_step": {
+      "dev_01": {
+        "count": 30,
+        "mean": 13.766666666666667,
+        "std": 5.1640890863688655,
+        "median": 13.5,
+        "p25": 11.0,
+        "p75": 17.75,
+        "iqr": 6.75,
+        "min": 5.0,
+        "max": 25.0
+      },
+      "dev_02": {
+        "count": 30,
+        "mean": 19.7,
+        "std": 12.542754468424087,
+        "median": 21.5,
+        "p25": 9.0,
+        "p75": 26.5,
+        "iqr": 17.5,
+        "min": 5.0,
+        "max": 49.0
+      }
+    }
+  }
+}

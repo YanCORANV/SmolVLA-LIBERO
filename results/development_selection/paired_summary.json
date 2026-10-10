@@ -1,0 +1,87 @@
+{
+  "evaluation_name": "task0_paired_flow_dev_eval",
+  "evaluation_scope": "Model-selection development evaluation on States 23-32 (10 states)",
+  "models": [
+    "paired_bc",
+    "paired_flow_consistency"
+  ],
+  "primary_metric": "goal_ever",
+  "results": {
+    "paired_bc": {
+      "evaluated_states": [
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32
+      ],
+      "states_count": 10,
+      "O": 1.0,
+      "P": 0.6,
+      "H": 0.7499999999999999,
+      "robustness_gap": -0.4,
+      "original_success_count": "10/10",
+      "original_success_rate": 1.0,
+      "paraphrase_dev_01_count": "5/10",
+      "paraphrase_dev_01_rate": 0.5,
+      "paraphrase_dev_02_count": "7/10",
+      "paraphrase_dev_02_rate": 0.7,
+      "pooled_dev_paraphrase_count": "12/20",
+      "pooled_dev_paraphrase_success_rate": 0.6,
+      "goal_final_summary": {
+        "original_final_count": "10/10",
+        "paraphrase_dev_01_final_count": "5/10",
+        "paraphrase_dev_02_final_count": "7/10",
+        "pooled_dev_paraphrase_final_count": "12/20"
+      }
+    },
+    "paired_flow_consistency": {
+      "evaluated_states": [
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32
+      ],
+      "states_count": 10,
+      "O": 0.9,
+      "P": 0.55,
+      "H": 0.6827586206896552,
+      "robustness_gap": -0.35,
+      "original_success_count": "9/10",
+      "original_success_rate": 0.9,
+      "paraphrase_dev_01_count": "8/10",
+      "paraphrase_dev_01_rate": 0.8,
+      "paraphrase_dev_02_count": "3/10",
+      "paraphrase_dev_02_rate": 0.3,
+      "pooled_dev_paraphrase_count": "11/20",
+      "pooled_dev_paraphrase_success_rate": 0.55,
+      "goal_final_summary": {
+        "original_final_count": "9/10",
+        "paraphrase_dev_01_final_count": "7/10",
+        "paraphrase_dev_02_final_count": "2/10",
+        "pooled_dev_paraphrase_final_count": "9/20"
+      }
+    }
+  },
+  "model_selection_gate": {
+    "status": "FAIL",
+    "conditions": {
+      "O_consistency_ge_080": true,
+      "P_consistency_ge_045": true,
+      "H_consistency_gt_max_controls": false
+    },
+    "H_baseline_original_language": 0.5538,
+    "H_paired_bc": 0.7499999999999999
+  }
+}
