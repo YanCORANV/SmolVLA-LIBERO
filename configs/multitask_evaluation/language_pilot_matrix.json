@@ -1,0 +1,109 @@
+{
+  "protocol_version": 1,
+  "role": "multitask_language_robustness",
+  "run_name": "multitask_language_sensitivity_pilot",
+  "output_dir": "outputs/multitask_evaluation/runs/multitask_language_sensitivity_pilot",
+  "models": [
+    "untuned_fp32"
+  ],
+  "tasks": [
+    {
+      "suite": "libero_spatial",
+      "task_id": 1,
+      "task_name": "pick_up_the_black_bowl_next_to_the_ramekin_and_place_it_on_the_plate",
+      "canonical": "pick up the black bowl next to the ramekin and place it on the plate",
+      "prompt_catalog": "configs/multitask_evaluation/instructions/spatial_1_pilot.jsonl",
+      "states": [
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "horizon": 280
+    },
+    {
+      "suite": "libero_spatial",
+      "task_id": 4,
+      "task_name": "pick_up_the_black_bowl_in_the_top_drawer_of_the_wooden_cabinet_and_place_it_on_the_plate",
+      "canonical": "pick up the black bowl in the top drawer of the wooden cabinet and place it on the plate",
+      "prompt_catalog": "configs/multitask_evaluation/instructions/spatial_4_pilot.jsonl",
+      "states": [
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "horizon": 280
+    },
+    {
+      "suite": "libero_object",
+      "task_id": 0,
+      "task_name": "pick_up_the_alphabet_soup_and_place_it_in_the_basket",
+      "canonical": "pick up the alphabet soup and place it in the basket",
+      "prompt_catalog": "configs/multitask_evaluation/instructions/object_0_pilot.jsonl",
+      "states": [
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "horizon": 280
+    },
+    {
+      "suite": "libero_goal",
+      "task_id": 5,
+      "task_name": "push_the_plate_to_the_front_of_the_stove",
+      "canonical": "push the plate to the front of the stove",
+      "prompt_catalog": "configs/multitask_evaluation/instructions/goal_5_pilot.jsonl",
+      "states": [
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "horizon": 300
+    },
+    {
+      "suite": "libero_goal",
+      "task_id": 7,
+      "task_name": "turn_on_the_stove",
+      "canonical": "turn on the stove",
+      "prompt_catalog": "configs/multitask_evaluation/instructions/goal_7_pilot.jsonl",
+      "states": [
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "horizon": 300
+    }
+  ],
+  "environment": {
+    "environment_seed": 0,
+    "obs_type": "pixels_agent_pos",
+    "observation_height": 256,
+    "observation_width": 256,
+    "control_freq": 20,
+    "control_mode": "relative",
+    "hard_reset": true,
+    "num_steps_wait": 10
+  },
+  "policy": {
+    "policy_seed": 0,
+    "n_action_steps": 1,
+    "num_steps": 10,
+    "use_amp": false
+  },
+  "execution": {
+    "workers": 1,
+    "videos": true
+  },
+  "primary_success": "goal_ever",
+  "expected_rollouts": 75,
+  "scientific_evidence": true
+}

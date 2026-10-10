@@ -1,0 +1,98 @@
+{
+  "role": "multitask_language_robustness",
+  "matrix_sha256": "7de559007de4bcd91f1f3175e37533892df81baf7972abd017e932253e71d9b7",
+  "source_sha256": {
+    "src/smolvla_grounding/multitask_protocol.py": "aa4e0b307de3cf364089cbdb7d3dffb8b6d7e4782146bdc233ad5b7de0591018",
+    "src/smolvla_grounding/multitask_evaluator.py": "495bd37d97642e39f804b975bd346560227bdda71ccb5d64807f9c544d88e3cf",
+    "src/smolvla_grounding/multitask_pilot_protocol.py": "56a2ae0d5acff987a44f7a6e164991040d9b218fe860e3fbbcda90abcf7945cc",
+    "src/smolvla_grounding/multitask_pilot_evaluator.py": "8e19f6591054176cce13789692a9fc4ae97a2e72dee9e6ce7f6a990837092c50",
+    "scripts/run_multitask_language_pilot.py": "e4c7d9fa02f5ae14a7036344415a64163df450c5a881b969d83d00e64bbe1b7e",
+    "scripts/freeze_multitask_language_pilot.py": "0dc5075f03ea1578fa1f84487b4e59c4f0119cfdbf35dd9a8c8aeff6f6a310be"
+  },
+  "models": {
+    "untuned_fp32": {
+      "kind": "official_smolvla",
+      "path": "checkpoints/smolvla_libero",
+      "revision": "6721902bc4d61e50a3bfdb11dfb4cb626f05d102",
+      "artifact_sha256": {
+        "config.json": "e346a63094732ea28e05b08302a218306cf6541960b663a3cb4b6948e4efe6e0",
+        "model.safetensors": "71d9563c8295284acba8fc2d5c19de000d6fe9ba58a406832af7ef3d221ed52f",
+        "policy_preprocessor.json": "29267ff4423fcce93bbd76ad0f386905f9de5d267ca13379a5795a514a81b7a9",
+        "policy_postprocessor.json": "ad2d22405cb63be4932c4a4d9a69bc9953df02a01235c5f420b679dbe6bfe7c5",
+        "policy_preprocessor_step_5_normalizer_processor.safetensors": "7008ba73c73887e5a7e631d478de9563ec5a0c51b7f0327f2530d7326c4b039e",
+        "policy_postprocessor_step_1_unnormalizer_processor.safetensors": "7008ba73c73887e5a7e631d478de9563ec5a0c51b7f0327f2530d7326c4b039e"
+      }
+    }
+  },
+  "backbone": {
+    "repo_id": "HuggingFaceTB/SmolVLM2-500M-Instruct",
+    "revision": "7b375e1b73b11138ff12fe22c8f2822d8fe03467",
+    "artifact_sha256": {
+      "model.safetensors": "b9bfd456c9472c0acd5719d6e514c4b859891af205ee1a736552fd3497b8b0c3",
+      "config.json": "ea6bc1237e96247f6258de3e202e2e62b93d6f386dc47e7b36b5588bf3a15e17",
+      "tokenizer.json": "5ece781dc8d2b2f3e2f289ca0ae50b17cfc27dd27bfe7971bb8241e0b964331a",
+      "tokenizer_config.json": "dd9ce2ab89a3dd881bd9378f1a79b943a064b9275a7e1706d5b7b47b68977913"
+    }
+  },
+  "assets": {
+    "libero_spatial:1": {
+      "bddl_path": "/mnt/d/SmolVLA-LIBERO/.venv/lib/python3.12/site-packages/libero/libero/bddl_files/libero_spatial/pick_up_the_black_bowl_next_to_the_ramekin_and_place_it_on_the_plate.bddl",
+      "bddl_sha256": "53a7516571412a2f46a27cbf8482d3b76dbad4221858c8f6b565d506c274e61d",
+      "init_path": "/mnt/d/SmolVLA-LIBERO/.venv/lib/python3.12/site-packages/libero/libero/init_files/libero_spatial/pick_up_the_black_bowl_next_to_the_ramekin_and_place_it_on_the_plate.pruned_init",
+      "init_sha256": "9b6927b6ef03460ab055141e1a1154ad85e5e290058d8ed3a8a314aff911f864",
+      "state_count": 50
+    },
+    "libero_spatial:4": {
+      "bddl_path": "/mnt/d/SmolVLA-LIBERO/.venv/lib/python3.12/site-packages/libero/libero/bddl_files/libero_spatial/pick_up_the_black_bowl_in_the_top_drawer_of_the_wooden_cabinet_and_place_it_on_the_plate.bddl",
+      "bddl_sha256": "4371189e11d9fd29bb548ab9a8adcd741bb0ce41bb66c612672d0e8cb29a52a9",
+      "init_path": "/mnt/d/SmolVLA-LIBERO/.venv/lib/python3.12/site-packages/libero/libero/init_files/libero_spatial/pick_up_the_black_bowl_in_the_top_drawer_of_the_wooden_cabinet_and_place_it_on_the_plate.pruned_init",
+      "init_sha256": "deef3df529e0bb57658b973bbb3baf02b02922db065c025a73ebfcd11eb54d46",
+      "state_count": 50
+    },
+    "libero_object:0": {
+      "bddl_path": "/mnt/d/SmolVLA-LIBERO/.venv/lib/python3.12/site-packages/libero/libero/bddl_files/libero_object/pick_up_the_alphabet_soup_and_place_it_in_the_basket.bddl",
+      "bddl_sha256": "df088984da13131f8332ee0f13a7896c6a97afd02ee5007a42e8fc5e0893571e",
+      "init_path": "/mnt/d/SmolVLA-LIBERO/.venv/lib/python3.12/site-packages/libero/libero/init_files/libero_object/pick_up_the_alphabet_soup_and_place_it_in_the_basket.pruned_init",
+      "init_sha256": "b9023e5546b239cacb2aaa3c76df3b73c3de6f97500fea5e27a0db9827002a19",
+      "state_count": 50
+    },
+    "libero_goal:5": {
+      "bddl_path": "/mnt/d/SmolVLA-LIBERO/.venv/lib/python3.12/site-packages/libero/libero/bddl_files/libero_goal/push_the_plate_to_the_front_of_the_stove.bddl",
+      "bddl_sha256": "26f22f8ad39a4b2b344b049115c45661a877fa0b4821fb78246725e7e87d8c0b",
+      "init_path": "/mnt/d/SmolVLA-LIBERO/.venv/lib/python3.12/site-packages/libero/libero/init_files/libero_goal/push_the_plate_to_the_front_of_the_stove.pruned_init",
+      "init_sha256": "794beed679b18bbd7d9fb851c81877a974915ad63addff2d5ac5af0607fafac9",
+      "state_count": 50
+    },
+    "libero_goal:7": {
+      "bddl_path": "/mnt/d/SmolVLA-LIBERO/.venv/lib/python3.12/site-packages/libero/libero/bddl_files/libero_goal/turn_on_the_stove.bddl",
+      "bddl_sha256": "cbd2a0514d53226c5d09e17af40b22935d4cb6ff8fdaff0d55f555de1adecc13",
+      "init_path": "/mnt/d/SmolVLA-LIBERO/.venv/lib/python3.12/site-packages/libero/libero/init_files/libero_goal/turn_on_the_stove.pruned_init",
+      "init_sha256": "ed121db31d749647d70741c4c4ef0bd8e0876663986578795968e962d9b91340",
+      "state_count": 50
+    }
+  },
+  "catalog_sha256": {
+    "configs/multitask_evaluation/instructions/spatial_1_pilot.jsonl": "222fa2c3d61eee0f14fac6ef373e9ccda5760139a0b76d71d5fbcbb6643041fb",
+    "configs/multitask_evaluation/instructions/spatial_4_pilot.jsonl": "87e8ec38fad00f42a88af05e1d5f5f83f68ff3828806666b18e1f27a24cd8a87",
+    "configs/multitask_evaluation/instructions/object_0_pilot.jsonl": "dbe4086c6f29f19e1b4428caa4e9226721cc4ba04185a3628e61401fc74ac188",
+    "configs/multitask_evaluation/instructions/goal_5_pilot.jsonl": "78953c68c6b0ff51c6dacc710a0ca7aec3ddce1d88de68991e80f3e54cc19d45",
+    "configs/multitask_evaluation/instructions/goal_7_pilot.jsonl": "a4aff099b41232c587dec7d9eb23198a10a089eebd262c87ee7366fc59437378"
+  },
+  "prompt_sha256": {
+    "libero_spatial:1:original": "62903ee73ba3e6e73ed6183c529a34bf1cca052a1152e9fa6e60954b1eb7c5f3",
+    "libero_spatial:1:paraphrase_01": "7c4719a176a581ccf9933766b11efc6f8542fa7c62e9830a1a997361ab9ceb60",
+    "libero_spatial:1:paraphrase_02": "4691692916ec3adb84b244f44c6388d79871203b667b524b287235b724ad8afc",
+    "libero_spatial:4:original": "98fef9381e261cbac30d4c58daa38fda85460c0bf0d4dd838997f741be85c3fd",
+    "libero_spatial:4:paraphrase_01": "6ea71d3820527f11fdac0ce3bde5ea41c9ed52b58ac09109d6826d13af6af05e",
+    "libero_spatial:4:paraphrase_02": "4af551d231721cde809439c9472025835196b8144355fdb7145448233a465f20",
+    "libero_object:0:original": "2d112bee564a0f6cef3403df144f91ee5c02aebe0ad96c18d47e430c2734cb54",
+    "libero_object:0:paraphrase_01": "339b3130b68ec1edd57d77250eabf5369de8a8b86d56e4d632352698782b1458",
+    "libero_object:0:paraphrase_02": "be088f3610755f26af010a7fa22cd36407ba394db86611745258b28e90befe63",
+    "libero_goal:5:original": "e1bde17bec614bc5b4d0b217384eb05f91d2f1309e1822c4a72d691016a4f4aa",
+    "libero_goal:5:paraphrase_01": "6663dde9e91d84456b2158b7785624ea520a753614a93a5f37001b8be2b91b9f",
+    "libero_goal:5:paraphrase_02": "9de9b208838ee1c73fb60e629a81f6ce8bd90855810ae2e1c293397d2ff190da",
+    "libero_goal:7:original": "c0d1b2f3264d13ceb9741ea5987ec2dc542ca096e0fc21573fe1b6faf2e01e31",
+    "libero_goal:7:paraphrase_01": "24ee8bda0ad20f2fa1c287e4e0502665d674ceab5aeb2b6e92d1542369d12c34",
+    "libero_goal:7:paraphrase_02": "5493b4e935632c5740dc4b8b9bf8ece5fe1ae48f6e9116130a94ab144ca1d41c"
+  }
+}

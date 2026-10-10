@@ -96,7 +96,7 @@ def _execute_episode(root, plan, row, attempt):
 
     from .diagnostic_policy import capture_noise, require_empty_queue
     from .diagnostic_records import pack_rng, pack_tensors
-    from .libero_pairing import array_hashes, capture_initial_state
+    from .libero_pairing import array_hashes, capture_initial_state, flatten_observation
 
     model, suite_name, task_id, state, prompt_id = row
     task = next(t for t in plan["matrix"]["tasks"]
@@ -151,8 +151,10 @@ def _execute_episode(root, plan, row, attempt):
                 raise RuntimeError("Policy tokenizer changed the canonical instruction")
             require_empty_queue(policy)
             rng_before = pack_rng(get_rng_state(), "rng_before", {}, {})
-            with capture_noise(policy):
+            with capture_noise(policy) as sampled_noise:
                 action = policy.select_action(batch)
+            if len(sampled_noise) != 1:
+                raise RuntimeError("Expected exactly one flow-noise sample")
             require_empty_queue(policy)
             rng_after = pack_rng(get_rng_state(), "rng_after", {}, {})
             actual_action = env_post({ACTION: post(action)})[ACTION]
@@ -160,6 +162,7 @@ def _execute_episode(root, plan, row, attempt):
             inference.append({
                 "step": step, "raw_pixels": array_hashes(pixels),
                 "rng_before": rng_before, "rng_after": rng_after,
+                "noise": pack_tensors({"noise": sampled_noise[0]}, "noise", {}, {}),
                 "normalized_action": pack_tensors({"action": action}, "output", {}, {}),
             })
             following, reward, _, _, _ = env.step(action_np)
@@ -172,6 +175,8 @@ def _execute_episode(root, plan, row, attempt):
                 "step": step, "instruction_id": prompt_id,
                 "action": action_np.tolist(), "reward": float(reward),
                 "goal": success, "eef_before": before.tolist(), "eef_after": after.tolist(),
+                "robot_state_before": {k: v.tolist() for k, v in flatten_observation(current["robot_state"], "robot_state").items()},
+                "robot_state_after": {k: v.tolist() for k, v in flatten_observation(following["robot_state"], "robot_state").items()},
             })
             actions.append(action_np)
             rewards.append(float(reward))
