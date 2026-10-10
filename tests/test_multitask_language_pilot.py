@@ -114,5 +114,6 @@ class PilotProtocolTests(unittest.TestCase):
         self.assertEqual(result["pooled_paraphrase"]["successes"], 4)
         self.assertEqual(result["pooled_paraphrase"]["trials"], 10)
         self.assertEqual(result["canonical_success_paraphrase_failure_pairs"], 4)
+        self.assertEqual(result["canonical_success_paraphrase_failure_states"], 3)
         with self.assertRaisesRegex(ValueError, "five"):
             task_success(rows[:-1])

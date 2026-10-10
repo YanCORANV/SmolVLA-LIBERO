@@ -45,4 +45,51 @@ Each task has one canonical sentence and two meaning-preserving variants. The va
 - Frozen matrix: `configs/multitask_evaluation/language_pilot_matrix.json`.
 - Frozen hash manifest: `configs/multitask_evaluation/language_pilot_manifest.json`.
 - Raw local rollouts, videos, trajectories, and logs: `outputs/multitask_evaluation/runs/multitask_language_sensitivity_pilot/` (Git-ignored).
-- Run entry: `scripts/run_multitask_language_pilot.py`. Analysis: `scripts/analyze_multitask_language_pilot.py`. Curated summary and figures will be added after all 75 commits pass integrity checks.
+- Run entry: `scripts/run_multitask_language_pilot.py`. Analysis: `scripts/analyze_multitask_language_pilot.py`. Curated results and four reproducible figures are in results/multitask_language_pilot/.
+
+## Completed pilot: integrity and success
+
+The production preflight accepted exactly 75 matrix cells before execution. One serial WSL process completed 75/75 valid complete.json commits; the post-run analyzer independently revalidated the committed artifacts and raw-file hashes. No final-test state (30–49), new training, or Task-0 frozen protocol was used. All three prompts for each task/state shared the hashed initial observation and simulator state. The recorded Step-1 RNG state and sampled flow noise matched within every three-prompt group; all 50 canonical/paraphrase pairs also matched flow noise at the first 10 synchronized steps. This does not make subsequent observations or random streams identical after trajectories diverge.
+
+Primary metric: goal_ever. The paired difference is the average, over five states, of paraphrase success minus canonical success; pooled treats the two paraphrases equally. A canonical-success/paraphrase-failure count is over 10 prompt pairs per task, not five unique states.
+
+| Task | Canonical | Paraphrase 01 | Paraphrase 02 | Pooled paraphrases | Paired P−O | Canonical-success / paraphrase-failure pairs |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| spatial/1 | 4/5 (80%) | 0/5 (0%) | 1/5 (20%) | 1/10 (10%) | −70 pp | 7/10 |
+| spatial/4 | 5/5 (100%) | 0/5 (0%) | 0/5 (0%) | 0/10 (0%) | −100 pp | 10/10 |
+| object/0 | 4/5 (80%) | 0/5 (0%) | 0/5 (0%) | 0/10 (0%) | −80 pp | 8/10 |
+| goal/5 | 3/5 (60%) | 0/5 (0%) | 0/5 (0%) | 0/10 (0%) | −60 pp | 6/10 |
+| goal/7 | 5/5 (100%) | 3/5 (60%) | 0/5 (0%) | 3/10 (30%) | −70 pp | 7/10 |
+| **All five** | **21/25 (84%)** | **3/25 (12%)** | **1/25 (4%)** | **4/50 (8%)** | **−76 pp** | **38/50** |
+
+Across the 25 task/state clusters, 21 had canonical success and at least one paraphrase failure (spatial/1: 4; spatial/4: 5; object/0: 4; goal/5: 3; goal/7: 5). All four paraphrase successes occurred where canonical also succeeded; there were no reverse discordances. The largest observed pooled drop was spatial/4 (−100 pp). The small sample and two fixed wordings per task do not establish a task-level ranking beyond this pilot.
+
+![Per-task success rates](../results/multitask_language_pilot/task_success.png)
+
+## Action and trajectory diagnosis
+
+All 50 paired Step-1 action-vector L2 differences were nonzero (range 0.069–0.517 in raw action units). The action normalizer was fixed from 30 canonical competence-screen trajectories on states 0–4: each dimension uses max(P95−P5, 0.05). Early divergence is mean normalized action L2 over synchronized steps 1–10. EEF separation compares positions at the same step; after Step 1 it includes closed-loop feedback and physical-state divergence.
+
+| Task | Mean Step-1 raw action L2 | Mean Step-1 normalized L2 | Mean steps 1–10 normalized L2 | Mean EEF separation at Step 10 |
+| --- | ---: | ---: | ---: | ---: |
+| spatial/1 | 0.41 | 0.37 | 0.38 | 4.17 cm |
+| spatial/4 | 0.18 | 0.16 | 0.28 | 3.00 cm |
+| object/0 | 0.15 | 0.16 | 0.26 | 2.39 cm |
+| goal/5 | 0.20 | 0.21 | 0.31 | 3.25 cm |
+| goal/7 | 0.16 | 0.15 | 0.22 | 2.55 cm |
+
+The four successful paraphrase pairs averaged 0.135 early normalized action L2 and 1.62 cm EEF separation at Step 10; the 46 failed pairs averaged 0.302 and 3.20 cm. These are descriptive associations with only four successful paraphrases, uneven task composition, and overlapping early-divergence ranges (success 0.091–0.202; failure 0.127–0.554). For example, goal/7 state 6 paraphrase_01 failed at 0.127, close to successful pairs. Early divergence therefore does not by itself explain or predict every failure. Identical initial states and matched early noise support a language-conditioned Step-1 action difference; later trajectory separation cannot be attributed to language alone.
+
+![Early action divergence distribution](../results/multitask_language_pilot/early_action_divergence.png)
+![Action divergence and outcome](../results/multitask_language_pilot/divergence_vs_outcome.png)
+![Example paired EEF trajectories](../results/multitask_language_pilot/paired_eef_examples.png)
+
+## Failure-stage review and interpretation
+
+The committed simulator-state arrays and action/EEF traces contain no labeled contact or task-phase events. We inspected sampled frames spanning all 75 front-view videos together with their trajectories. The views show that many spatial/4 failures approached the cabinet without a visible bowl transfer, object/0 failures often left the soup can at its starting area, goal/5 failures did not put the plate at the required stove-front location, and goal/7 failures left the stove visibly off. These observations describe unmet task goals; they do not reliably separate approach, initial contact, manipulation, and final placement or activation for each episode. The machine-readable precise failure-stage field is therefore unknown for all 50 failed rollouts. In particular, the push and stove-switch tasks should not be labeled as grasp failures. No contact-mechanism claim is made from sparse frames.
+
+This development pilot reproduces the qualitative Task-0 phenomenon across five additional tasks: under matched initial physical states and early noise, semantically reviewed wording changes the first predicted action and is accompanied by large observed success drops. It is evidence for investigating language-conditioning alignment as a next technical direction, but insufficient to conclude an Adapter will help. Counterevidence and alternatives include canonical failures (especially goal/5), heterogeneous prompts and task semantics, overlap between successful and failed divergence magnitudes, and only five states per task. Additional controlled evidence would be needed before treating early divergence as the cause of failure; no Adapter was trained here.
+
+## Reproduction and scope
+
+The complete local experiment is under outputs/multitask_evaluation/runs/multitask_language_sensitivity_pilot/. Raw execution and analysis logs are outputs/multitask_evaluation/language_pilot_execution.log and outputs/multitask_evaluation/language_pilot_analysis.log. The checked-in summary.json, 50-row pair_level.csv, and four PNGs in results/multitask_language_pilot/ are regenerated by scripts/analyze_multitask_language_pilot.py from committed local rollouts. The production runner scripts/run_multitask_language_pilot.py safely skips valid complete.json cells and reports progress. Large videos, trajectories, model weights, and caches remain local and Git-ignored. This is a development diagnostic, not a confirmatory cross-task benchmark or a claim of statistical significance.

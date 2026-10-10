@@ -1,0 +1,208 @@
+{
+  "role": "multitask_language_robustness",
+  "model": "untuned_fp32",
+  "development_only": true,
+  "states": [
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "completed_rollouts": 75,
+  "metric": "goal_ever",
+  "per_task": [
+    {
+      "suite": "libero_spatial",
+      "task_id": 1,
+      "original": {
+        "successes": 4,
+        "trials": 5,
+        "rate": 0.8
+      },
+      "paraphrase_01": {
+        "successes": 0,
+        "trials": 5,
+        "rate": 0.0
+      },
+      "paraphrase_02": {
+        "successes": 1,
+        "trials": 5,
+        "rate": 0.2
+      },
+      "pooled_paraphrase": {
+        "successes": 1,
+        "trials": 10,
+        "rate": 0.1
+      },
+      "paired_difference": {
+        "paraphrase_01": -0.8,
+        "paraphrase_02": -0.6,
+        "pooled_paraphrase": -0.7
+      },
+      "canonical_success_paraphrase_failure_states": 4,
+      "canonical_success_paraphrase_failure_pairs": 7
+    },
+    {
+      "suite": "libero_spatial",
+      "task_id": 4,
+      "original": {
+        "successes": 5,
+        "trials": 5,
+        "rate": 1.0
+      },
+      "paraphrase_01": {
+        "successes": 0,
+        "trials": 5,
+        "rate": 0.0
+      },
+      "paraphrase_02": {
+        "successes": 0,
+        "trials": 5,
+        "rate": 0.0
+      },
+      "pooled_paraphrase": {
+        "successes": 0,
+        "trials": 10,
+        "rate": 0.0
+      },
+      "paired_difference": {
+        "paraphrase_01": -1.0,
+        "paraphrase_02": -1.0,
+        "pooled_paraphrase": -1.0
+      },
+      "canonical_success_paraphrase_failure_states": 5,
+      "canonical_success_paraphrase_failure_pairs": 10
+    },
+    {
+      "suite": "libero_object",
+      "task_id": 0,
+      "original": {
+        "successes": 4,
+        "trials": 5,
+        "rate": 0.8
+      },
+      "paraphrase_01": {
+        "successes": 0,
+        "trials": 5,
+        "rate": 0.0
+      },
+      "paraphrase_02": {
+        "successes": 0,
+        "trials": 5,
+        "rate": 0.0
+      },
+      "pooled_paraphrase": {
+        "successes": 0,
+        "trials": 10,
+        "rate": 0.0
+      },
+      "paired_difference": {
+        "paraphrase_01": -0.8,
+        "paraphrase_02": -0.8,
+        "pooled_paraphrase": -0.8
+      },
+      "canonical_success_paraphrase_failure_states": 4,
+      "canonical_success_paraphrase_failure_pairs": 8
+    },
+    {
+      "suite": "libero_goal",
+      "task_id": 5,
+      "original": {
+        "successes": 3,
+        "trials": 5,
+        "rate": 0.6
+      },
+      "paraphrase_01": {
+        "successes": 0,
+        "trials": 5,
+        "rate": 0.0
+      },
+      "paraphrase_02": {
+        "successes": 0,
+        "trials": 5,
+        "rate": 0.0
+      },
+      "pooled_paraphrase": {
+        "successes": 0,
+        "trials": 10,
+        "rate": 0.0
+      },
+      "paired_difference": {
+        "paraphrase_01": -0.6,
+        "paraphrase_02": -0.6,
+        "pooled_paraphrase": -0.6
+      },
+      "canonical_success_paraphrase_failure_states": 3,
+      "canonical_success_paraphrase_failure_pairs": 6
+    },
+    {
+      "suite": "libero_goal",
+      "task_id": 7,
+      "original": {
+        "successes": 5,
+        "trials": 5,
+        "rate": 1.0
+      },
+      "paraphrase_01": {
+        "successes": 3,
+        "trials": 5,
+        "rate": 0.6
+      },
+      "paraphrase_02": {
+        "successes": 0,
+        "trials": 5,
+        "rate": 0.0
+      },
+      "pooled_paraphrase": {
+        "successes": 3,
+        "trials": 10,
+        "rate": 0.3
+      },
+      "paired_difference": {
+        "paraphrase_01": -0.4,
+        "paraphrase_02": -1.0,
+        "pooled_paraphrase": -0.7
+      },
+      "canonical_success_paraphrase_failure_states": 5,
+      "canonical_success_paraphrase_failure_pairs": 7
+    }
+  ],
+  "total_canonical_success_paraphrase_failure_states": 21,
+  "total_canonical_success_paraphrase_failure_pairs": 38,
+  "action_normalization": {
+    "method": "per-dimension max(P95-P5, 0.05) from 30 canonical competence screen trajectories (states 0-4)",
+    "scale": [
+      1.1247798472642894,
+      1.1835493803024288,
+      1.243137016892433,
+      0.13277425728738296,
+      0.20323653779923911,
+      0.4008001379668711,
+      2.0239786982536314
+    ]
+  },
+  "divergence_by_outcome": {
+    "paraphrase_success": {
+      "pairs": 4,
+      "mean_early_action_l2_normalized": 0.13498261738204684,
+      "mean_eef_at_step_10_m": 0.016163449425309832
+    },
+    "paraphrase_failure": {
+      "pairs": 46,
+      "mean_early_action_l2_normalized": 0.3024394302320365,
+      "mean_eef_at_step_10_m": 0.03200782001949169
+    }
+  },
+  "failure_stage": {
+    "classified": 0,
+    "unknown": 50,
+    "reason": "Task-phase annotations are not encoded in the committed logs; EEF/action traces alone do not prove object contact or phase of failure."
+  },
+  "limitations": [
+    "Five states per task; descriptive development pilot only.",
+    "Step-1 RNG and sampled flow-noise hashes are matched; later sampling and closed-loop states may diverge.",
+    "Later trajectory divergence includes closed-loop state changes and is not an isolated language effect.",
+    "Success/divergence association is observational, not causal."
+  ]
+}

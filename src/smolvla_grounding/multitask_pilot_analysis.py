@@ -36,6 +36,9 @@ def task_success(rows):
     result["paired_difference"]["pooled_paraphrase"] = float(np.mean([
         int(r[p]) - int(r["original"]) for r in rows for p in PROMPTS[1:]
     ]))
+    result["canonical_success_paraphrase_failure_states"] = sum(
+        r["original"] and any(not r[p] for p in PROMPTS[1:]) for r in rows
+    )
     result["canonical_success_paraphrase_failure_pairs"] = sum(
         r["original"] and not r[p] for r in rows for p in PROMPTS[1:]
     )
@@ -128,6 +131,8 @@ def analyze(root=None):
         "role": "multitask_language_robustness", "model": "untuned_fp32",
         "development_only": True, "states": list(range(5, 10)),
         "completed_rollouts": 75, "metric": "goal_ever", "per_task": per_task,
+        "total_canonical_success_paraphrase_failure_states": sum(
+            x["canonical_success_paraphrase_failure_states"] for x in per_task),
         "total_canonical_success_paraphrase_failure_pairs": sum(
             x["canonical_success_paraphrase_failure_pairs"] for x in per_task),
         "action_normalization": {"method": "per-dimension max(P95-P5, 0.05) from 30 canonical competence screen trajectories (states 0-4)",
