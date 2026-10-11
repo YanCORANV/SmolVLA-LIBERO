@@ -64,7 +64,18 @@ Primary metric: goal_ever. The table reports canonical success minus pooled para
 
 The secondary goal_final counts equal goal_ever for every prompt in this pilot: per-task canonical / paraphrase_01 / paraphrase_02 counts are spatial/1 4/0/1, spatial/4 5/0/0, object/0 4/0/0, goal/5 3/0/0, and goal/7 5/3/0 (each over five states). Aggregate goal_final is 21/25 canonical and 4/50 pooled paraphrases. This equality is observed here; the metric definitions remain distinct.
 
-The 50 matched outcome transitions are: both succeed **4**, canonical succeeds and paraphrase fails **38**, canonical fails and paraphrase succeeds **0**, both fail **8**. The [per-rollout source table](../results/multitask_language_pilot/per_rollout.csv) preserves each model/task/state/prompt identity and both success metrics; the [pair table](../results/multitask_language_pilot/pair_level.csv) preserves transition labels.
+The 50 matched outcome transitions are: both succeed **4**, canonical succeeds and paraphrase fails **38**, canonical fails and paraphrase succeeds **0**, both fail **8**.
+
+| Task | Both succeed | Canonical only | Paraphrase only | Both fail |
+| --- | ---: | ---: | ---: | ---: |
+| spatial/1 | 1 | 7 | 0 | 2 |
+| spatial/4 | 0 | 10 | 0 | 0 |
+| object/0 | 0 | 8 | 0 | 2 |
+| goal/5 | 0 | 6 | 0 | 4 |
+| goal/7 | 3 | 7 | 0 | 0 |
+| **All five** | **4** | **38** | **0** | **8** |
+
+The [per-rollout source table](../results/multitask_language_pilot/per_rollout.csv) preserves each model/task/state/prompt identity and both success metrics; the [pair table](../results/multitask_language_pilot/pair_level.csv) preserves transition labels.
 
 Across the 25 task/state clusters, 21 had canonical success and at least one paraphrase failure (spatial/1: 4; spatial/4: 5; object/0: 4; goal/5: 3; goal/7: 5). All four paraphrase successes occurred where canonical also succeeded; there were no reverse discordances. The largest observed pooled drop was spatial/4 (100 pp, O−P). The small sample and two fixed wordings per task do not establish a task-level ranking beyond this pilot.
 
