@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-10-10 — audited five-task development pilot
+
+- Preserved all 75 already completed untuned SmolVLA rollouts; no new evaluation or training was run for this audit.
+- Published 75 per-rollout outcomes with goal_ever and goal_final, 50 matched outcome/action/EEF comparisons, an integrity audit, and four reproducible figures.
+- Added 12 deterministic video-backed comparison cases across the five tasks (10 failure pairs, two successful contrasts) with source-video and case-sheet SHA256 values.
+- Added a model-free public-data verifier, bounded tests for missing records and EEF values, and separate reproduction instructions. The five-task pilot remains distinct from the Task-0 paired-training final result.
 ## 2026-10-09 — completed language-robustness study and public documentation
 
 - First confirmatory, anchored and paired development, action/trajectory diagnosis, and amended final v4 evaluation are complete.

@@ -4,6 +4,10 @@
 
 [Experiment history](docs/experiments.md) · [Method](docs/method.md) · [Full results](docs/results.md) · [Setup](docs/setup.md) · [Reproduction notes](docs/reproduction.md)
 
+## Two separate studies
+
+- **Study A — Task-0 training intervention:** fine-tuned policies, including Paired BC, were compared in a 153-rollout frozen final evaluation. Paired BC did not improve unseen-paraphrase success.
+- **Study B — five-task language sensitivity:** the original, untuned SmolVLA policy was evaluated in a 75-rollout development pilot on five competence-selected tasks. This pilot does **not** measure Paired BC generalization. Its [full report](docs/multitask_language_pilot.md), [12 auditable cases](docs/multitask_failure_cases.md), and [published rows and figures](results/multitask_language_pilot/) document observed wording sensitivity and its limits.
 ## At a glance
 
 | Final v4, Task 0, States 33–49 | Canonical instruction | Two new paraphrases, pooled | Balanced score H |
@@ -117,3 +121,5 @@ The final model comparison is one task and a small set of instruction paraphrase
 ## Multi-task canonical competence screen
 
 Before the development language pilot, the untuned official SmolVLA checkpoint was screened on six additional LIBERO tasks using canonical instructions and initial states 0–4. Five tasks reached the predeclared 3/5 competence threshold: spatial/1 (3/5), spatial/4 (5/5), object/0 (5/5), goal/5 (5/5), and goal/7 (5/5). Goal/0 (2/5) was excluded. These 30 canonical rollouts select feasible pilot tasks; they are not evidence of language robustness. The compact [screening summary](results/multitask_canonical_screen/summary.json) and [frozen matrix](configs/multitask_evaluation/canonical_screen_matrix.json) are public; raw trajectories and videos remain local under `outputs/multitask_evaluation/`. The separate [75-rollout development pilot](docs/multitask_language_pilot.md) used those five eligible tasks, States 5–9, and two meaning-preserving paraphrases per task fixed before any pilot outcome was observed. All 75 rollouts completed: canonical success was 21/25 (84%) and pooled paraphrase success was 4/50 (8%). Every task showed an observed drop, but each used only five development states. Matched initial observations and early flow noise revealed first-action differences for all 50 canonical/paraphrase pairs. Larger early divergence was associated with failure descriptively; it does not establish causation or show that an Adapter would improve robustness. [Curated summary and reproducible plots](results/multitask_language_pilot/) are public; raw videos and trajectories remain local.
+
+The pilot publishes [75 per-rollout outcomes](results/multitask_language_pilot/per_rollout.csv), [50 paired diagnostics](results/multitask_language_pilot/pair_level.csv), an [integrity audit](results/multitask_language_pilot/integrity.json), and [12 case sheets](docs/multitask_failure_cases.md). Public-table statistics and figures can be verified without model weights using python scripts/regenerate_multitask_language_pilot.py; simulator-level reproduction still requires the frozen local assets.

@@ -41,7 +41,29 @@
         "pooled_paraphrase": -0.7
       },
       "canonical_success_paraphrase_failure_states": 4,
-      "canonical_success_paraphrase_failure_pairs": 7
+      "canonical_success_paraphrase_failure_pairs": 7,
+      "goal_final": {
+        "original": {
+          "successes": 4,
+          "trials": 5,
+          "rate": 0.8
+        },
+        "paraphrase_01": {
+          "successes": 0,
+          "trials": 5,
+          "rate": 0.0
+        },
+        "paraphrase_02": {
+          "successes": 1,
+          "trials": 5,
+          "rate": 0.2
+        },
+        "pooled_paraphrase": {
+          "successes": 1,
+          "trials": 10,
+          "rate": 0.1
+        }
+      }
     },
     {
       "suite": "libero_spatial",
@@ -72,7 +94,29 @@
         "pooled_paraphrase": -1.0
       },
       "canonical_success_paraphrase_failure_states": 5,
-      "canonical_success_paraphrase_failure_pairs": 10
+      "canonical_success_paraphrase_failure_pairs": 10,
+      "goal_final": {
+        "original": {
+          "successes": 5,
+          "trials": 5,
+          "rate": 1.0
+        },
+        "paraphrase_01": {
+          "successes": 0,
+          "trials": 5,
+          "rate": 0.0
+        },
+        "paraphrase_02": {
+          "successes": 0,
+          "trials": 5,
+          "rate": 0.0
+        },
+        "pooled_paraphrase": {
+          "successes": 0,
+          "trials": 10,
+          "rate": 0.0
+        }
+      }
     },
     {
       "suite": "libero_object",
@@ -103,7 +147,29 @@
         "pooled_paraphrase": -0.8
       },
       "canonical_success_paraphrase_failure_states": 4,
-      "canonical_success_paraphrase_failure_pairs": 8
+      "canonical_success_paraphrase_failure_pairs": 8,
+      "goal_final": {
+        "original": {
+          "successes": 4,
+          "trials": 5,
+          "rate": 0.8
+        },
+        "paraphrase_01": {
+          "successes": 0,
+          "trials": 5,
+          "rate": 0.0
+        },
+        "paraphrase_02": {
+          "successes": 0,
+          "trials": 5,
+          "rate": 0.0
+        },
+        "pooled_paraphrase": {
+          "successes": 0,
+          "trials": 10,
+          "rate": 0.0
+        }
+      }
     },
     {
       "suite": "libero_goal",
@@ -134,7 +200,29 @@
         "pooled_paraphrase": -0.6
       },
       "canonical_success_paraphrase_failure_states": 3,
-      "canonical_success_paraphrase_failure_pairs": 6
+      "canonical_success_paraphrase_failure_pairs": 6,
+      "goal_final": {
+        "original": {
+          "successes": 3,
+          "trials": 5,
+          "rate": 0.6
+        },
+        "paraphrase_01": {
+          "successes": 0,
+          "trials": 5,
+          "rate": 0.0
+        },
+        "paraphrase_02": {
+          "successes": 0,
+          "trials": 5,
+          "rate": 0.0
+        },
+        "pooled_paraphrase": {
+          "successes": 0,
+          "trials": 10,
+          "rate": 0.0
+        }
+      }
     },
     {
       "suite": "libero_goal",
@@ -165,9 +253,91 @@
         "pooled_paraphrase": -0.7
       },
       "canonical_success_paraphrase_failure_states": 5,
-      "canonical_success_paraphrase_failure_pairs": 7
+      "canonical_success_paraphrase_failure_pairs": 7,
+      "goal_final": {
+        "original": {
+          "successes": 5,
+          "trials": 5,
+          "rate": 1.0
+        },
+        "paraphrase_01": {
+          "successes": 3,
+          "trials": 5,
+          "rate": 0.6
+        },
+        "paraphrase_02": {
+          "successes": 0,
+          "trials": 5,
+          "rate": 0.0
+        },
+        "pooled_paraphrase": {
+          "successes": 3,
+          "trials": 10,
+          "rate": 0.3
+        }
+      }
     }
   ],
+  "aggregate": {
+    "original": {
+      "successes": 21,
+      "trials": 25,
+      "rate": 0.84
+    },
+    "paraphrase_01": {
+      "successes": 3,
+      "trials": 25,
+      "rate": 0.12
+    },
+    "paraphrase_02": {
+      "successes": 1,
+      "trials": 25,
+      "rate": 0.04
+    },
+    "pooled_paraphrase": {
+      "successes": 4,
+      "trials": 50,
+      "rate": 0.08
+    }
+  },
+  "goal_final_aggregate": {
+    "original": {
+      "successes": 21,
+      "trials": 25,
+      "rate": 0.84
+    },
+    "paraphrase_01": {
+      "successes": 3,
+      "trials": 25,
+      "rate": 0.12
+    },
+    "paraphrase_02": {
+      "successes": 1,
+      "trials": 25,
+      "rate": 0.04
+    },
+    "pooled_paraphrase": {
+      "successes": 4,
+      "trials": 50,
+      "rate": 0.08
+    }
+  },
+  "outcome_transitions": {
+    "both_succeed": 4,
+    "canonical_success_paraphrase_failure": 38,
+    "canonical_failure_paraphrase_success": 0,
+    "both_fail": 8
+  },
+  "divergence_coverage": {
+    "pairs": 50,
+    "step_1_action_and_eef": 50,
+    "steps_1_to_10_action_and_eef": 50,
+    "mean_step_1_action_l2_normalized": 0.2103576160011498,
+    "mean_step_1_eef_separation_m": 0.0011396025343674504,
+    "mean_early_action_l2_normalized": 0.28904288520403737,
+    "mean_eef_separation_at_step_10_m": 0.030740270371957146,
+    "early_noise_matched_pairs": 50
+  },
   "total_canonical_success_paraphrase_failure_states": 21,
   "total_canonical_success_paraphrase_failure_pairs": 38,
   "action_normalization": {

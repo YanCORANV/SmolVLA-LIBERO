@@ -12,6 +12,11 @@
 
 The data files above are byte-identical copies of completed local `outputs/` summaries. The final protocol amendment, checkpoint hashes and prompt hashes are in [the v4 freeze record](../configs/final_confirmatory/freeze_final_protocol_v4.json). Figures under [assets/figures](../assets/figures/) can be rebuilt with [the figure script](../scripts/make_portfolio_figures.py). Raw checkpoints, trajectories, videos and logs remain local and Git-ignored.
 
+## Separate five-task development pilot
+
+The [multi-task language sensitivity report](../docs/multitask_language_pilot.md) evaluates **untuned_fp32**, not the Task-0 fine-tuned models. It covers five competence-selected tasks, States 5–9, and 75/75 committed rollouts. The [75-row per-rollout source table](multitask_language_pilot/per_rollout.csv), [50-row paired diagnostics](multitask_language_pilot/pair_level.csv), [aggregate summary](multitask_language_pilot/summary.json), [integrity audit](multitask_language_pilot/integrity.json), and [12 video-backed cases](multitask_language_pilot/case_index.csv) are checked in. Four quantitative figures and the 12 selected-case keyframe sheets are in the same directory. The [failure-case review](../docs/multitask_failure_cases.md) records what the visible evidence supports and leaves unobserved mechanisms unknown.
+
+Run python scripts/regenerate_multitask_language_pilot.py to verify published statistics and figures without model weights or raw rollout data. Its input files are exactly the curated CSV/JSON files above plus the frozen matrix, manifest and five prompt catalogs. It does not independently verify the original simulator outcomes; the stronger raw-artifact validation requires the local ignored outputs.
 ## Earlier development archive
 
 The following pre-confirmatory materials remain available as historical engineering evidence. Their small samples and wordings must not be pooled with the final result.

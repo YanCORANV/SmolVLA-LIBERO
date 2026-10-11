@@ -2,7 +2,10 @@
 from __future__ import annotations
 
 from copy import deepcopy
+import csv
+import hashlib
 import json
+import shutil
 from pathlib import Path
 import tempfile
 import unittest
@@ -10,7 +13,8 @@ from unittest.mock import patch
 
 from smolvla_grounding.multitask_pilot_protocol import pilot_preflight, TASKS
 from smolvla_grounding.multitask_pilot_evaluator import _paired_reset_audit
-from smolvla_grounding.multitask_pilot_analysis import task_success
+from smolvla_grounding.multitask_pilot_analysis import (outcome_transition, regenerate_published,
+                                                       task_success)
 from smolvla_grounding.multitask_protocol import make_rows
 
 REPO = Path(__file__).resolve().parents[1]
@@ -117,3 +121,71 @@ class PilotProtocolTests(unittest.TestCase):
         self.assertEqual(result["canonical_success_paraphrase_failure_states"], 3)
         with self.assertRaisesRegex(ValueError, "five"):
             task_success(rows[:-1])
+
+    def test_all_outcome_transitions(self):
+        self.assertEqual(outcome_transition(True, True), "both_succeed")
+        self.assertEqual(outcome_transition(True, False),
+                         "canonical_success_paraphrase_failure")
+        self.assertEqual(outcome_transition(False, True),
+                         "canonical_failure_paraphrase_success")
+        self.assertEqual(outcome_transition(False, False), "both_fail")
+        with self.assertRaises(ValueError):
+            outcome_transition(1, False)
+
+
+class PublishedPilotTests(unittest.TestCase):
+    def _copy_public_fixture(self, destination):
+        matrix = json.loads((REPO / "configs/multitask_evaluation/language_pilot_matrix.json")
+                            .read_text(encoding="utf-8"))
+        paths = [
+            "configs/multitask_evaluation/language_pilot_matrix.json",
+            "configs/multitask_evaluation/language_pilot_manifest.json",
+            *[task["prompt_catalog"] for task in matrix["tasks"]],
+            *[f"results/multitask_language_pilot/{name}" for name in
+              ("summary.json", "per_rollout.csv", "pair_level.csv",
+               "paired_eef_examples.json", "integrity.json")],
+        ]
+        for rel in paths:
+            target = destination / rel
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(REPO / rel, target)
+
+    def _rehash(self, destination, name):
+        audit_file = destination / "results/multitask_language_pilot/integrity.json"
+        audit = json.loads(audit_file.read_text(encoding="utf-8"))
+        content = (destination / "results/multitask_language_pilot" / name).read_bytes()
+        audit["public_source_sha256"][name] = hashlib.sha256(content).hexdigest()
+        audit_file.write_text(json.dumps(audit), encoding="utf-8")
+
+    def test_public_statistics_and_figures_reproduce_without_raw_outputs(self):
+        summary = regenerate_published(REPO)
+        self.assertEqual(summary["completed_rollouts"], 75)
+        self.assertEqual(summary["outcome_transitions"][
+            "canonical_success_paraphrase_failure"], 38)
+
+    def test_missing_public_rollout_is_rejected_after_hash_update(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self._copy_public_fixture(root)
+            path = root / "results/multitask_language_pilot/per_rollout.csv"
+            lines = path.read_text(encoding="utf-8").splitlines()
+            path.write_text("\n".join(lines[:-1]) + "\n", encoding="utf-8")
+            self._rehash(root, "per_rollout.csv")
+            with self.assertRaisesRegex(RuntimeError, "per-rollout matrix differs"):
+                regenerate_published(root)
+
+    def test_missing_eef_is_rejected_after_hash_update(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self._copy_public_fixture(root)
+            path = root / "results/multitask_language_pilot/pair_level.csv"
+            with path.open(encoding="utf-8", newline="") as stream:
+                rows = list(csv.DictReader(stream))
+            rows[0]["eef_step_1_m"] = ""
+            with path.open("w", encoding="utf-8", newline="") as stream:
+                writer = csv.DictWriter(stream, fieldnames=rows[0].keys())
+                writer.writeheader()
+                writer.writerows(rows)
+            self._rehash(root, "pair_level.csv")
+            with self.assertRaisesRegex(RuntimeError, "Missing or invalid published divergence"):
+                regenerate_published(root)

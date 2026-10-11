@@ -1,0 +1,28 @@
+# Multi-task pilot: auditable paired cases
+
+These are post hoc **evidence cases**, not a subset used to estimate success rates. The fixed selection rule first takes, for each of the five frozen tasks in matrix order, the first two distinct states (ascending state ID, then prompt ID) where the canonical rollout succeeded and a paraphrase failed. It then adds the first both-successful pair in each task that has one. This yields 10 failure comparisons plus two success contrasts. No pilot outcome was rerun or replaced.
+
+All cases use model untuned_fp32 and experiment identity recorded in [case_index.csv](../results/multitask_language_pilot/case_index.csv). That index contains the **exact canonical and paraphrase texts**, both goal_ever and goal_final outcomes, full-precision action/EEF measurements, repository-relative local evidence directories, source-video SHA256 hashes, keyframe indices, and sheet hashes. The original instruction catalogs are fixed in [the pilot matrix](../configs/multitask_evaluation/language_pilot_matrix.json).
+
+Each linked sheet shows frames from the canonical video (top row) and paraphrase video (bottom row), sampled at start, 25%, 50%, 75%, and last frame. Frame numbers are printed on the sheet. The complete local evidence for each row remains in the indexed attempt directories: complete.json, image.mp4, image2.mp4, trajectory.npz, steps.jsonl, and inference.jsonl. The case exporter verifies each video against its committed artifact hash before rendering and can resume by reusing a matching sheet.
+
+**Measurements:** S1 and early are the L2 action-vector difference after the frozen per-dimension normalization, at Step 1 and averaged over Steps 1–10. EEF10 is synchronized end-effector separation at Step 10 in cm. These are paired comparisons, not independent samples. C/P means canonical/paraphrase goal_ever.
+
+| Case | Task / state / variant | C/P | S1 | Early | EEF10 | Observation in sampled frames |
+| --- | --- | ---: | ---: | ---: | ---: | --- |
+| [C01](../results/multitask_language_pilot/cases/C01.png) | spatial/1 · 5 · 01 | 1/0 | 0.446 | 0.533 | 5.07 | Canonical bowl appears on the plate; variant arm follows another path and the bowl remains off the plate at the last sampled frame. |
+| [C02](../results/multitask_language_pilot/cases/C02.png) | spatial/1 · 6 · 01 | 1/0 | 0.489 | 0.554 | 5.29 | Canonical bowl reaches the plate; variant stays around the starting bowl region in the sampled frames. |
+| [C03](../results/multitask_language_pilot/cases/C03.png) | spatial/4 · 5 · 01 | 1/0 | 0.173 | 0.274 | 2.87 | Canonical bowl appears on the plate; the variant's bowl remains visible in the cabinet drawer at the last sampled frame. |
+| [C04](../results/multitask_language_pilot/cases/C04.png) | spatial/4 · 6 · 01 | 1/0 | 0.168 | 0.353 | 3.41 | Canonical transfers the bowl; the variant moves near the drawer while its bowl remains there in sampled frames. |
+| [C05](../results/multitask_language_pilot/cases/C05.png) | object/0 · 5 · 01 | 1/0 | 0.140 | 0.178 | 0.47 | Canonical soup can reaches the basket area; the variant's soup can remains near its starting location. |
+| [C06](../results/multitask_language_pilot/cases/C06.png) | object/0 · 6 · 01 | 1/0 | 0.153 | 0.215 | 1.22 | Canonical moves the soup can toward the basket; the variant's can remains at its initial location in sampled frames. |
+| [C07](../results/multitask_language_pilot/cases/C07.png) | goal/5 · 5 · 01 | 1/0 | 0.228 | 0.346 | 4.34 | The plate follows a different visible path under the variant; the simulator never records the required stove-front goal. |
+| [C08](../results/multitask_language_pilot/cases/C08.png) | goal/5 · 6 · 01 | 1/0 | 0.197 | 0.399 | 4.76 | Variant robot remains near the plate region, with no recorded stove-front goal; canonical reaches the goal. |
+| [C09](../results/multitask_language_pilot/cases/C09.png) | goal/7 · 5 · 02 | 1/0 | 0.163 | 0.265 | 3.00 | Canonical stove burner visibly turns red; it remains dark in the variant's sampled frames. |
+| [C10](../results/multitask_language_pilot/cases/C10.png) | goal/7 · 6 · 01 | 1/0 | 0.090 | 0.127 | 1.29 | Canonical stove turns red; variant arm approaches the stove differently but the burner remains dark. |
+| [C11](../results/multitask_language_pilot/cases/C11.png) | spatial/1 · 5 · 02 | 1/1 | 0.278 | 0.202 | 2.87 | Both paths visibly place the bowl on the plate despite different actions and EEF trajectories. |
+| [C12](../results/multitask_language_pilot/cases/C12.png) | goal/7 · 5 · 01 | 1/1 | 0.076 | 0.091 | 0.89 | Both rollouts visibly turn the stove on while taking somewhat different robot paths. |
+
+For all 10 selected failures, the verified outcome category is **task timeout without goal_ever** after the fixed 280- or 300-step horizon. The precise mechanism is **unknown (10/10)**: five sampled frames and EEF/action traces cannot establish contact, grip success, perception error, or why the controller took a particular path. The two contrasts have no failure category. These counts describe the selected 12 cases only; all-task failure counts remain in the [75-rollout report](multitask_language_pilot.md).
+
+The contrast cases also prevent an overly simple divergence rule: C11 succeeds with S1 = 0.278, while C10 fails with S1 = 0.090. Later trajectory differences include feedback from different physical observations and are not a controlled language-only effect. Public keyframes allow visual inspection; full temporal inspection or independent verification against simulator state requires the local hashed raw videos and trajectories, which are excluded from Git.
